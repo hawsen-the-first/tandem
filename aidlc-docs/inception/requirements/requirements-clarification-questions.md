@@ -28,7 +28,7 @@ C) Include Git plus MCP (Model Context Protocol) client support, so agents can u
 
 X) Other (please describe after [Answer]: tag below)
 
-[Answer]: 
+[Answer]: A
 
 ## Ambiguity 1: What spawned tasks actually do
 Q5 says the orchestrator "can take this context and spawn tasks to implement what was agreed". The
@@ -47,7 +47,7 @@ D) A then B: MVP produces artifacts in Tandem (A); sandboxed repo work (B) is th
 
 X) Other (please describe after [Answer]: tag below)
 
-[Answer]: 
+[Answer]: X) I think ideally this would be flexible. Maybe similar to the Github Copilot app, where we can work in folders and/or repositories and there is the ability to write and commit code in those repos, or simply generate artifacts. This should always be gated by the questions that are being worked through.
 
 ## Ambiguity 2: Source of code for "code analysis" in threads
 
@@ -62,7 +62,7 @@ C) Both A and B
 
 X) Other (please describe after [Answer]: tag below)
 
-[Answer]: 
+[Answer]: X) See answer to above - Code would be in the repo for that session. But it should have permission gated access to other repos on request/approval. These might be local or remote, make use of a github connector here.
 
 ## Ambiguity 3: Voting/approval rules for closing a thread
 Q5 asks for a "configurable voting/approval system that marks a thread as completed".
@@ -80,7 +80,7 @@ D) As C, plus AI agents can be given a vote
 
 X) Other (please describe after [Answer]: tag below)
 
-[Answer]: 
+[Answer]: X) I think to start with, there can just be a simple approval for each discussion thread. We can flesh this out later to include more complicated approval workflows.
 
 ## Ambiguity 4: Human control over the orchestrator
 Q5 describes the orchestrator generating questions (threads) from the initial prompt, then spawning tasks.
@@ -96,7 +96,7 @@ C) Fully automatic once each thread is approved
 
 X) Other (please describe after [Answer]: tag below)
 
-[Answer]: 
+[Answer]: X) I think everything should work in threads with approvals. So after the initial questions are approved, there may be further rounds of clarification with new threads. Then we can follow a similar process to interactive mode, where the plan is presented with clear next steps on what will be built and each step can spawn a new thread if required (by the user not the agent) and there is the option to approve the plan, or rework it etc.
 
 ## Ambiguity 5: Sign-in methods (Q9: "A and/or C")
 
@@ -111,7 +111,7 @@ C) Magic link only (SMTP required to run Tandem)
 
 X) Other (please describe after [Answer]: tag below)
 
-[Answer]: 
+[Answer]: B
 
 ## Ambiguity 6: Model providers (Q10)
 "Claude Pro for testing" and "open-weight as first class" need defining. Background: Anthropic currently
@@ -130,7 +130,7 @@ C) OpenAI-compatible API only (local models first; Claude via an OpenAI-compatib
 
 X) Other (please describe after [Answer]: tag below)
 
-[Answer]: 
+[Answer]: A
 
 ### Clarification Question 8
 Where are model settings configured?
@@ -143,7 +143,7 @@ C) Per user: each user brings their own keys and models
 
 X) Other (please describe after [Answer]: tag below)
 
-[Answer]: 
+[Answer]: B with predefined defaults set by the admin.
 
 ## Ambiguity 7: Web search for thread agents (Q5)
 
@@ -160,7 +160,7 @@ D) Defer web search until after the MVP
 
 X) Other (please describe after [Answer]: tag below)
 
-[Answer]: 
+[Answer]: C
 
 ## Ambiguity 8: Back-end language (Q12)
 You're curious about Rust. Trade-off: Rust is excellent for a long-running, concurrent server
@@ -178,7 +178,7 @@ C) Hybrid: Rust core server (API, realtime, persistence) with agent/LLM logic in
 
 X) Other (please describe after [Answer]: tag below)
 
-[Answer]: 
+[Answer]: A
 
 ## Ambiguity 9: Artifacts and rich text (Q4)
 
@@ -193,9 +193,11 @@ C) As A, plus rendered previews of HTML artifacts in a sandboxed frame
 
 X) Other (please describe after [Answer]: tag below)
 
-[Answer]: 
+[Answer]: A
 
 ---
+
+> **User note (2026-09-29):** "the resiliency questions aren't relevant to the build as this is pitched as a self hosted app, so those concerns are for the end user to decide for themselves."
 
 # Part 2: Resiliency Extension Decisions (required by RESILIENCY rules)
 
@@ -217,7 +219,7 @@ E) N/A — Single-region deployment is acceptable, no cross-region DR needed. Re
 
 X) Other (please describe after [Answer]: tag below)
 
-[Answer]: 
+[Answer]: X) Not applicable to the build: Tandem is a self-hosted app, so this is the end user's (operator's) decision.
 
 ## Question: Change Management Process (suggested: B)
 How should production changes for this workload be governed? AI-DLC will conform the design to your answer rather than inventing a process.
@@ -230,7 +232,7 @@ C) N/A — this workload is exempt from formal change management (e.g., internal
 
 X) Other (describe after [Answer]: tag below)
 
-[Answer]: 
+[Answer]: X) Not applicable to the build: Tandem is a self-hosted app, so this is the end user's (operator's) decision.
 
 ## Question: CI/CD and Deployment Tooling (suggested: B, GitHub Actions)
 What CI/CD tooling and deployment process should this workload use?
@@ -241,7 +243,7 @@ B) No pipeline exists — AI-DLC should propose a CI/CD pipeline definition appr
 
 X) Other (describe after [Answer]: tag below)
 
-[Answer]: 
+[Answer]: X) Not applicable to the build: Tandem is a self-hosted app, so this is the end user's (operator's) decision.
 
 ## Question: Rollback Mechanism (suggested: A, plus D noted for database migrations)
 How should a failed production deployment be rolled back?
@@ -258,7 +260,7 @@ E) Use our organization's existing rollback procedure — provide reference
 
 X) Other (describe after [Answer]: tag below)
 
-[Answer]: 
+[Answer]: X) Not applicable to the build: Tandem is a self-hosted app, so this is the end user's (operator's) decision.
 
 ## Question: Deployment Style (suggested: A)
 What deployment strategy is acceptable for this workload's risk profile?
@@ -273,7 +275,7 @@ D) Canary (progressive traffic shift with automated rollback)
 
 X) Other (describe after [Answer]: tag below)
 
-[Answer]: 
+[Answer]: X) Not applicable to the build: Tandem is a self-hosted app, so this is the end user's (operator's) decision.
 
 ## Question: Regional Topology (suggested: X, "single host for MVP, stateless services so it can scale out later")
 Does this workload require multi-region deployment, or is single-region with multi-zone redundancy sufficient?
@@ -286,7 +288,7 @@ C) Multi-region active-active — survives region failure with no downtime. High
 
 X) Other (describe after [Answer]: tag below)
 
-[Answer]: 
+[Answer]: X) Not applicable to the build: Tandem is a self-hosted app, so this is the end user's (operator's) decision.
 
 ## Question: Resiliency Testing Approach (suggested: C)
 How will resiliency mechanisms (failover, recovery) be validated?
@@ -299,7 +301,7 @@ C) Defer to the Operations phase — capture test scenarios now, execute during 
 
 X) Other (describe after [Answer]: tag below)
 
-[Answer]: 
+[Answer]: X) Not applicable to the build: Tandem is a self-hosted app, so this is the end user's (operator's) decision.
 
 ## Question: Incident Response Process (suggested: B)
 How are production incidents handled for this workload?
@@ -310,4 +312,4 @@ B) No formal process exists — AI-DLC should propose a lightweight incident res
 
 X) Other (describe after [Answer]: tag below)
 
-[Answer]: 
+[Answer]: X) Not applicable to the build: Tandem is a self-hosted app, so this is the end user's (operator's) decision.
