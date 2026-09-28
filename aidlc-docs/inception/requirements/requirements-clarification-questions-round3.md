@@ -23,7 +23,7 @@ C) MVP generates artifacts only, as in the original Clarification 1 answer. Fold
 
 X) Other (please describe after [Answer]: tag below)
 
-[Answer]: 
+[Answer]: A
 
 ## Ambiguity 1: What "local" repos and folders mean
 Tandem runs on a server (Docker), so "local" could mean the server's disk or each user's own computer.
@@ -40,7 +40,7 @@ C) Host-mounted directories (A) for the MVP; the desktop helper (B) comes later
 
 X) Other (please describe after [Answer]: tag below)
 
-[Answer]: 
+[Answer]: X) Good callout, I think the desktop app will be required, but local to the server could work too. We would just need to be careful about security here or put some warnings out there as having code on a remote box is risky. For the MVP lets go for an isolated and ephemeral clone of a remote repo only, with changes treated as only existing in the worktree for the session until explicitly told to commit. Ending a session should clean up the copy of the repo.
 
 ## Ambiguity 2: Session workspace
 You said code "would be in the repo for that session", with other repos reachable on request.
@@ -54,7 +54,7 @@ B) The primary workspace is **optional**: sessions can be artifact-only, and a w
 
 X) Other (please describe after [Answer]: tag below)
 
-[Answer]: 
+[Answer]: A
 
 ## Ambiguity 3: What agents may execute
 Writing and committing code is clear. Running code (installing dependencies, running tests or builds)
@@ -71,7 +71,7 @@ C) A for the MVP; sandboxed execution (B) is the first post-MVP milestone
 
 X) Other (please describe after [Answer]: tag below)
 
-[Answer]: 
+[Answer]: C
 
 ## Ambiguity 4: Scope of the Resiliency extension
 You enabled the Resiliency extension in Round 1, and in Round 2 said the deployment and recovery
@@ -87,4 +87,4 @@ B) Disable the Resiliency extension entirely
 
 X) Other (please describe after [Answer]: tag below)
 
-[Answer]: 
+[Answer]: A
