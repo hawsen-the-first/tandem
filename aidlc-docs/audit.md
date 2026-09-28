@@ -87,3 +87,18 @@
 **Context**: INCEPTION - Requirements Analysis, awaiting approval
 
 ---
+## Licence Question
+**Timestamp**: 2026-09-28T19:05:07Z
+**User Input**: "Can you help me choose the right license for this?"
+**AI Response**: "Compared AGPL-3.0 and Apache-2.0 for a self-hosted open-source app; recommended AGPL-3.0 (with CLA/DCO if dual-licensing is a future option). Noted MIT-0 AI-DLC rules are compatible and that the Agent SDK adapter should invoke, not bundle, Claude Code."
+**Context**: Side question during Requirements Analysis approval gate
+
+---
+
+## Repository Created and Licence Chosen
+**Timestamp**: 2026-09-28T19:05:07Z
+**User Input**: "Here's the repo, I will review the doc now https://github.com/hawsen-the-first/tandem.git"
+**AI Response**: "Remote contained an initial commit with GPL-3.0 LICENSE and README. Rebased local AI-DLC commits onto it (README merged, keeping owner's tagline; licence section added). Recorded GPL-3.0 in NFR-7.4 with a note on the network-use difference from AGPL-3.0. Pushed to origin/main. Requirements approval still pending."
+**Context**: INCEPTION - Requirements Analysis, awaiting approval
+
+---
