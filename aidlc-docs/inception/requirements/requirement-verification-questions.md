@@ -21,7 +21,7 @@ D) An open-source project others can self-host
 
 X) Other (please describe after [Answer]: tag below)
 
-[Answer]: 
+[Answer]: D
 
 ## Question 2
 Who is the primary target user?
@@ -36,7 +36,7 @@ D) Students and researchers
 
 X) Other (please describe after [Answer]: tag below)
 
-[Answer]: 
+[Answer]: X) Any of the above, it should support teams working with AI on shared work in any context and plugin to existing workflows/tools where sensible.
 
 ## Question 3
 What does a successful first release (MVP) look like?
@@ -49,7 +49,7 @@ C) Public launch with sign-up and at least a free tier
 
 X) Other (please describe after [Answer]: tag below)
 
-[Answer]: 
+[Answer]: A) Working demo of core functionality would be great.
 
 ---
 
@@ -70,7 +70,7 @@ E) A freeform canvas or whiteboard
 
 X) Other (please describe after [Answer]: tag below)
 
-[Answer]: 
+[Answer]: X) I think primarily text, code and artifacts to begin with, with rich  text or at least md if it's a small lift for the MVP.
 
 ## Question 5
 How should AI take part in the workspace?
@@ -83,7 +83,7 @@ C) Both: an on-demand assistant plus assignable agent teammates
 
 X) Other (please describe after [Answer]: tag below)
 
-[Answer]: 
+[Answer]: X) I see three levels: at a high level theres a session orchestrator agent. You would start a session with an initial prompt. This would trigger questions much like this current process, with each question allowing a thread for discussion. Inside the thread, a shortlived agent could be called with an @ command or similar to ask questions, perform code analysis, search the web etc. The thread would create the collaboration context to answer the question. Then there should be a configurable voting/approval system that marks a thread as completed. Then the orchestration agent can take this context and spawn tasks to implement what was agreed in the thread.
 
 ## Question 6
 How "real time" does collaboration need to be for the MVP?
@@ -96,7 +96,7 @@ C) Asynchronous: comments, activity feed and notifications are enough
 
 X) Other (please describe after [Answer]: tag below)
 
-[Answer]: 
+[Answer]: X) Think like slack. More of a messaging/threads approach with some structure that supports cowork around a problem.
 
 ## Question 7
 Which of these are in scope for the MVP? (List all letters that apply, e.g. "A, C, D")
@@ -115,7 +115,7 @@ F) File uploads that AI can read as context
 
 X) Other (please describe after [Answer]: tag below)
 
-[Answer]: 
+[Answer]: A, C, F
 
 ## Question 8
 How are users and teams organized?
@@ -128,7 +128,7 @@ C) Individual users who share specific items with others
 
 X) Other (please describe after [Answer]: tag below)
 
-[Answer]: 
+[Answer]: X) for MVP just a single team, with users added to sessions. We can address more complex RBAC and organisations of teams/projects etc later.
 
 ## Question 9
 How should users sign in?
@@ -143,7 +143,7 @@ D) Enterprise SSO (SAML/OIDC) in addition to one of the above
 
 X) Other (please describe after [Answer]: tag below)
 
-[Answer]: 
+[Answer]: A and/or C. But the intention is selfhosted, so probably require somekind of email server for the latter.
 
 ---
 
@@ -162,7 +162,7 @@ D) Bring-your-own API key per workspace
 
 X) Other (please describe after [Answer]: tag below)
 
-[Answer]: 
+[Answer]: X) If we can integrate with claude pro that is useful for testing. Also supporting opensource/openweight needs to be a first class citizen (i.e. ollama/LM Studio etc)
 
 ## Question 11
 What platform should the MVP run on?
@@ -175,7 +175,7 @@ C) Desktop app (Electron/Tauri) plus web
 
 X) Other (please describe after [Answer]: tag below)
 
-[Answer]: 
+[Answer]: B) MVP can be browser based with mobile/native web app support ideally. We can look at dedicated apps/clients later.
 
 ## Question 12
 Do you have a preferred tech stack?
@@ -188,7 +188,7 @@ C) No preference: recommend one during Workflow Planning / NFR stages
 
 X) Other (please describe after [Answer]: tag below)
 
-[Answer]: 
+[Answer]: X) Definitely typescript front end. Open for backend suggestions, but I have been curious about Rust so this could be a good way to dip my toes.
 
 ## Question 13
 Where should Tandem be hosted?
@@ -203,7 +203,7 @@ D) Local only for the MVP; decide hosting later
 
 X) Other (please describe after [Answer]: tag below)
 
-[Answer]: 
+[Answer]: C) Docker is an easy starting point and suits my own selfhosted stack for testing.
 
 ---
 
@@ -220,7 +220,7 @@ C) Growth-ready: thousands of users, designed to scale horizontally
 
 X) Other (please describe after [Answer]: tag below)
 
-[Answer]: 
+[Answer]: X) Realistically we don't need mega scale, but I don't want to build myself into a corner. Building with scalability in mind makes sense.
 
 ## Question 15
 How sensitive is the content people will put in Tandem?
@@ -233,7 +233,7 @@ C) High: regulated data (health, finance, personal data under GDPR/NZ Privacy Ac
 
 X) Other (please describe after [Answer]: tag below)
 
-[Answer]: 
+[Answer]: B
 
 ## Question 16
 How should AI usage costs be controlled?
@@ -246,7 +246,7 @@ C) Usage-based billing passed through to customers
 
 X) Other (please describe after [Answer]: tag below)
 
-[Answer]: 
+[Answer]: X) it should be a BYO model design for now. So billing is a seperate concern.
 
 ---
 
@@ -261,7 +261,7 @@ B) No — skip all SECURITY rules (suitable for PoCs, prototypes, and experiment
 
 X) Other (please describe after [Answer]: tag below)
 
-[Answer]: 
+[Answer]: A) Security: yes security is important.
 
 ## Question: Resiliency Extensions
 Should the resiliency baseline be applied to this project?
@@ -278,7 +278,7 @@ B) No — skip the resiliency baseline (suitable for PoCs, prototypes, and exper
 
 X) Other (please describe after [Answer]: tag below)
 
-[Answer]: 
+[Answer]: A) And yes let's use resiliency.
 
 ## Question: Property-Based Testing Extension
 Should property-based testing (PBT) rules be enforced for this project?
@@ -291,4 +291,4 @@ C) No — skip all PBT rules (suitable for simple CRUD applications, UI-only pro
 
 X) Other (please describe after [Answer]: tag below)
 
-[Answer]: 
+[Answer]: C) No property based testing.

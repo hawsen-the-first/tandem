@@ -4,7 +4,7 @@
 - **Project Name**: Tandem
 - **Project Type**: Greenfield
 - **Start Date**: 2026-09-28T03:32:30Z
-- **Current Stage**: INCEPTION - Requirements Analysis (awaiting answers to clarifying questions)
+- **Current Stage**: INCEPTION - Requirements Analysis (awaiting answers to round 2 clarification questions)
 - **AI-DLC Rules Version**: v1.0.1 (awslabs/aidlc-workflows @ e40f6a93a59d1a22be78314ff32585fdd6b60936)
 
 ## Workspace State
@@ -23,15 +23,15 @@
 ## Extension Configuration
 | Extension | Enabled | Decided At |
 |---|---|---|
-| Security Baseline | Pending | Requirements Analysis |
-| Resiliency Baseline | Pending | Requirements Analysis |
-| Property-Based Testing | Pending | Requirements Analysis |
+| Security Baseline | Yes | Requirements Analysis |
+| Resiliency Baseline | Yes | Requirements Analysis |
+| Property-Based Testing | No | Requirements Analysis |
 
 ## Stage Progress
 ### 🔵 INCEPTION PHASE
 - [x] Workspace Detection
 - [ ] Reverse Engineering (SKIPPED - greenfield)
-- [ ] Requirements Analysis (IN PROGRESS - Standard/Comprehensive depth, awaiting answers)
+- [ ] Requirements Analysis (IN PROGRESS - Comprehensive depth, round 1 answered, awaiting clarification answers)
 - [ ] User Stories
 - [ ] Workflow Planning
 - [ ] Application Design
