@@ -513,3 +513,10 @@
 **Context**: CONSTRUCTION - U1 Code Generation, step 34
 
 ---
+## U1 Code Generation - PR 3 merged; PR 4 started
+**Timestamp**: 2026-11-10T01:00:00Z
+**User Input**: "Merged, continue"
+**AI Response**: "PR #8 merged. Synced main, created branch unit-u1/api-worker-cli for plan steps 35-47 (config, telemetry, api, worker, cli, service-level tests, CI additions)."
+**Context**: CONSTRUCTION - U1 Code Generation, PR 4 of 5
+
+---
