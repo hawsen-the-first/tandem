@@ -8,7 +8,7 @@
 
 | Unit | Name | Stories | Delivers (demo at the end of the unit) |
 |---|---|---|---|
-| U1 | Foundation and walking skeleton | 10 | Admin sets up an instance, invites a user, both sign in (MFA for admin); a user creates a managed-folder session and posts a message that travels web, API, database, worker and back over the WebSocket; minimal CI is green |
+| U1 | Foundation and walking skeleton | 12 | Admin sets up an instance, invites a user, both sign in (MFA for admin); a user creates a managed-folder session and posts a message that travels web, API, database, worker and back over the WebSocket; minimal CI is green |
 | U2 | Instance administration | 6 | Admin configures an OpenAI-compatible provider, defaults, search, the GitHub connector and the sandbox policy, and tests each connection |
 | U3 | Collaboration core | 21 | Members work in a session: threads, messages, replies, uploads, chat, approvals, live updates, notifications, presence; sessions can be ended and archived |
 | U4 | Agent runtime and question rounds | 15 | The orchestrator proposes question rounds from a prompt; members call `@ask`, `@search`, `@draft`; outcome summaries; all through the policy-checked tool layer and the in-process runner |
@@ -22,7 +22,7 @@
 
 ### U1 Foundation and walking skeleton
 - **Purpose**: Establish the repo, the architecture skeleton and the security base, and prove the whole path end to end with the thinnest possible slice.
-- **Responsibilities**: Cargo workspace and `web/` scaffold; `core`, `ports` and `app` crates; PostgreSQL schema base and reversible migrations; secret vault; audit base; identity (bootstrap admin, sign-in, invite, MFA, password change and reset, deactivate, lockout); audit log viewer; API and web shell with security headers, responsive layout and light/dark themes; health, readiness, metrics and structured logs; operations CLI (migrate, bootstrap); **thin stubs** of session, message, job queue, outbox and event bus for the skeleton; scripted mock model provider (NFR-7.3); minimal CI (build, test, lint, dependency scan) and a dev-only Postgres compose file.
+- **Responsibilities**: Cargo workspace and `web/` scaffold; `core`, `ports` and `app` crates; PostgreSQL schema base and reversible migrations; secret vault; audit base; identity (bootstrap admin, sign-in, invite by copyable link, MFA, password change and reset by link, deactivate and reactivate, role changes, progressive-delay lockout); instance security settings (sign-in duration, online breach check); append-only audit log viewer; API and web shell with security headers, responsive layout and light/dark themes; health, readiness, metrics and structured logs; operations CLI (migrate, bootstrap); **thin stubs** of session, message, job queue, outbox and event bus for the skeleton; scripted mock model provider (NFR-7.3); minimal CI (build, test, lint, dependency scan) and a dev-only Postgres compose file.
 - **Components introduced**: C1, C2, C4, C13, C24, C25, C26, C27; stubs of C3, C5, C6, C18, C19.
 - **Not in U1**: image building, reference Compose, signing, SBOM (U8).
 - **Exit criteria**: demo above; all U1 Must stories pass; CI green; no secret appears in logs.

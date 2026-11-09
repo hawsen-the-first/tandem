@@ -16,52 +16,74 @@
 - [ ] On a fresh instance with no users, the first visit shows a setup screen
 - [ ] The setup screen creates an account with the admin role and then disappears for good
 - [ ] There is no default password and the setup screen cannot be reached once an admin exists
-- [ ] The admin is prompted to enrol MFA before reaching admin settings (US-1.5)
+- [ ] The password meets the password policy (US-1.2)
+- [ ] The admin must enrol MFA (US-1.5) immediately: nothing else is reachable until it is done
 
 ### US-1.2 Sign in with email and password
 **As a** member, **I want** to sign in with my email and password, **so that** I can reach my sessions.
-**Personas**: OWN, NTM, DEV, ADM · **Reqs**: FR-1.1, SECURITY-12 · **Priority**: Must
+**Personas**: OWN, NTM, DEV, ADM · **Reqs**: FR-1.1, FR-1.8, SECURITY-12 · **Priority**: Must
 - [ ] Valid credentials sign me in; invalid credentials show a generic error that does not reveal whether the email exists
-- [ ] Passwords are stored with Argon2id and checked against a breached-password list when set
+- [ ] A password must be at least 10 characters with upper case, lower case, a digit and a symbol, and must not appear in the breached-password list
+- [ ] Passwords are stored with Argon2id
 - [ ] Session cookies are Secure, HttpOnly and SameSite, with a server-side expiry
 - [ ] Deactivated users cannot sign in
 
 ### US-1.3 Invite users
-**As an** Instance Admin, **I want** to invite people by email and give them the member or admin role, **so that** my team can join.
+**As an** Instance Admin, **I want** to invite people and give them the member or admin role, **so that** my team can join.
 **Personas**: ADM · **Reqs**: FR-1.3, FR-1.4 · **Priority**: Must
-- [ ] An invitation creates a single-use, expiring link that lets the invitee set a password
+- [ ] An invitation creates a single-use link that expires (7 days) and lets the invitee set a password; it is shown once for the admin to copy and send, because the MVP sends no email
 - [ ] The two roles available are admin and member; no other roles exist in the MVP
 - [ ] The instance is a single team: invited users all belong to the same instance with no organisation concept
 - [ ] The user list shows pending invitations and can revoke them
 
-### US-1.4 Deactivate and remove users
-**As an** Instance Admin, **I want** to deactivate or remove a user, **so that** people who leave lose access immediately.
-**Personas**: ADM · **Reqs**: FR-1.3, SECURITY-14 · **Priority**: Must
+### US-1.4 Deactivate and reactivate users
+**As an** Instance Admin, **I want** to deactivate a user and reactivate them later, **so that** people who leave lose access immediately and returning people can be restored.
+**Personas**: ADM · **Reqs**: FR-1.3, FR-1.7, SECURITY-14 · **Priority**: Must
 - [ ] Deactivation ends the user's active logins at once and blocks sign-in
 - [ ] A deactivated user's past messages, approvals and artifacts remain attributed to them
-- [ ] Removing a user requires confirmation and is recorded in the audit log
-- [ ] An admin cannot deactivate or remove the last remaining admin
+- [ ] Deactivation requires confirmation and is recorded in the audit log
+- [ ] Reactivation restores sign-in with the user's existing password and MFA; their earlier logins stay ended
+- [ ] Permanent removal of users is not part of the MVP
+- [ ] The last remaining admin cannot be deactivated
 
 ### US-1.5 Multi-factor authentication
 **As an** Instance Admin, **I want** to enrol a TOTP authenticator, and **as a** member I want the option to, **so that** accounts are harder to take over.
 **Personas**: ADM, OWN, NTM, DEV · **Reqs**: FR-1.5, SECURITY-12 · **Priority**: Must
 - [ ] Enrolment shows a QR code and requires a valid code to complete
-- [ ] MFA is required for admins and optional for members
+- [ ] MFA is required for admins, who must enrol immediately (nothing else is reachable until they do), and optional for members
 - [ ] Sign-in asks for the code after the password when MFA is enrolled
 - [ ] Recovery codes are shown once at enrolment
 
 ### US-1.6 Change my password
 **As a** member, **I want** to change my own password, **so that** I can keep my account secure.
-**Personas**: OWN, NTM, DEV · **Reqs**: FR-1.6 · **Priority**: Should
+**Personas**: OWN, NTM, DEV · **Reqs**: FR-1.6, FR-1.8 · **Priority**: Should
 - [ ] Changing the password requires the current password
-- [ ] The new password is checked against the breached-password list
+- [ ] The new password meets the password policy and is not in the breached-password list
 - [ ] Other active logins for my account end after the change
 
 ### US-1.7 Force a password reset
 **As an** Instance Admin, **I want** to force a user to reset their password, **so that** I can respond to a suspected compromise.
 **Personas**: ADM · **Reqs**: FR-1.6, SECURITY-14 · **Priority**: Should
 - [ ] Forcing a reset ends that user's logins and requires a new password at next sign-in
+- [ ] The reset is delivered as a one-time link (valid 24 hours) shown once for the admin to copy; no email is sent
+- [ ] The admin can tick "Also reset MFA", so a user who lost their device and recovery codes can be recovered; an admin whose MFA is reset must enrol again (US-1.5)
 - [ ] The action is recorded in the audit log with who performed it
+
+### US-1.8 Change a user's role
+**As an** Instance Admin, **I want** to promote a member to admin or demote an admin to member, **so that** responsibilities can change without removing anyone.
+**Personas**: ADM · **Reqs**: FR-1.4, FR-1.7, SECURITY-14 · **Priority**: Should
+- [ ] I can change another user's role between admin and member
+- [ ] The last remaining admin cannot be demoted
+- [ ] A demoted admin loses admin access immediately; a promoted member must enrol MFA before using admin screens
+- [ ] Every role change is recorded in the audit log
+
+### US-1.9 Set sign-in duration and the breached-password check
+**As an** Instance Admin, **I want** to set how long sign-ins last and whether passwords are also checked online against breach data, **so that** the instance matches my organisation's rules.
+**Personas**: ADM · **Reqs**: FR-1.9, FR-15.1, SECURITY-14 · **Priority**: Should
+- [ ] I can set the idle timeout and total duration of a sign-in (defaults 12 hours and 14 days)
+- [ ] I can switch the optional online breached-password check on or off (the offline list is always used)
+- [ ] Changes to sign-in duration apply to new sign-ins; existing sign-ins keep their limits
+- [ ] Every change is recorded in the audit log
 
 ---
 
@@ -119,6 +141,7 @@
 - [ ] Each entry shows who, what, when and the affected object
 - [ ] I can filter by user, event type and date range
 - [ ] Entries cannot be edited or deleted from the UI
+- [ ] The application cannot update or delete entries and never prunes them automatically; operators prune only with a documented command using a privileged credential
 
 ### US-2.8 See token usage per session
 **As an** Instance Admin, **I want** to see token usage per session, **so that** I understand how heavily models are used.
@@ -638,8 +661,9 @@
 
 ### US-13.3 Lockout after repeated failed sign-ins
 **As an** Instance Admin, **I want** repeated failed sign-ins limited, **so that** passwords cannot be guessed freely.
-**Personas**: ADM, OWN, NTM, DEV · **Reqs**: SECURITY-12 · **Priority**: Should
-- [ ] Repeated failures from one account or source trigger rate limiting and a temporary lockout
+**Personas**: ADM, OWN, NTM, DEV · **Reqs**: FR-1.10, SECURITY-12 · **Priority**: Should
+- [ ] Each failed attempt adds a growing delay before the next try is accepted
+- [ ] After 10 failures in an hour the account is locked temporarily, and each source is rate-limited
 - [ ] The user sees a clear, non-revealing message and when to retry
 - [ ] Lockouts appear in the audit log
 
@@ -674,6 +698,7 @@
 
 
 
+
 ---
 
 ## Requirements Coverage
@@ -685,9 +710,13 @@ Every functional requirement (FR) in `requirements.md` maps to at least one stor
 | FR-1.1 | US-1.2 |
 | FR-1.2 | US-1.1 |
 | FR-1.3 | US-1.3, US-1.4 |
-| FR-1.4 | US-1.3 |
+| FR-1.4 | US-1.3, US-1.8 |
 | FR-1.5 | US-1.5 |
 | FR-1.6 | US-1.6, US-1.7 |
+| FR-1.7 | US-1.4, US-1.8 |
+| FR-1.8 | US-1.2, US-1.6 |
+| FR-1.9 | US-1.9 |
+| FR-1.10 | US-13.3 |
 | FR-2.1 | US-3.1 |
 | FR-2.2 | US-3.1, US-3.4 |
 | FR-2.3 | US-3.5 |
@@ -754,7 +783,7 @@ Every functional requirement (FR) in `requirements.md` maps to at least one stor
 | FR-13.4 | US-10.2 |
 | FR-13.5 | US-10.5 |
 | FR-14.1 | US-12.1, US-12.2 |
-| FR-15.1 | US-2.1 |
+| FR-15.1 | US-1.9, US-2.1 |
 | FR-15.2 | US-2.7 |
 | FR-16.1 | US-2.9, US-2.11, US-9.3 |
 | FR-16.2 | US-2.11, US-6.8, US-9.2 |
@@ -763,7 +792,7 @@ Every functional requirement (FR) in `requirements.md` maps to at least one stor
 | FR-16.5 | US-2.9 |
 | FR-16.6 | US-2.9 |
 
-**NFR touchpoints with stories**: SECURITY-04/05 (US-13.1, US-13.2), SECURITY-06 (US-2.11), SECURITY-11 (US-2.9, US-2.11, US-6.8, US-9.3), SECURITY-12 (US-1.2, US-1.5, US-13.3), SECURITY-14 (US-1.4, US-2.7, US-2.9), NFR-4.2/4.3 (US-2.1, US-13.5), NFR-5.2 (US-13.6), NFR-5.3 (US-9.9), NFR-5.6 (US-13.4), NFR-6 (US-13.7). Remaining NFRs stay constraints in `requirements.md`.
+**NFR touchpoints with stories**: SECURITY-04/05 (US-13.1, US-13.2), SECURITY-06 (US-2.11), SECURITY-11 (US-2.9, US-2.11, US-6.8, US-9.3), SECURITY-12 (US-1.2, US-1.5, US-13.3), SECURITY-14 (US-1.4, US-1.8, US-1.9, US-2.7, US-2.9), NFR-4.2/4.3 (US-2.1, US-13.5), NFR-5.2 (US-13.6), NFR-5.3 (US-9.9), NFR-5.6 (US-13.4), NFR-6 (US-13.7). Remaining NFRs stay constraints in `requirements.md`.
 
 ---
 
@@ -771,7 +800,7 @@ Every functional requirement (FR) in `requirements.md` maps to at least one stor
 
 | Persona | Stories (primary or beneficiary) | Count |
 |---|---|---|
-| ADM | US-1.1, US-1.2, US-1.3, US-1.4, US-1.5, US-1.7, US-2.1, US-2.2, US-2.3, US-2.4, US-2.5, US-2.6, US-2.7, US-2.8, US-2.9, US-2.10, US-2.11, US-9.3, US-11.5, US-13.3, US-13.4, US-13.5,  | 22 |
+| ADM | US-1.1, US-1.2, US-1.3, US-1.4, US-1.5, US-1.7, US-1.8, US-1.9, US-2.1, US-2.2, US-2.3, US-2.4, US-2.5, US-2.6, US-2.7, US-2.8, US-2.9, US-2.10, US-2.11, US-9.3, US-11.5, US-13.3, US-13.4, US-13.5,  | 24 |
 | OWN | US-1.2, US-1.5, US-1.6, US-2.8, US-2.11, US-3.1, US-3.2, US-3.3, US-3.4, US-3.5, US-3.6, US-3.7, US-4.1, US-4.2, US-4.3, US-4.4, US-4.5, US-5.1, US-5.2, US-5.3, US-5.4, US-5.5, US-5.6, US-5.7, US-5.8, US-6.1, US-6.2, US-6.3, US-6.4, US-6.5, US-6.6, US-6.7, US-6.8, US-6.9, US-7.1, US-7.2, US-7.3, US-8.1, US-8.2, US-8.3, US-8.4, US-8.5, US-8.6, US-8.7, US-9.1, US-9.2, US-9.3, US-9.4, US-9.5, US-9.6, US-9.7, US-9.8, US-9.9, US-10.1, US-10.2, US-10.3, US-10.4, US-10.5, US-11.1, US-11.2, US-11.3, US-11.4, US-11.5, US-11.6, US-12.1, US-12.2, US-12.3, US-13.1, US-13.2, US-13.3, US-13.5, US-13.6, US-13.7,  | 73 |
 | NTM | US-1.2, US-1.5, US-1.6, US-3.3, US-3.5, US-3.7, US-4.1, US-4.2, US-4.3, US-4.4, US-4.5, US-5.1, US-5.2, US-5.3, US-5.4, US-5.5, US-5.6, US-5.7, US-5.8, US-6.1, US-6.2, US-6.4, US-6.5, US-6.6, US-6.7, US-7.1, US-7.2, US-7.3, US-8.1, US-8.2, US-8.3, US-8.4, US-8.5, US-8.6, US-9.2, US-9.4, US-9.6, US-9.7, US-9.8, US-10.1, US-10.2, US-10.3, US-10.4, US-11.6, US-12.1, US-12.2, US-12.3, US-13.1, US-13.2, US-13.3, US-13.6, US-13.7,  | 52 |
 | DEV | US-1.2, US-1.5, US-1.6, US-3.2, US-3.5, US-3.7, US-4.1, US-4.2, US-4.3, US-4.4, US-4.5, US-5.1, US-5.2, US-5.3, US-5.4, US-5.5, US-5.6, US-5.7, US-5.8, US-6.1, US-6.2, US-6.3, US-6.4, US-6.6, US-6.7, US-6.8, US-6.9, US-7.1, US-7.2, US-7.3, US-8.1, US-8.2, US-8.3, US-8.4, US-8.5, US-8.6, US-9.1, US-9.2, US-9.4, US-9.5, US-9.7, US-9.8, US-9.9, US-10.1, US-10.2, US-10.3, US-10.4, US-10.5, US-11.1, US-11.2, US-11.3, US-11.6, US-12.1, US-12.2, US-12.3, US-13.1, US-13.2, US-13.3, US-13.6, US-13.7,  | 60 |
@@ -783,7 +812,7 @@ Every functional requirement (FR) in `requirements.md` maps to at least one stor
 | Priority (first listed) | Stories |
 |---|---|
 | Must | 53 |
-| Should | 31 |
+| Should | 33 |
 | Could | 3 |
 
 ---

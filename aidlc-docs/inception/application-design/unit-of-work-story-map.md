@@ -1,12 +1,12 @@
 # Tandem: Unit of Work to Story Map
 
-Every one of the 87 stories in `stories.md` is assigned to **exactly one** unit: the unit in which the story is first fully demonstrable and its acceptance checklist can be passed. Priority is the story's first-listed MoSCoW priority.
+Every one of the 89 stories in `stories.md` is assigned to **exactly one** unit: the unit in which the story is first fully demonstrable and its acceptance checklist can be passed. Priority is the story's first-listed MoSCoW priority.
 
 ## Summary
 
 | Unit | Name | Stories | Must | Should | Could |
 |---|---|---|---|---|---|
-| U1 | Foundation and walking skeleton | 10 | 6 | 4 | 0 |
+| U1 | Foundation and walking skeleton | 12 | 6 | 6 | 0 |
 | U2 | Instance administration | 6 | 5 | 1 | 0 |
 | U3 | Collaboration core | 21 | 12 | 9 | 0 |
 | U4 | Agent runtime and question rounds | 15 | 9 | 6 | 0 |
@@ -15,7 +15,7 @@ Every one of the 87 stories in `stories.md` is assigned to **exactly one** unit:
 | U7 | Container sandbox runner | 1 | 0 | 1 | 0 |
 | U8 | Hardening and delivery | 4 | 0 | 4 | 0 |
 | U9 | Backlog (Could-have) | 3 | 0 | 0 | 3 |
-| **Total** | | **87** | **53** | **31** | **3** |
+| **Total** | | **89** | **53** | **33** | **3** |
 
 ## Assignments
 
@@ -26,10 +26,12 @@ Every one of the 87 stories in `stories.md` is assigned to **exactly one** unit:
 | US-1.1 | First-run admin setup | ADM | Must |
 | US-1.2 | Sign in with email and password | OWN, NTM, DEV, ADM | Must |
 | US-1.3 | Invite users | ADM | Must |
-| US-1.4 | Deactivate and remove users | ADM | Must |
+| US-1.4 | Deactivate and reactivate users | ADM | Must |
 | US-1.5 | Multi-factor authentication | ADM, OWN, NTM, DEV | Must |
 | US-1.6 | Change my password | OWN, NTM, DEV | Should |
 | US-1.7 | Force a password reset | ADM | Should |
+| US-1.8 | Change a user's role | ADM | Should |
+| US-1.9 | Set sign-in duration and the breached-password check | ADM | Should |
 | US-2.7 | View the security audit log | ADM | Must |
 | US-13.3 | Lockout after repeated failed sign-ins | ADM, OWN, NTM, DEV | Should |
 | US-13.7 | Use Tandem on a phone and in dark mode | NTM, OWN, DEV | Should |

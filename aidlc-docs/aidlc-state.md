@@ -4,7 +4,7 @@
 - **Project Name**: Tandem
 - **Project Type**: Greenfield
 - **Start Date**: 2026-09-28T03:32:30Z
-- **Current Stage**: CONSTRUCTION - U1 Foundation and walking skeleton, Functional Design (next; waiting for PR merge)
+- **Current Stage**: CONSTRUCTION - U1 Foundation and walking skeleton, NFR Requirements (generated, awaiting approval)
 - **AI-DLC Rules Version**: v1.0.1 (awslabs/aidlc-workflows @ e40f6a93a59d1a22be78314ff32585fdd6b60936)
 
 ## Workspace State
@@ -38,7 +38,7 @@
 - [x] Units Generation (APPROVED - 9 units, 87 stories mapped)
 
 ### 🟢 CONSTRUCTION PHASE
-- [ ] Per-unit design and code generation (Functional Design, NFR Requirements, NFR Design, Infrastructure Design, Code Generation: all EXECUTE)
+- [ ] Per-unit design and code generation (U1 Functional Design APPROVED, NFR Requirements generated, awaiting approval; units U1-U9 per unit-of-work.md)
 - [ ] Build and Test
 
 ### 🟡 OPERATIONS PHASE

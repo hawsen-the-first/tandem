@@ -46,9 +46,9 @@ U1 -> U2 -> U3 -> U4 -> U5 -> U6 -> U7 -> U8 -> U9 (optional)
 | Check | Result |
 |---|---|
 | No cycles between units | Passed: every dependency points to an earlier unit in the build order |
-| Every story is in exactly one unit | Passed: 87 of 87 (see `unit-of-work-story-map.md`) |
+| Every story is in exactly one unit | Passed: 89 of 89 (see `unit-of-work-story-map.md`) |
 | Every component is introduced by exactly one unit | Passed: 27 of 27 (see `unit-of-work.md` section 3; stubs are replaced, not duplicated) |
-| Every FR reaches a unit | Passed: all 80 FRs are covered by stories that each belong to a unit |
+| Every FR reaches a unit | Passed: all 84 FRs are covered by stories that each belong to a unit |
 | Security-critical components get NFR stages in full | Passed: C4 (U1), C7 (U3), C16 (U4, U7), C17 (U5), C24 (U1) |
 | Cross-unit contracts are ports, events or jobs only | Passed: units interact through the ports and the outbox and queue defined in Application Design |
 
