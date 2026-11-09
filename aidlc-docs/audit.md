@@ -430,3 +430,28 @@
 **Context**: CONSTRUCTION - U1, Code Generation next
 
 ---
+
+## U1 Code Generation - Part 1 Planning Started
+**Timestamp**: 2026-11-09T20:06:47Z
+**User Input**: N/A
+**AI Response**: "PR #4 opened for U1 NFR Design and Infrastructure Design. Loaded code-generation.md. Environment check: Rust, just, openssl and psql missing; Node 22, pnpm, Docker 29 and Nix 2.34 present, so the flake dev shell can provide the toolchain. Created branch aidlc/u1-code-generation-plan (stacked on aidlc/u1-nfr-design; its PR will target main after #4 merges). Asking four decisions that the plan depends on: UI primitive library, breached-password dataset, PR granularity for U1 code, verification during generation."
+**Context**: CONSTRUCTION - U1 Code Generation, Part 1
+
+---
+
+## U1 Code Generation - Plan Created and Approval Prompt
+**Timestamp**: 2026-11-09T20:10:43Z
+**User Input (chat)**: Q1 "Radix UI (Recommended)"; Q2 "HIBP top ~1M (Recommended)"; Q3 "About 5 PRs by layer (Recommended)"; Q4 "Yes (Recommended)".
+**AI Response**: "Created construction/plans/u1-foundation-code-generation-plan.md: 58 numbered steps in 5 PR groups (scaffold and dev environment; domain and application; persistence, vault and credentials; api, worker and CLI; web and end-to-end), unit context, added crates (support, config, credentials) and tool (breach-filter), conventions, 5 risks with handling (notably R2: full HIBP dataset may be impractical; fallback to a smaller permissively licensed list, with a stop-and-ask), story traceability, PR plan. Asked: 'Approve the U1 code generation plan?'"
+**Context**: CONSTRUCTION - U1 Code Generation Part 1, awaiting plan approval
+
+---
+
+## U1 Code Generation - Plan Approval
+**Timestamp**: 2026-11-09T20:12:25Z
+**AI Prompt**: "Approve the U1 code generation plan (58 steps across 5 PRs) and the HIBP fallback?"
+**User Input**: "Approve plan and fallback (Recommended)"
+**Status**: Approved. Fallback agreed: if the full HIBP dataset is impractical, stop at step 32 and ask before using a smaller permissively licensed list.
+**Context**: Code Generation Part 2 begins at Step 1 on branch unit-u1/scaffold (stacked on aidlc/u1-code-generation-plan until #4 and the plan PR merge)
+
+---
