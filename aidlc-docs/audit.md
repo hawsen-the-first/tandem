@@ -455,3 +455,11 @@
 **Context**: Code Generation Part 2 begins at Step 1 on branch unit-u1/scaffold (stacked on aidlc/u1-code-generation-plan until #4 and the plan PR merge)
 
 ---
+
+## U1 Code Generation - PR 1 (steps 1-8) executed
+**Timestamp**: 2026-11-09T20:24:20Z
+**User Input**: N/A
+**AI Response**: "Executed plan steps 1-8 on branch unit-u1/scaffold: workspace scaffold, Nix flake (verified), justfile, dev environment (verified: TLS enforced, roles, secrets hygiene), CI (actionlint clean), CodeQL, Dependabot, CODEOWNERS, SECURITY.md, README, web skeleton. just check passes. Deviations: certificate bind mount instead of volume; ESLint 10 without jsx-a11y (axe checks instead); moderate dev-only minimatch advisory accepted (below CI threshold, not in shipped client). Summary in construction/u1-foundation/code/pr1-scaffold-summary.md. Opening PR 1."
+**Context**: CONSTRUCTION - U1 Code Generation, PR 1 of 5
+
+---

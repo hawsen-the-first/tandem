@@ -2,7 +2,7 @@
 
 A collaboration workspace for teams to build with AI.
 
-> Status: **Inception, Requirements Analysis.** No application code yet.
+> Status: **Construction, unit U1 (foundation and walking skeleton).** Early scaffold; not usable yet.
 
 ## How this project is built
 
@@ -24,6 +24,55 @@ something like *"Continue the AI-DLC workflow"*. The agent reads `aidlc-docs/aid
 and picks up from the current stage.
 
 Questions are answered in the question files by filling in the `[Answer]:` tags.
+
+## Development
+
+Tandem is a Rust back end (`api` and `worker` services plus an operations CLI) and a React web client.
+The development shell pins every tool; Docker (or Podman with Compose v2) provides PostgreSQL.
+
+### Prerequisites
+- [Nix](https://nixos.org/download) with flakes enabled (recommended): `nix develop` provides Rust, Node, `just`,
+  `cargo-audit`, `cargo-deny`, `sqlx-cli`, `psql` and browsers for the end-to-end tests.
+  Without Nix, install the versions pinned in `rust-toolchain.toml` and `.node-version`, plus `just`.
+- Docker with Compose v2.
+
+### First-time setup
+```sh
+nix develop            # or install the pinned tools yourself
+just dev-init          # generates random dev secrets (git-ignored); never reuse them elsewhere
+just dev-up            # PostgreSQL 18 with TLS; creates certificates on first start
+just migrate           # applies migrations under the migration role
+just api               # in separate terminals: just worker, just web
+```
+Open <http://localhost:5173>; the first-run setup screen appears.
+
+### Everyday loop
+`just check` runs everything CI runs (format, clippy, tests, web checks, dependency and licence audits).
+`just dev-reset` gives a clean database and fresh secrets. `just --list` shows every command.
+
+### Notes
+- Development uses plain `http://localhost` behind the Vite dev server. Chrome and Firefox accept `Secure`
+  cookies on localhost; **Safari does not**, so use Chrome or Firefox locally.
+- The database accepts only TLS connections; the apps verify its certificate against the private CA that
+  `just dev-up` generates in `dev/secrets/certs/`.
+- Nothing under `dev/secrets/` or `dev/.env` is ever committed.
+
+### Repository settings (owner)
+Enable these in GitHub so the checks below are enforced:
+- Protect `main`: require a pull request with one approving review, require the status checks
+  (`rust`, `web`, and the CodeQL jobs; later also `contract`, `e2e`, `perf`), block force pushes and deletion.
+- Enable secret scanning, push protection, Dependabot alerts and security updates, and private vulnerability reporting.
+
+### Layout
+```text
+crates/   shared libraries (core, ports, app, support, config, credentials, store-postgres, vault, providers, telemetry)
+apps/     api, worker, cli
+web/      Vite + React client
+tools/    breach-filter (builds the offline breached-password filter)
+tests/    cross-crate integration, end-to-end and performance tests
+dev/      development Compose file and scripts
+aidlc-docs/  AI-DLC workflow artifacts (requirements, designs, plans)
+```
 
 ## License
 

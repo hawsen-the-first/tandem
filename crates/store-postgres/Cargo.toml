@@ -1,0 +1,12 @@
+[package]
+name = "tandem-store-postgres"
+description = "PostgreSQL migrations, repositories, job queue, outbox and schema guard."
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+repository.workspace = true
+publish.workspace = true
+
+[lints]
+workspace = true

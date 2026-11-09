@@ -12,7 +12,7 @@ Infrastructure created in one unit and reused by later units. Created in U1 unle
 | CodeQL workflow, Dependabot configuration, secret scanning and push protection | U1 | Every unit | Same |
 | Branch protection and required checks on `main` | U1 (owner enables) | Every unit; the list of required checks grows with the CI | Repository owner |
 | Database roles `tandem_migrate` and `tandem_app` and the TLS requirement | U1 | Every unit adds migrations and grants under the same roles | Migrations under CODEOWNERS review |
-| Certificate volume and CA | U1 | U8 reference Compose | Same |
+| Certificate directory (`dev/secrets/certs`) and CA | U1 | U8 reference Compose | Same |
 | `SECURITY.md` and `CODEOWNERS` | U1 | Every unit | Repository owner |
 
 ## Rules for later units
