@@ -1,6 +1,6 @@
 # Tandem: Requirements (MVP)
 
-**Status**: Draft for approval
+**Status**: Approved. Amended after Application Design approval (RD1 to RD6: FR-16, NFR-1.2, NFR-2.1, NFR-2.3, FR-8.3 note)
 **Depth**: Comprehensive
 **Sources**: `requirement-verification-questions.md` (round 1), `requirements-clarification-questions.md` (round 2),
 `requirements-clarification-questions-round3.md` (round 3), `audit.md`
@@ -174,7 +174,7 @@ flowchart TD
 ### FR-8 Tasks
 - **FR-8.1** After plan approval, the orchestrator spawns one or more tasks per plan step and runs them in dependency order.
 - **FR-8.2** A task agent may: create and edit **artifacts**, and read and write **files in the session workspace**.
-- **FR-8.3** A task agent **may not run commands** (no installs, builds, tests or scripts) in the MVP. Sandboxed command execution is the first post-MVP milestone.
+- **FR-8.3** A task agent **may not run commands** (no installs, builds, tests or scripts) in the MVP, enforced by the sandbox policy (FR-16), not by instructions. Sandboxed command execution is the first post-MVP milestone.
 - **FR-8.4** Task progress (queued, running, needs review, approved, failed) is shown on the session overview and in a thread per task.
 - **FR-8.5** Task output is reviewed as a diff (workspace changes) or new artifact version, and approved per FR-6 before it is kept.
 - **FR-8.6** Rejected output can be reworked with feedback, or discarded.
@@ -225,21 +225,29 @@ flowchart TD
 - **FR-15.1** Admin settings: users, model providers and defaults, search providers, connectors, instance settings.
 - **FR-15.2** Admin can view an audit log of security-relevant events (FR-SEC).
 
+### FR-16 Sandbox policy
+- **FR-16.1** The admin sets one **instance-wide sandbox policy**: default runner tier (`in-process` or `container`), tool allow-list, network rule (default deny) and resource limits.
+- **FR-16.2** Each agent run's concrete file access is derived from the session's grants: task agents read-write to the session workspace only; thread agents read-only; approved extra repos read-only; nothing else.
+- **FR-16.3** Limits are enforced by the server and the runner, never by instructions to the model. Violations are denied and logged.
+- **FR-16.4** If the required runner cannot start, the run fails closed and never falls back to a looser tier.
+- **FR-16.5** Policy changes apply to runs started afterwards and are audited. Model and connector credentials are never available inside a sandbox.
+- **FR-16.6** Per-session policy overrides are post-MVP; the data model keeps a policy scope so they can be added.
+
 ---
 
 ## 5. Non-Functional Requirements
 
 ### NFR-1 Technology
 - **NFR-1.1** Front end: **TypeScript + React**, responsive for desktop and mobile browsers; installable as a PWA. Native apps are post-MVP.
-- **NFR-1.2** Back end: **Rust** (Axum, Tokio, SQLx).
+- **NFR-1.2** Back end: **Rust** (Axum, Tokio, SQLx), one repository with shared crates and two binaries (`api`, `worker`). Git access uses libgit2.
 - **NFR-1.3** Database: **PostgreSQL**. Blob storage for uploads and artifacts behind an interface (local disk by default; S3-compatible later).
 - **NFR-1.4** Real-time: WebSockets for messages, presence, agent streaming and task status.
 - **NFR-1.5** Specific framework choices (e.g. front-end framework, agent runtime design) are confirmed in NFR Requirements / Application Design.
 
 ### NFR-2 Deployment
-- **NFR-2.1** Ships as versioned Docker images with a reference **Docker Compose** file (app, PostgreSQL, optional SearXNG).
+- **NFR-2.1** Ships as versioned Docker images (`api`, which also serves the web client, and `worker`) with a reference **Docker Compose** file (api, worker, PostgreSQL, optional SearXNG).
 - **NFR-2.2** All configuration by environment variables and admin UI; secrets from env/files, never baked into images.
-- **NFR-2.3** A **self-hosting guide** documents install, upgrade, backup/restore, TLS/reverse proxy, and the operator decisions listed in NFR-5.4.
+- **NFR-2.3** A **self-hosting guide** documents install, upgrade, backup/restore, TLS/reverse proxy, the operator decisions listed in NFR-5.4, and the container runner's host requirement (a container runtime reachable only from the worker; rootless recommended).
 
 ### NFR-3 Performance and scale
 - **NFR-3.1** Target for the MVP: one team (tens of users) on a single host, with message delivery typically under 500 ms on a LAN.
@@ -346,5 +354,6 @@ Per round 3, the extension applies to **the product**, and deployment decisions 
 | One workspace per session | R3 Q3 (A) |
 | No command execution in MVP | R3 Q4 (C) |
 | Product-level resiliency | R2 note, R3 Q5 (A) |
+| Sandbox policy, separate api and worker, libgit2 | Application Design Q1, Q4, Q6 |
 | Security baseline | R1 Security (A) |
 | No property-based testing | R1 PBT (C) |

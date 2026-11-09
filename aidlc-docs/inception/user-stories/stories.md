@@ -75,12 +75,11 @@
 - [ ] A provider with no key (e.g. local Ollama) can be saved
 - [ ] I can edit and remove a provider; removing one in use by a session warns me first
 
-### US-2.2 Configure the Anthropic API and the optional Agent SDK provider
-**As an** Instance Admin, **I want** to add an Anthropic API key and, optionally, the Claude Agent SDK provider, **so that** I can use Claude models.
-**Personas**: ADM · **Reqs**: FR-9.1, FR-9.2 · **Priority**: Should (Anthropic API), Could (Agent SDK)
-- [ ] The Anthropic API provider accepts an API key stored encrypted
-- [ ] The Agent SDK provider is off by default and is marked as intended for personal testing under the operator's own login
-- [ ] The Agent SDK adapter invokes Claude Code on the server rather than bundling it
+### US-2.2 Configure the Anthropic API provider
+**As an** Instance Admin, **I want** to add an Anthropic API key, **so that** I can use Claude models.
+**Personas**: ADM · **Reqs**: FR-9.1, FR-9.2 · **Priority**: Should
+- [ ] The API key is stored encrypted and is never sent back to the browser after saving
+- [ ] Once tested, its models appear in the default and per-session model choices
 - [ ] The admin screen shows which provider each default and session uses
 
 ### US-2.3 Test a provider connection
@@ -126,6 +125,32 @@
 **Personas**: ADM, OWN · **Reqs**: FR-9.5 · **Priority**: Could
 - [ ] Usage per session is listed by model and by orchestrator, thread agent and task
 - [ ] The screen shows no billing or cost limits (out of scope)
+
+### US-2.9 Configure the sandbox policy
+**As an** Instance Admin, **I want** to set the instance-wide sandbox policy, **so that** agents can only reach the files, tools and network I allow.
+**Personas**: ADM · **Reqs**: FR-16.1, FR-16.5, FR-16.6, SECURITY-11, SECURITY-14 · **Priority**: Must
+- [ ] I can choose the default runner tier: in-process, or container (offered only when a container runtime is reachable, with a test action; container behaviour is covered by US-2.11)
+- [ ] I can set the tool allow-list, the network rule (default: none) and resource limits
+- [ ] The command tool is shown as disabled in the MVP
+- [ ] A saved change applies to runs started afterwards; runs already in progress are unaffected
+- [ ] Every change is recorded in the audit log
+- [ ] Concrete file paths are not edited here; they come from each session's grants (US-3.2, US-6.9)
+
+### US-2.10 Configure the optional Agent SDK provider
+**As an** Instance Admin, **I want** to enable the Claude Agent SDK provider, **so that** I can try Tandem on my own Claude login for personal testing.
+**Personas**: ADM · **Reqs**: FR-9.1, FR-9.2 · **Priority**: Could
+- [ ] The provider is off by default and is marked as intended for personal testing under the operator's own login
+- [ ] The adapter invokes Claude Code on the server rather than bundling it
+- [ ] A test action reports whether the server's Claude login is usable
+
+### US-2.11 Run agents in container sandboxes
+**As an** Instance Admin, **I want** agent runs to execute in isolated containers when I choose the container runner, **so that** operating-system limits back up the sandbox policy.
+**Personas**: ADM, OWN · **Reqs**: FR-16.1, FR-16.2, FR-16.3, FR-16.4, SECURITY-06, SECURITY-11 · **Priority**: Should
+- [ ] With the container runner selected, each run starts in its own container with only policy-bound paths mounted (task agents: workspace read-write; thread agents and extra repos: read-only)
+- [ ] The container has no network by default, runs as a non-root user with a read-only root filesystem, and has CPU, memory and process limits
+- [ ] No model or connector credentials are present inside the container
+- [ ] If the container cannot start, the run fails closed with a clear reason and never falls back to the in-process runner
+- [ ] Containers and scratch space are removed when the run ends
 
 ---
 
@@ -333,10 +358,11 @@
 
 ### US-6.8 Agents answer but do not change the workspace
 **As a** Session Owner, **I want** thread agents to be short-lived and unable to change the workspace, **so that** discussion can never alter files by accident.
-**Personas**: OWN, DEV · **Reqs**: FR-5.2, FR-5.5, SECURITY-11 · **Priority**: Must
+**Personas**: OWN, DEV · **Reqs**: FR-5.2, FR-5.5, FR-16.2, FR-16.3, SECURITY-11 · **Priority**: Must
 - [ ] A thread agent runs for one request, posts its result and stops
 - [ ] A thread agent has no write access to workspace files
 - [ ] A thread agent cannot approve a thread, the plan or any output
+- [ ] Write access is denied by the runner policy (read-only binding), not by instructions to the model
 
 ### US-6.9 Request and approve access to another repo
 **As a** developer, **I want** to request access to an additional repo in a thread and have the team approve it, **so that** agents can read related code.
@@ -434,16 +460,18 @@
 
 ### US-9.2 Task agents create artifacts and edit workspace files
 **As a** Session Owner, **I want** task agents to create or edit artifacts and files in the workspace, **so that** the plan produces real output.
-**Personas**: OWN, DEV, NTM · **Reqs**: FR-8.2 · **Priority**: Must
+**Personas**: OWN, DEV, NTM · **Reqs**: FR-8.2, FR-16.2, FR-16.4 · **Priority**: Must
 - [ ] A task agent can create and edit artifacts and read and write files in the session workspace
 - [ ] A task agent cannot touch anything outside the session workspace
+- [ ] If the required sandbox runner cannot start, the task fails with a clear reason and never runs under a looser tier
 - [ ] Changes stay in the session worktree until committed (US-11.1)
 
 ### US-9.3 Task agents cannot run commands
 **As a** Session Owner, **I want** task agents unable to run commands, **so that** the MVP is safe to run on a shared host.
-**Personas**: OWN, ADM · **Reqs**: FR-8.3, SECURITY-11 · **Priority**: Must
+**Personas**: OWN, ADM · **Reqs**: FR-8.3, FR-16.1, FR-16.3, SECURITY-11 · **Priority**: Must
 - [ ] No tool for installs, builds, tests or scripts is available to any agent
 - [ ] If a task needs a command, it reports that clearly instead of working around the limit
+- [ ] The sandbox policy disables the command tool, and the runner enforces this outside the model
 
 ### US-9.4 Track task progress
 **As a** member, **I want** to see each task's status, **so that** I know what is running and what needs me.
@@ -644,6 +672,8 @@
 - [ ] Core flows meet WCAG 2.2 AA (keyboard use, contrast, labels)
 
 
+
+
 ---
 
 ## Requirements Coverage
@@ -700,8 +730,8 @@ Every functional requirement (FR) in `requirements.md` maps to at least one stor
 | FR-8.5 | US-9.5, US-9.6, US-9.7 |
 | FR-8.6 | US-9.8 |
 | FR-8.7 | US-9.9 |
-| FR-9.1 | US-2.1, US-2.2 |
-| FR-9.2 | US-2.1, US-2.2, US-2.3 |
+| FR-9.1 | US-2.1, US-2.2, US-2.10 |
+| FR-9.2 | US-2.1, US-2.2, US-2.3, US-2.10 |
 | FR-9.3 | US-2.4, US-3.6 |
 | FR-9.4 | US-2.3 |
 | FR-9.5 | US-2.8 |
@@ -726,8 +756,14 @@ Every functional requirement (FR) in `requirements.md` maps to at least one stor
 | FR-14.1 | US-12.1, US-12.2 |
 | FR-15.1 | US-2.1 |
 | FR-15.2 | US-2.7 |
+| FR-16.1 | US-2.9, US-2.11, US-9.3 |
+| FR-16.2 | US-2.11, US-6.8, US-9.2 |
+| FR-16.3 | US-2.11, US-6.8, US-9.3 |
+| FR-16.4 | US-2.11, US-9.2 |
+| FR-16.5 | US-2.9 |
+| FR-16.6 | US-2.9 |
 
-**NFR touchpoints with stories**: SECURITY-04/05 (US-13.1, US-13.2), SECURITY-12 (US-1.2, US-1.5, US-13.3), SECURITY-14 (US-1.4, US-2.7), NFR-4.2/4.3 (US-2.1, US-13.5), NFR-5.2 (US-13.6), NFR-5.3 (US-9.9), NFR-5.6 (US-13.4), NFR-6 (US-13.7). Remaining NFRs stay constraints in `requirements.md`.
+**NFR touchpoints with stories**: SECURITY-04/05 (US-13.1, US-13.2), SECURITY-06 (US-2.11), SECURITY-11 (US-2.9, US-2.11, US-6.8, US-9.3), SECURITY-12 (US-1.2, US-1.5, US-13.3), SECURITY-14 (US-1.4, US-2.7, US-2.9), NFR-4.2/4.3 (US-2.1, US-13.5), NFR-5.2 (US-13.6), NFR-5.3 (US-9.9), NFR-5.6 (US-13.4), NFR-6 (US-13.7). Remaining NFRs stay constraints in `requirements.md`.
 
 ---
 
@@ -735,8 +771,8 @@ Every functional requirement (FR) in `requirements.md` maps to at least one stor
 
 | Persona | Stories (primary or beneficiary) | Count |
 |---|---|---|
-| ADM | US-1.1, US-1.2, US-1.3, US-1.4, US-1.5, US-1.7, US-2.1, US-2.2, US-2.3, US-2.4, US-2.5, US-2.6, US-2.7, US-2.8, US-9.3, US-11.5, US-13.3, US-13.4, US-13.5,  | 19 |
-| OWN | US-1.2, US-1.5, US-1.6, US-2.8, US-3.1, US-3.2, US-3.3, US-3.4, US-3.5, US-3.6, US-3.7, US-4.1, US-4.2, US-4.3, US-4.4, US-4.5, US-5.1, US-5.2, US-5.3, US-5.4, US-5.5, US-5.6, US-5.7, US-5.8, US-6.1, US-6.2, US-6.3, US-6.4, US-6.5, US-6.6, US-6.7, US-6.8, US-6.9, US-7.1, US-7.2, US-7.3, US-8.1, US-8.2, US-8.3, US-8.4, US-8.5, US-8.6, US-8.7, US-9.1, US-9.2, US-9.3, US-9.4, US-9.5, US-9.6, US-9.7, US-9.8, US-9.9, US-10.1, US-10.2, US-10.3, US-10.4, US-10.5, US-11.1, US-11.2, US-11.3, US-11.4, US-11.5, US-11.6, US-12.1, US-12.2, US-12.3, US-13.1, US-13.2, US-13.3, US-13.5, US-13.6, US-13.7,  | 72 |
+| ADM | US-1.1, US-1.2, US-1.3, US-1.4, US-1.5, US-1.7, US-2.1, US-2.2, US-2.3, US-2.4, US-2.5, US-2.6, US-2.7, US-2.8, US-2.9, US-2.10, US-2.11, US-9.3, US-11.5, US-13.3, US-13.4, US-13.5,  | 22 |
+| OWN | US-1.2, US-1.5, US-1.6, US-2.8, US-2.11, US-3.1, US-3.2, US-3.3, US-3.4, US-3.5, US-3.6, US-3.7, US-4.1, US-4.2, US-4.3, US-4.4, US-4.5, US-5.1, US-5.2, US-5.3, US-5.4, US-5.5, US-5.6, US-5.7, US-5.8, US-6.1, US-6.2, US-6.3, US-6.4, US-6.5, US-6.6, US-6.7, US-6.8, US-6.9, US-7.1, US-7.2, US-7.3, US-8.1, US-8.2, US-8.3, US-8.4, US-8.5, US-8.6, US-8.7, US-9.1, US-9.2, US-9.3, US-9.4, US-9.5, US-9.6, US-9.7, US-9.8, US-9.9, US-10.1, US-10.2, US-10.3, US-10.4, US-10.5, US-11.1, US-11.2, US-11.3, US-11.4, US-11.5, US-11.6, US-12.1, US-12.2, US-12.3, US-13.1, US-13.2, US-13.3, US-13.5, US-13.6, US-13.7,  | 73 |
 | NTM | US-1.2, US-1.5, US-1.6, US-3.3, US-3.5, US-3.7, US-4.1, US-4.2, US-4.3, US-4.4, US-4.5, US-5.1, US-5.2, US-5.3, US-5.4, US-5.5, US-5.6, US-5.7, US-5.8, US-6.1, US-6.2, US-6.4, US-6.5, US-6.6, US-6.7, US-7.1, US-7.2, US-7.3, US-8.1, US-8.2, US-8.3, US-8.4, US-8.5, US-8.6, US-9.2, US-9.4, US-9.6, US-9.7, US-9.8, US-10.1, US-10.2, US-10.3, US-10.4, US-11.6, US-12.1, US-12.2, US-12.3, US-13.1, US-13.2, US-13.3, US-13.6, US-13.7,  | 52 |
 | DEV | US-1.2, US-1.5, US-1.6, US-3.2, US-3.5, US-3.7, US-4.1, US-4.2, US-4.3, US-4.4, US-4.5, US-5.1, US-5.2, US-5.3, US-5.4, US-5.5, US-5.6, US-5.7, US-5.8, US-6.1, US-6.2, US-6.3, US-6.4, US-6.6, US-6.7, US-6.8, US-6.9, US-7.1, US-7.2, US-7.3, US-8.1, US-8.2, US-8.3, US-8.4, US-8.5, US-8.6, US-9.1, US-9.2, US-9.4, US-9.5, US-9.7, US-9.8, US-9.9, US-10.1, US-10.2, US-10.3, US-10.4, US-10.5, US-11.1, US-11.2, US-11.3, US-11.6, US-12.1, US-12.2, US-12.3, US-13.1, US-13.2, US-13.3, US-13.6, US-13.7,  | 60 |
 
@@ -746,9 +782,9 @@ Every functional requirement (FR) in `requirements.md` maps to at least one stor
 
 | Priority (first listed) | Stories |
 |---|---|
-| Must | 52 |
-| Should | 30 |
-| Could | 2 |
+| Must | 53 |
+| Should | 31 |
+| Could | 3 |
 
 ---
 
@@ -758,7 +794,7 @@ Every functional requirement (FR) in `requirements.md` maps to at least one stor
 
 | Step | What happens | Stories |
 |---|---|---|
-| 1 | Priya installs Tandem, creates the admin account, enrols MFA, connects an Ollama provider and the GitHub connector, tests both, and sets default models | US-1.1, US-1.5, US-2.1, US-2.3, US-2.4, US-2.6 |
+| 1 | Priya installs Tandem, creates the admin account, enrols MFA, connects an Ollama provider and the GitHub connector, tests both, sets default models, and chooses the sandbox policy | US-1.1, US-1.5, US-2.1, US-2.3, US-2.4, US-2.6, US-2.9 |
 | 2 | Priya invites Marcus, Lena and Sam; each sets a password and signs in | US-1.3, US-1.2 |
 | 3 | Marcus creates a session "CSV export", writes the prompt, picks the repo as the workspace, and adds Lena and Sam | US-3.1, US-3.2, US-3.4, US-3.5 |
 | 4 | The orchestrator reads the prompt and repo and proposes a round of questions; each becomes a thread. Marcus removes one and Lena adds one | US-4.1, US-4.2, US-4.3 |
