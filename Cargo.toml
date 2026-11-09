@@ -11,6 +11,7 @@ members = [
     "crates/vault",
     "crates/providers",
     "crates/telemetry",
+    "crates/runtime",
     "apps/api",
     "apps/worker",
     "apps/cli",

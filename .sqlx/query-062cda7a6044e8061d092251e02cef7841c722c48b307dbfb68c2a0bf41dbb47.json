@@ -1,0 +1,16 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "INSERT INTO instance_settings (key, value, updated_by, updated_at) VALUES ($1, $2, NULL, $3)\n             ON CONFLICT (key) DO NOTHING",
+  "describe": {
+    "columns": [],
+    "parameters": {
+      "Left": [
+        "Text",
+        "Text",
+        "Timestamptz"
+      ]
+    },
+    "nullable": []
+  },
+  "hash": "062cda7a6044e8061d092251e02cef7841c722c48b307dbfb68c2a0bf41dbb47"
+}

@@ -243,3 +243,9 @@ pub fn update_process_metrics() {
         metrics::gauge!(names::PROCESS_CPU_SECONDS).set((ticks(11) + ticks(12)) / 100.0);
     }
 }
+
+/// Set a gauge that carries a `state` label (a small helper so callers need not depend on the
+/// `metrics` crate).
+pub fn set_gauge_with_state(name: &'static str, state: &'static str, value: f64) {
+    metrics::gauge!(name, "state" => state).set(value);
+}
