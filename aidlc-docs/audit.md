@@ -487,3 +487,13 @@
 **Context**: CONSTRUCTION - U1 Code Generation, PR 3 of 5
 
 ---
+
+## U1 Code Generation - Step 32 dataset decision (risk R2)
+**Timestamp**: 2026-11-09T22:16:52Z
+**AI Prompt**: "Step 32: the full HIBP most-prevalent corpus can't be downloaded here ... Which source should the committed offline breached-password filter use?"
+**User Input (chat)**: "SecLists top 1M (Recommended)"
+**AI Response**: "Checked feasibility: the HIBP ordered archive is unreachable from this machine and the range API would need about a million requests. Used SecLists Pwdb_top-1000000.txt (MIT repository; commit a1a06ab, source SHA-256 e9a88f67...). Built tools/breach-filter (library and CLI, with --min-length to omit passwords shorter than the policy minimum), then the filter: 151,512 entries, 453,849 bytes, 1e-5 false-positive target. Recorded provenance in crates/credentials/data/README.md and licence in THIRD-PARTY-NOTICES.md. The online check still covers full HIBP when enabled. HIBP-built filter can replace this later (documented)."
+**Status**: Approved fallback used.
+**Context**: CONSTRUCTION - U1 Code Generation, step 32
+
+---

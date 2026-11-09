@@ -1775,6 +1775,11 @@ dependencies = [
 [[package]]
 name = "tandem-breach-filter"
 version = "0.1.0"
+dependencies = [
+ "tandem-credentials",
+ "tempfile",
+ "thiserror",
+]
 
 [[package]]
 name = "tandem-cli"
