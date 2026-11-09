@@ -14,7 +14,7 @@ flowchart LR
         Db[("PostgreSQL 18 - TLS - 127.0.0.1:5432")]
         Cert["Certificate generator - one-shot"]
     end
-    Certs[("Volume - certificates")]
+    Certs[("dev/secrets/certs - bind mount")]
     Secrets["dev/.env and dev/secrets - git-ignored"]
 
     Browser --> Vite
@@ -27,7 +27,7 @@ flowchart LR
     Secrets --> Worker
 ```
 
-Text alternative: the browser talks only to the Vite dev server, which proxies API and event traffic to the native `api` process. `api` and `worker` connect to PostgreSQL over TLS with certificate verification. A one-shot generator writes the certificates into a volume that the database mounts; generated secrets in git-ignored files feed the apps.
+Text alternative: the browser talks only to the Vite dev server, which proxies API and event traffic to the native `api` process. `api` and `worker` connect to PostgreSQL over TLS with certificate verification. A one-shot generator writes the certificates into a git-ignored directory that the database mounts; generated secrets in git-ignored files feed the apps.
 
 | Item | Value |
 |---|---|

@@ -31,7 +31,7 @@ Maps the U1 logical components (`nfr-design/logical-components.md`) to the infra
 
 ## 3. Certificate generator
 
-- A one-shot container (small pinned image with OpenSSL) that creates, if absent, a private CA and a server certificate valid for `localhost`, `127.0.0.1` and the Compose service name, into the volume `tandem_dev_certs`. It is idempotent and sets file permissions so only the database user can read the key.
+- A one-shot container (small pinned image with OpenSSL) that creates, if absent, a private CA and a server certificate valid for `localhost`, `127.0.0.1` and the Compose service name, into the bind mount `dev/secrets/certs` (so the native apps can read the CA file directly). It is idempotent and sets file permissions so only the database user can read the key.
 - The CA certificate is exposed read-only to the apps as `TANDEM_DATABASE_CA_FILE`; the apps connect with certificate verification (`verify-full`).
 - The same generator is reused by the reference Compose file in U8; operators can replace the certificates with their own.
 
