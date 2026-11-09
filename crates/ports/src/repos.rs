@@ -246,7 +246,8 @@ pub trait ChatRepo: Send {
     async fn insert_message(&mut self, message: &ChatMessage) -> Result<(), StoreError>;
     /// Fetch a message by id.
     async fn get_message(&mut self, id: ChatMessageId) -> Result<Option<ChatMessage>, StoreError>;
-    /// A session's messages, oldest first (at most `limit`).
+    /// A session's messages, oldest first (at most `limit`). Messages with the same timestamp keep
+    /// insertion order, so a reply never sorts before the message it answers.
     async fn list_messages(
         &mut self,
         session: ChatSessionId,
@@ -282,6 +283,8 @@ pub trait OutboxRepo: Send {
     ) -> Result<Vec<OutboxEvent>, StoreError>;
     /// The lowest retained event id, or `None` when the outbox is empty (replay window start).
     async fn lowest_retained_id(&mut self) -> Result<Option<OutboxEventId>, StoreError>;
+    /// The highest event id written so far, or `None` when nothing was ever written.
+    async fn latest_id(&mut self) -> Result<Option<OutboxEventId>, StoreError>;
 }
 
 /// The job queue.

@@ -7,10 +7,10 @@ use crate::user::User;
 #[derive(Debug, Clone, Copy, PartialEq, Eq, thiserror::Error)]
 pub enum AdminRuleError {
     /// The change would leave no active admin.
-    #[error("at least one active admin is required")]
+    #[error("At least one active admin is required")]
     LastAdmin,
     /// An admin cannot deactivate themselves.
-    #[error("you cannot deactivate your own account; ask another admin")]
+    #[error("You cannot deactivate your own account; ask another admin")]
     SelfDeactivation,
 }
 

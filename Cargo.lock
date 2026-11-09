@@ -262,6 +262,17 @@ version = "0.1.0"
 [[package]]
 name = "tandem-app"
 version = "0.1.0"
+dependencies = [
+ "async-trait",
+ "tandem-core",
+ "tandem-ports",
+ "tandem-providers",
+ "tandem-support",
+ "thiserror",
+ "time",
+ "tokio",
+ "tracing",
+]
 
 [[package]]
 name = "tandem-breach-filter"

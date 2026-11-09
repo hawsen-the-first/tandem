@@ -82,13 +82,13 @@ User, Invitation, PasswordReset, AuthSession, MfaCredential, RecoveryCode, SignI
 - [x] **Step 14 - `core`: skeleton domain.** `ChatSession`, `ChatMessage`, `OutboxEvent`, `Job` with retry policy (5 s, 30 s, 2 min; three attempts), message length rule (BR-13.2). *Skeleton.*
 - [x] **Step 15 - `core` tests.** Unit tests for every rule above, named after the BR ids; property-style table tests for the delay calculator and password policy (plain table tests, since property-based testing is disabled).
 - [x] **Step 16 - `ports` crate.** Traits: `UnitOfWork` and transaction handle, repositories (`Users`, `Invitations`, `PasswordResets`, `Sessions`, `MfaCredentials`, `SignInGuards`, `Settings`, `Audit` with append and query only, `Chat`, `Outbox`, `Jobs`), `Vault`, `PasswordHasher`, `BreachChecker`, `TotpService`, `ModelProvider`. No concrete types.
-- [ ] **Step 17 - `app`: authorisation and context.** `RequestContext`, `Access::authorize` implementing BR-9, typed capability results, and the "not found for non-admins" behaviour. *US-1.8, US-1.4.*
-- [ ] **Step 18 - `app`: setup, invitation acceptance, sign-in.** Services for W1, W3, W4: first-run setup, accept invitation, sign-in with guard, hasher, breach check, MFA step and recovery codes, session creation, audit and failure handling. *US-1.1, 1.2, 1.3, 13.3.*
-- [ ] **Step 19 - `app`: MFA, password change, forced reset.** Services for W5, W6, W7, W8 including "Also reset MFA" and session ending rules. *US-1.5, 1.6, 1.7.*
-- [ ] **Step 20 - `app`: administration.** Services for W2, W9, W10, W12, W13: invite, revoke, deactivate, reactivate, change role with last-admin protection, instance settings, audit query. *US-1.3, 1.4, 1.8, 1.9, 2.7.*
-- [ ] **Step 21 - `app`: skeleton.** Chat session and message services (W15), the orchestration decision step (`message.posted` enqueues `MockAgentReply`), and the mock agent job handler with idempotency. *Skeleton.*
-- [ ] **Step 22 - `app` tests.** Service tests over in-memory fakes covering W1 to W15, including: audit failure fails the operation, concurrent last-admin demotion, replayed TOTP step, expired and reused links, unknown email timing path, duplicate outbox delivery.
-- [ ] **Step 23 - `providers`: scripted mock provider.** Deterministic scripts behind `ModelProvider` (BR-13.5) with tests.
+- [x] **Step 17 - `app`: authorisation and context.** `RequestContext`, `Access::authorize` implementing BR-9, typed capability results, and the "not found for non-admins" behaviour. *US-1.8, US-1.4.*
+- [x] **Step 18 - `app`: setup, invitation acceptance, sign-in.** Services for W1, W3, W4: first-run setup, accept invitation, sign-in with guard, hasher, breach check, MFA step and recovery codes, session creation, audit and failure handling. *US-1.1, 1.2, 1.3, 13.3.*
+- [x] **Step 19 - `app`: MFA, password change, forced reset.** Services for W5, W6, W7, W8 including "Also reset MFA" and session ending rules. *US-1.5, 1.6, 1.7.*
+- [x] **Step 20 - `app`: administration.** Services for W2, W9, W10, W12, W13: invite, revoke, deactivate, reactivate, change role with last-admin protection, instance settings, audit query. *US-1.3, 1.4, 1.8, 1.9, 2.7.*
+- [x] **Step 21 - `app`: skeleton.** Chat session and message services (W15), the orchestration decision step (`message.posted` enqueues `MockAgentReply`), and the mock agent job handler with idempotency. *Skeleton.*
+- [x] **Step 22 - `app` tests.** Service tests over in-memory fakes covering W1 to W15, including: audit failure fails the operation, concurrent last-admin demotion, replayed TOTP step, expired and reused links, unknown email timing path, duplicate outbox delivery.
+- [x] **Step 23 - `providers`: scripted mock provider.** Deterministic scripts behind `ModelProvider` (BR-13.5) with tests.
 - [ ] **Step 24 - PR 2 verification and summary.** Compile, clippy, unit tests in the dev shell; write `code/pr2-domain-application-summary.md`. Open PR 2.
 
 ### PR 3 of 5: Persistence, vault and credentials
