@@ -4,7 +4,7 @@
 - **Project Name**: Tandem
 - **Project Type**: Greenfield
 - **Start Date**: 2026-09-28T03:32:30Z
-- **Current Stage**: INCEPTION - User Stories (generated, awaiting approval)
+- **Current Stage**: CONSTRUCTION - U1 Foundation and walking skeleton, Functional Design (next; waiting for PR merge)
 - **AI-DLC Rules Version**: v1.0.1 (awslabs/aidlc-workflows @ e40f6a93a59d1a22be78314ff32585fdd6b60936)
 
 ## Workspace State
@@ -32,13 +32,13 @@
 - [x] Workspace Detection
 - [ ] Reverse Engineering (SKIPPED - greenfield)
 - [x] Requirements Analysis (APPROVED - Comprehensive depth; assumptions A1-A5 confirmed)
-- [ ] User Stories (GENERATED - 4 personas, 84 stories; awaiting approval)
-- [ ] Workflow Planning
-- [ ] Application Design
-- [ ] Units Generation
+- [x] User Stories (APPROVED - 4 personas, 84 stories; PR #1)
+- [x] Workflow Planning (APPROVED)
+- [x] Application Design (APPROVED)
+- [x] Units Generation (APPROVED - 9 units, 87 stories mapped)
 
 ### 🟢 CONSTRUCTION PHASE
-- [ ] Per-unit design and code generation
+- [ ] Per-unit design and code generation (Functional Design, NFR Requirements, NFR Design, Infrastructure Design, Code Generation: all EXECUTE)
 - [ ] Build and Test
 
 ### 🟡 OPERATIONS PHASE

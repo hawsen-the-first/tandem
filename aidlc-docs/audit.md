@@ -167,3 +167,111 @@
 **Context**: INCEPTION - User Stories, awaiting approval (review in GitHub PR)
 
 ---
+
+## User Stories - Approval
+**Timestamp**: 2026-11-09T02:14:39Z
+**User Input**: "Approved, continue"
+**AI Response**: "User stories and personas approved (reviewed in PR #1). Proceeding to Workflow Planning."
+**Context**: INCEPTION - User Stories complete
+
+---
+
+## Workflow Planning - Plan Created and Approval Prompt
+**Timestamp**: 2026-11-09T02:15:19Z
+**User Input**: N/A
+**AI Response**: "Created inception/plans/execution-plan.md. Risk High; all conditional stages EXECUTE (Application Design, Units Generation, and per-unit Functional Design, NFR Requirements, NFR Design, Infrastructure Design); Reverse Engineering skipped (greenfield). 7 provisional unit candidates listed. No calendar estimate given. Mermaid diagram written with text alternative. Presented plan with Request Changes / Approve & Continue to Application Design."
+**Context**: INCEPTION - Workflow Planning awaiting approval
+
+---
+
+## Workflow Planning - Approval
+**Timestamp**: 2026-11-09T02:16:36Z
+**AI Prompt**: "Approve the execution plan and proceed to Application Design?"
+**User Input**: "SOunds good, go ahead"
+**Status**: Approved
+**Context**: Workflow plan approved with 11 stages remaining; proceeding to Application Design
+
+---
+
+## Application Design - Plan Created
+**Timestamp**: 2026-11-09T02:17:08Z
+**User Input**: N/A
+**AI Response**: "Created inception/plans/application-design-plan.md with 4 working assumptions (REST+WebSocket, Postgres source of truth, ports for providers/search/connectors/blob, server-enforced permissions), 8 design questions (deployment style, job queue, real-time fan-out, agent runtime, lifecycle control, Git integration, web client build, internal structure) and the generation checklist. Asking the questions in chat, as the user previously preferred."
+**Context**: INCEPTION - Application Design, planning questions
+
+---
+
+## Application Design - Planning Answers
+**Timestamp**: 2026-11-09T02:24:59Z
+**User Input (chat)**: Q1 "Separate API and worker"; Q2 "PostgreSQL queue (Recommended)"; Q3 "In-process hub + LISTEN/NOTIFY (Recommended)"; Q4 "Can we architect an almost dev container/sandbox approach for each sandbox but make this configurable? We want some control over isolation. It might not matter for some use cases, but we might want configurable access controls (i.e. read some files but no write access outside the repo, for eg) and this should be enforced in a way that is more robust than just instructions."; Q5 "Can you provide some examples of how this looks in practice?" then "Code owns a state machine (Recommended)"; Q6 "Git library"; Q7 "Vite + React SPA (Recommended)"; Q8 "Hexagonal (Recommended)". Follow-ups: Q1 "One repo, shared crates (Recommended)"; Q4 enforcement "Policy + tiered runners (Recommended)"; Q4 config "Admin sets one instance-wide policy".
+**AI Response**: "Provided worked examples for Q5. Q4 and Q1 needed clarification; asked 3 follow-ups. Recorded answers and assumptions X5-X8 in application-design-plan.md. Noted tension between per-use-case control (original Q4 note) and single instance-wide policy; resolved as instance-wide rules with per-run path binding, flagged for confirmation. Proceeding to generation."
+**Context**: INCEPTION - Application Design, answers analysed
+
+---
+
+## Application Design - Generation Complete and Approval Prompt
+**Timestamp**: 2026-11-09T02:27:25Z
+**User Input**: N/A
+**AI Response**: "Generated inception/application-design/{components,component-methods,services,component-dependency,application-design}.md: 27 components (criticality and business impact per RESILIENCY-01), method signatures, 5 flows with lifecycle state machine, dependency matrix, data-flow and deployment diagrams, sandbox runner boundary. Recorded 6 requirement changes (RD1-RD6, incl. new FR-16 sandbox policy and story US-2.9) as pending approval rather than editing approved docs. Three items flagged for confirmation (X5 instance-wide policy, X7 container runner in MVP, D1 separate images). Mermaid diagrams (5) written with text alternatives; not render-checked because the Mermaid CLI is unavailable. Presented completion message: Request Changes / Approve & Continue to Units Generation."
+**Context**: INCEPTION - Application Design awaiting approval
+
+---
+
+## Application Design - Approval
+**Timestamp**: 2026-11-09T02:35:27Z
+**AI Prompt**: "Approve the design and proceed to Units Generation?"
+**User Input**: "Approve and continue"
+**Status**: Approved, including X5 (instance-wide policy), X7 (container runner in MVP design), D1 (separate images) and requirement changes RD1-RD6.
+**Context**: Applying RD1-RD6 to requirements.md and stories.md, then Units Generation
+
+---
+
+## Requirement Changes Applied (RD1-RD6)
+**Timestamp**: 2026-11-09T02:36:03Z
+**User Input**: N/A (follows approval of Application Design)
+**AI Response**: "Amended requirements.md (FR-16.1-16.6 sandbox policy; FR-8.3, NFR-1.2, NFR-2.1, NFR-2.3 updates; traceability row; status line). Amended stories.md: added US-2.9; extended US-6.8, US-9.2 and US-9.3 (FR-16 references and runner-enforced acceptance criteria); regenerated coverage table (80 FRs, 0 missing), persona matrix, priority summary (53 Must / 30 Should / 2 Could) and scenario step 1. Total 85 stories."
+**Context**: INCEPTION - between Application Design and Units Generation
+
+---
+
+## Units Generation - Plan Created
+**Timestamp**: 2026-11-09T02:36:54Z
+**User Input**: N/A
+**AI Response**: "Created inception/plans/unit-of-work-plan.md with a proposed 8-unit vertical-slice decomposition (U1-U8), 8 planning questions (slicing, walking skeleton, CI/CD timing, container runner placement, provider sequencing, team and parallelism, repo layout, priority handling) and the Part 2 checklist. Business domain, inter-unit dependencies and deployment categories skipped with justification. Asking questions in chat."
+**Context**: INCEPTION - Units Generation Part 1
+
+---
+
+## Units Generation - Planning Answers and Plan Approval Prompt
+**Timestamp**: 2026-11-09T02:39:28Z
+**User Input (chat)**: Q1 "Vertical slices (Recommended)"; Q2 "Yes (Recommended)"; Q3 "Only in the last unit"; Q4 "Own unit after agents and tasks (Recommended)"; Q5 "OpenAI-compatible first (Recommended)"; Q6 "One developer + AI, sequential (Recommended)"; Q7 "By architecture (Recommended)"; Q8 "Must + Should per unit (Recommended)"; clarification "Minimal CI now, packaging last (Recommended)".
+**AI Response**: "Found 1 contradiction (Q2 skeleton includes CI and images vs Q3 packaging last; also SECURITY-10 implications) and resolved with one follow-up. Recorded answers, resolved 9-unit decomposition (U1-U9), US-2.2 split plan, repo layout, and per-unit stage notes in unit-of-work-plan.md. Asked: 'Unit of work plan complete. Review the plan in aidlc-docs/inception/plans/unit-of-work-plan.md. Ready to proceed to generation?'"
+**Context**: INCEPTION - Units Generation Part 1, awaiting plan approval
+
+---
+
+## Units Generation - Plan Approval
+**Timestamp**: 2026-11-09T02:40:32Z
+**AI Prompt**: "Unit of work plan complete. Review the plan in aidlc-docs/inception/plans/unit-of-work-plan.md. Ready to proceed to generation?"
+**User Input**: "Approve & generate"
+**Status**: Approved
+**Context**: Starting Units Generation Part 2
+
+---
+
+## Units Generation - Generation Complete and Approval Prompt
+**Timestamp**: 2026-11-09T02:42:17Z
+**User Input**: N/A
+**AI Response**: "Generated application-design/unit-of-work.md (9 units, component ownership, greenfield code organization, per-unit stage recommendations), unit-of-work-dependency.md (matrix, build order, boundary validation) and unit-of-work-story-map.md (generated from stories.md: 87 stories each in exactly one unit; 53 Must / 31 Should / 3 Could). Amended stories.md: split US-2.2 into US-2.2 and US-2.10, added US-2.11 (container sandboxes); coverage re-verified (80 FRs, 0 missing). Plan checklist marked complete. Noted: U7 owns only US-2.11, U8 has no Must stories (it carries packaging per NFR-2). Presented completion message: Request Changes / Approve & Continue to CONSTRUCTION PHASE."
+**Context**: INCEPTION - Units Generation awaiting approval
+
+---
+
+## Units Generation - Approval
+**Timestamp**: 2026-11-09T02:44:21Z
+**AI Prompt**: "Approve the units and proceed to the CONSTRUCTION PHASE?"
+**User Input**: "Sounds good, please commit and open this pr, then we will continue once merged."
+**Status**: Approved. INCEPTION phase complete. User will merge the PR before CONSTRUCTION begins.
+**Context**: Next stage after merge: CONSTRUCTION - U1 Foundation and walking skeleton, Functional Design
+
+---
