@@ -1969,7 +1969,6 @@ dependencies = [
  "reqwest",
  "rustls",
  "sha1",
- "sha2 0.11.1",
  "tandem-core",
  "tandem-ports",
  "tandem-support",
@@ -2018,7 +2017,6 @@ dependencies = [
  "thiserror",
  "time",
  "tokio",
- "tracing",
  "url",
  "uuid",
 ]
