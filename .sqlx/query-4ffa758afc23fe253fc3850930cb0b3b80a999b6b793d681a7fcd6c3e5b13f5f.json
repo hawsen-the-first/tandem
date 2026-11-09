@@ -1,0 +1,14 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "DELETE FROM invitations WHERE created_at < $1 AND (status <> 'pending' OR expires_at < $1)",
+  "describe": {
+    "columns": [],
+    "parameters": {
+      "Left": [
+        "Timestamptz"
+      ]
+    },
+    "nullable": []
+  },
+  "hash": "4ffa758afc23fe253fc3850930cb0b3b80a999b6b793d681a7fcd6c3e5b13f5f"
+}

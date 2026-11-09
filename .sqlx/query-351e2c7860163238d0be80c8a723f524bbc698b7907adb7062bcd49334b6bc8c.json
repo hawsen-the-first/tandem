@@ -1,0 +1,17 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "INSERT INTO instance_settings (key, value, updated_by, updated_at) VALUES ($1, $2, $3, $4)\n             ON CONFLICT (key) DO UPDATE\n             SET value = EXCLUDED.value, updated_by = EXCLUDED.updated_by, updated_at = EXCLUDED.updated_at",
+  "describe": {
+    "columns": [],
+    "parameters": {
+      "Left": [
+        "Text",
+        "Text",
+        "Uuid",
+        "Timestamptz"
+      ]
+    },
+    "nullable": []
+  },
+  "hash": "351e2c7860163238d0be80c8a723f524bbc698b7907adb7062bcd49334b6bc8c"
+}

@@ -1,0 +1,14 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "INSERT INTO unknown_sign_in_guards (key_hash, updated_at) VALUES ($1, now())\n             ON CONFLICT (key_hash) DO NOTHING",
+  "describe": {
+    "columns": [],
+    "parameters": {
+      "Left": [
+        "Text"
+      ]
+    },
+    "nullable": []
+  },
+  "hash": "57c78242bad1ba7202a39c1a93bb5d6185912c2cdbec12153f798b27732afd2f"
+}

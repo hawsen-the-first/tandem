@@ -86,3 +86,11 @@ perf:
 
 # Everything CI runs, in the same order
 check: lint test test-web audit
+
+# Regenerate the offline SQL query metadata (needs the dev database, migrated)
+sqlx-prepare:
+    . dev/scripts/dev-env.sh migrate && cargo sqlx prepare --workspace
+
+# Fail if the committed offline query metadata is out of date (needs the dev database, migrated)
+sqlx-check:
+    . dev/scripts/dev-env.sh migrate && cargo sqlx prepare --workspace --check

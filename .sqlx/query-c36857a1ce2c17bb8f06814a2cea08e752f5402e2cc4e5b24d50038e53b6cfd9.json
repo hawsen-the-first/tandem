@@ -1,0 +1,14 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "DELETE FROM unknown_sign_in_guards WHERE key_hash IN (\n                 SELECT key_hash FROM unknown_sign_in_guards ORDER BY updated_at DESC, key_hash OFFSET $1)",
+  "describe": {
+    "columns": [],
+    "parameters": {
+      "Left": [
+        "Int8"
+      ]
+    },
+    "nullable": []
+  },
+  "hash": "c36857a1ce2c17bb8f06814a2cea08e752f5402e2cc4e5b24d50038e53b6cfd9"
+}

@@ -1,0 +1,19 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "INSERT INTO unknown_sign_in_guards\n                 (key_hash, failure_count, window_started_at, delay_until, locked_until, updated_at)\n             VALUES ($1, $2, $3, $4, $5, $6)\n             ON CONFLICT (key_hash) DO UPDATE\n             SET failure_count = EXCLUDED.failure_count, window_started_at = EXCLUDED.window_started_at,\n                 delay_until = EXCLUDED.delay_until, locked_until = EXCLUDED.locked_until,\n                 updated_at = EXCLUDED.updated_at",
+  "describe": {
+    "columns": [],
+    "parameters": {
+      "Left": [
+        "Text",
+        "Int4",
+        "Timestamptz",
+        "Timestamptz",
+        "Timestamptz",
+        "Timestamptz"
+      ]
+    },
+    "nullable": []
+  },
+  "hash": "b5ee3c3b5bd7509c5e1aec1f326106ff2462246f35d157fcbbb0d31ba5be415a"
+}

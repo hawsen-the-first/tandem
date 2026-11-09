@@ -1,0 +1,14 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "DELETE FROM unknown_sign_in_guards WHERE updated_at < $1",
+  "describe": {
+    "columns": [],
+    "parameters": {
+      "Left": [
+        "Timestamptz"
+      ]
+    },
+    "nullable": []
+  },
+  "hash": "14ec795b619b621636d7ae6425b370b434a2193bd25aa70ea049aff74ec5604a"
+}
