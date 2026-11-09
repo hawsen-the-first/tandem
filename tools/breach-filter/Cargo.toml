@@ -8,9 +8,19 @@ license.workspace = true
 repository.workspace = true
 publish.workspace = true
 
+[lib]
+path = "src/lib.rs"
+
 [[bin]]
 name = "tandem-breach-filter"
 path = "src/main.rs"
 
 [lints]
 workspace = true
+
+[dependencies]
+tandem-credentials = { version = "0.1.0", path = "../../crates/credentials" }
+thiserror = "2.0.21"
+
+[dev-dependencies]
+tempfile = "3.27.0"

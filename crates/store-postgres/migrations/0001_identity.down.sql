@@ -1,0 +1,9 @@
+DROP TABLE instance_settings;
+DROP TABLE unknown_sign_in_guards;
+DROP TABLE sign_in_guards;
+DROP TABLE recovery_codes;
+DROP TABLE mfa_credentials;
+DROP TABLE auth_sessions;
+DROP TABLE password_resets;
+DROP TABLE invitations;
+DROP TABLE users;

@@ -1,0 +1,22 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "UPDATE users SET display_name = $2, role = $3, status = $4, password_hash = $5,\n                    password_changed_at = $6, deactivated_at = $7, deactivated_by = $8, last_sign_in_at = $9\n             WHERE id = $1",
+  "describe": {
+    "columns": [],
+    "parameters": {
+      "Left": [
+        "Uuid",
+        "Text",
+        "Text",
+        "Text",
+        "Text",
+        "Timestamptz",
+        "Timestamptz",
+        "Uuid",
+        "Timestamptz"
+      ]
+    },
+    "nullable": []
+  },
+  "hash": "e3685ad0bb3b1a9a3d9c95d4f5f9c69c45e15e16e5b589726237e3e56d210806"
+}

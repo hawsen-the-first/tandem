@@ -1,0 +1,17 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "INSERT INTO mfa_credentials (user_id, secret_sealed, confirmed_at, last_used_step)\n             VALUES ($1, $2, $3, $4)\n             ON CONFLICT (user_id) DO UPDATE\n             SET secret_sealed = EXCLUDED.secret_sealed, confirmed_at = EXCLUDED.confirmed_at,\n                 last_used_step = EXCLUDED.last_used_step",
+  "describe": {
+    "columns": [],
+    "parameters": {
+      "Left": [
+        "Uuid",
+        "Bytea",
+        "Timestamptz",
+        "Int8"
+      ]
+    },
+    "nullable": []
+  },
+  "hash": "cc89a27fee7a1922ca388de46d2082540ca66149dacc2d716aa35a9d442d4d33"
+}

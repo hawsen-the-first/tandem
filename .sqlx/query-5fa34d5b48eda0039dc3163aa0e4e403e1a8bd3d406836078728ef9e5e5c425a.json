@@ -1,0 +1,20 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "UPDATE jobs SET status = $2, attempts = $3, run_at = $4, last_error = $5, lease_expires_at = $6,\n                    trace_context = $7\n             WHERE id = $1",
+  "describe": {
+    "columns": [],
+    "parameters": {
+      "Left": [
+        "Uuid",
+        "Text",
+        "Int4",
+        "Timestamptz",
+        "Text",
+        "Timestamptz",
+        "Text"
+      ]
+    },
+    "nullable": []
+  },
+  "hash": "5fa34d5b48eda0039dc3163aa0e4e403e1a8bd3d406836078728ef9e5e5c425a"
+}

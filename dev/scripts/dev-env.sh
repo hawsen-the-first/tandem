@@ -19,3 +19,6 @@ export TANDEM_PUBLIC_URL="http://localhost:5173"
 export TANDEM_LISTEN_ADDR="127.0.0.1:8080"
 export TANDEM_LOG_LEVEL="${TANDEM_LOG_LEVEL:-debug}"
 unset _role _pw
+
+# sqlx-cli (migrate, prepare) reads DATABASE_URL; it needs the CA path in the URL.
+export DATABASE_URL="${TANDEM_DATABASE_URL}&sslrootcert=${TANDEM_DATABASE_CA_FILE}"

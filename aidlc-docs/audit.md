@@ -479,3 +479,37 @@
 **Context**: CONSTRUCTION - U1 Code Generation, PR 2 of 5
 
 ---
+
+## U1 Code Generation - PR 2 merged; PR 3 started
+**Timestamp**: 2026-11-09T21:57:42Z
+**User Input**: "Merged, continue"
+**AI Response**: "PR #7 merged. Synced main, created branch unit-u1/persistence for plan steps 25-34 (migrations, database access layer, repositories, outbox and queue, guards, vault, credentials, breached-password filter, integration tests). Step 32 will stop to ask about the dataset fallback as agreed."
+**Context**: CONSTRUCTION - U1 Code Generation, PR 3 of 5
+
+---
+
+## U1 Code Generation - Step 32 dataset decision (risk R2)
+**Timestamp**: 2026-11-09T22:16:52Z
+**AI Prompt**: "Step 32: the full HIBP most-prevalent corpus can't be downloaded here ... Which source should the committed offline breached-password filter use?"
+**User Input (chat)**: "SecLists top 1M (Recommended)"
+**AI Response**: "Checked feasibility: the HIBP ordered archive is unreachable from this machine and the range API would need about a million requests. Used SecLists Pwdb_top-1000000.txt (MIT repository; commit a1a06ab, source SHA-256 e9a88f67...). Built tools/breach-filter (library and CLI, with --min-length to omit passwords shorter than the policy minimum), then the filter: 151,512 entries, 453,849 bytes, 1e-5 false-positive target. Recorded provenance in crates/credentials/data/README.md and licence in THIRD-PARTY-NOTICES.md. The online check still covers full HIBP when enabled. HIBP-built filter can replace this later (documented)."
+**Status**: Approved fallback used.
+**Context**: CONSTRUCTION - U1 Code Generation, step 32
+
+---
+## U1 Code Generation - PR 3 (steps 25-34) executed
+**Timestamp**: 2026-11-10T00:00:00Z
+**User Input**: N/A
+**AI Response**: "Executed plan steps 25-34 on branch unit-u1/persistence: PostgreSQL migrations and adapter, outbox, queue, guards, vault, credentials, breach filter, and integration tests (19 repository and privilege tests plus an end-to-end App-over-Postgres flow). Found and fixed a retention bug (job cleanup compared the database clock with application time; now uses run_at). cargo deny flagged RUSTSEC-2026-0440 (astral-tokio-tar, unmaintained, via the testcontainers dev-dependency)."
+**Context**: CONSTRUCTION - U1 Code Generation, PR 3 of 5
+
+---
+
+## U1 Code Generation - Advisory decision (RUSTSEC-2026-0440)
+**AI Prompt**: "cargo deny now flags RUSTSEC-2026-0440: astral-tokio-tar (used only by the testcontainers dev-dependency) is unmaintained, with no patched release. How should I handle it?"
+**User Input (chat)**: "Drop testcontainers"
+**AI Response**: "Replaced testcontainers with a docker CLI harness (container removed by a watchdog when the test process ends); the advisory is not ignored. Also allowed CDLA-Permissive-2.0 (webpki-roots data licence) in deny.toml and added versions to dev path dependencies."
+**Status**: Approved.
+**Context**: CONSTRUCTION - U1 Code Generation, step 34
+
+---

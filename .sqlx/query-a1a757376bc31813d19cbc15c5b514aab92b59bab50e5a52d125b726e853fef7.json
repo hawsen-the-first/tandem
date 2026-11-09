@@ -1,0 +1,18 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "UPDATE auth_sessions SET last_seen_at = $2, scope = $3, ended_at = $4, ended_reason = $5\n             WHERE id = $1",
+  "describe": {
+    "columns": [],
+    "parameters": {
+      "Left": [
+        "Uuid",
+        "Timestamptz",
+        "Text",
+        "Timestamptz",
+        "Text"
+      ]
+    },
+    "nullable": []
+  },
+  "hash": "a1a757376bc31813d19cbc15c5b514aab92b59bab50e5a52d125b726e853fef7"
+}
