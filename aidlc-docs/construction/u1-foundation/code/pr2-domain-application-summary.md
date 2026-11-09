@@ -31,3 +31,6 @@ Every business rule BR-1 to BR-13 that this layer can express has at least one t
 
 ## Merge order
 Based on `main` after PRs #4, #5 and #6 merged; no dependencies on other open PRs.
+
+## CodeQL finding on this PR and how it was handled
+CodeQL reported 33 `rust/hard-coded-cryptographic-value` alerts, all password literals in test code and the test fakes (none in production code). Rather than dismissing alerts on GitHub, the PR adds `.github/codeql/codeql-config.yml`, which ignores test-only paths (`**/tests/**`, `**/tests.rs`, `**/*_tests.rs`, `**/testing.rs`), so production code stays fully scanned. The inline password-policy tests were moved to `crates/core/src/password_policy/tests.rs` to fit the convention, now recorded in the README and the plan. Review point: this narrows what CodeQL analyses to non-test code.

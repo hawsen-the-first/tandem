@@ -1,0 +1,9 @@
+# CodeQL treats password-like string literals in test code as hard-coded credentials. Test-only
+# paths are excluded so production code stays fully scanned. Convention (see README): tests that
+# contain credential-like literals live in `tests/` directories, `tests.rs` or `*_tests.rs` files.
+name: tandem-codeql
+paths-ignore:
+  - "**/tests/**"
+  - "**/tests.rs"
+  - "**/*_tests.rs"
+  - "**/testing.rs"

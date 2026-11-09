@@ -49,7 +49,7 @@ User, Invitation, PasswordReset, AuthSession, MfaCredential, RecoveryCode, SignI
 - **Rust**: `rustfmt`, `clippy` with warnings denied, `#![forbid(unsafe_code)]` in every crate that does not need it, typed errors with `thiserror`, no `unwrap` or `expect` in non-test code, every SQL statement parameterised.
 - **Naming**: IDs are UUIDv7 newtypes; times come only from the `Clock` trait; tokens and codes only from the `Rng` trait (so tests control them).
 - **Front end**: strict TypeScript, no `any`; all user-facing text from the message catalogue; every interactive element gets a stable `data-testid` named `{component}-{element-role}` (for example `sign-in-form-submit-button`); no dynamic IDs.
-- **Tests**: every business rule BR-1 to BR-13 has at least one test named after the rule (for example `br_3_1_delay_doubles_and_caps_at_60s`); the BR-to-test table is produced in step 58.
+- **Tests**: tests with credential-like literals live in `tests/` directories, `tests.rs` or `*_tests.rs` files (CodeQL ignores those paths); every business rule BR-1 to BR-13 has at least one test named after the rule (for example `br_3_1_delay_doubles_and_caps_at_60s`); the BR-to-test table is produced in step 58.
 - **Commits**: small, one logical change each, on the branch for the current PR.
 
 ## 2. Risks and how the plan handles them

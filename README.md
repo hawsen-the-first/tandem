@@ -56,6 +56,7 @@ Open <http://localhost:5173>; the first-run setup screen appears.
 - The database accepts only TLS connections; the apps verify its certificate against the private CA that
   `just dev-up` generates in `dev/secrets/certs/`.
 - Nothing under `dev/secrets/` or `dev/.env` is ever committed.
+- Tests that contain credential-like literals (passwords, keys) live in `tests/` directories, `tests.rs` or `*_tests.rs` files. CodeQL ignores those paths (`.github/codeql/codeql-config.yml`) because it reports test passwords as hard-coded credentials; production code is fully scanned.
 
 ### Repository settings (owner)
 Enable these in GitHub so the checks below are enforced:
