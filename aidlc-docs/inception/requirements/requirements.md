@@ -1,6 +1,6 @@
 # Tandem: Requirements (MVP)
 
-**Status**: Approved. Amended after Application Design approval (RD1 to RD6: FR-16, NFR-1.2, NFR-2.1, NFR-2.3, FR-8.3 note)
+**Status**: Approved. Amended after Application Design approval (RD1 to RD6) and after U1 Functional Design (FR-1.3, FR-1.5, new FR-1.7 to FR-1.10)
 **Depth**: Comprehensive
 **Sources**: `requirement-verification-questions.md` (round 1), `requirements-clarification-questions.md` (round 2),
 `requirements-clarification-questions-round3.md` (round 3), `audit.md`
@@ -115,10 +115,14 @@ flowchart TD
 ### FR-1 Authentication and users
 - **FR-1.1** Email + password sign-in. Magic-link sign-in is out of scope for the MVP.
 - **FR-1.2** First-run setup creates the initial **instance admin** account.
-- **FR-1.3** Admin can invite, deactivate and remove users. Single team per instance.
+- **FR-1.3** Admin can invite, deactivate and reactivate users. Permanent removal is post-MVP. Invitations and password resets are delivered as copyable one-time links; the MVP sends no email. Single team per instance.
 - **FR-1.4** Two instance roles: **admin** and **member**. Organisations, projects and fine-grained RBAC are post-MVP.
-- **FR-1.5** TOTP multi-factor authentication: **required** for admins, optional for members (SECURITY-12).
+- **FR-1.5** TOTP multi-factor authentication: **required** for admins, who must enrol immediately (nothing else is reachable until they do), optional for members (SECURITY-12).
 - **FR-1.6** Users can change their password; admins can force a password reset.
+- **FR-1.7** Admin can change a user's role (admin or member). The last remaining admin cannot be demoted or deactivated.
+- **FR-1.8** Password policy: at least 10 characters with upper case, lower case, digit and symbol, and not found in the breached-password list (bundled offline list; optional online k-anonymity check the admin can enable).
+- **FR-1.9** Instance security settings, editable by admins: sign-in idle timeout and total duration (defaults 12 hours and 14 days), and the optional online breached-password check.
+- **FR-1.10** Sign-in protection: progressive delay after each failed attempt, temporary account lockout after 10 failures in an hour, and a per-source rate limit.
 
 ### FR-2 Sessions
 - **FR-2.1** Any member can create a session with a title, an initial prompt, and a workspace (FR-7).
@@ -223,7 +227,7 @@ flowchart TD
 
 ### FR-15 Administration
 - **FR-15.1** Admin settings: users, model providers and defaults, search providers, connectors, instance settings.
-- **FR-15.2** Admin can view an audit log of security-relevant events (FR-SEC).
+- **FR-15.2** Admin can view an audit log of security-relevant events (FR-SEC). The log is append-only: the running application cannot update or delete entries, there is no automatic pruning, and operators prune only with a documented command using a privileged credential.
 
 ### FR-16 Sandbox policy
 - **FR-16.1** The admin sets one **instance-wide sandbox policy**: default runner tier (`in-process` or `container`), tool allow-list, network rule (default deny) and resource limits.

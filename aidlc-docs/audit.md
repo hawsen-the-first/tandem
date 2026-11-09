@@ -275,3 +275,84 @@
 **Context**: Next stage after merge: CONSTRUCTION - U1 Foundation and walking skeleton, Functional Design
 
 ---
+
+## CONSTRUCTION Phase Start
+**Timestamp**: 2026-11-09T02:45:35Z
+**User Input**: "Merged, proceed with construction"
+**AI Response**: "PR #2 merged. Synced main, created branch aidlc/u1-functional-design. Starting CONSTRUCTION: U1 Foundation and walking skeleton, Functional Design."
+**Context**: CONSTRUCTION - U1, Functional Design
+
+---
+
+## U1 Functional Design - Plan Created
+**Timestamp**: 2026-11-09T02:46:23Z
+**User Input**: N/A
+**AI Response**: "Created construction/plans/u1-foundation-functional-design-plan.md with 6 working assumptions, 10 questions (password policy, session durations, lockout, invitation delivery without email, admin MFA enrolment timing, role changes, deactivate vs remove, audit retention, skeleton round trip, profile fields) and the generation checklist. Identified a gap: US-1.3 says invite by email but email sending is out of scope (FR-14.1). Asking questions in chat."
+**Context**: CONSTRUCTION - U1 Functional Design, planning questions
+
+---
+
+## U1 Functional Design - Planning Answers
+**Timestamp**: 2026-11-09T02:59:11Z
+**User Input (chat)**: Q1 "Length plus composition"; Q2 "Admin-configurable (Recommended)"; Q3 "Delay, then lockout (Recommended)"; Q4 "Copyable one-time link (Recommended)"; Q5 "Immediately (Recommended)"; Q6 "Yes (Recommended)"; Q7 "Deactivate only"; Q8 "Configurable retention"; Q9 "Scripted mock agent replies (Recommended)"; Q10 "Display name and email (Recommended)"; Q1 follow-up "Yes, on top (Recommended)".
+**AI Response**: "Recorded answers in the plan. Found 1 ambiguity (Q1 B omitted the breached-password check) and resolved it with one follow-up. Answers imply amendments: FR-1.3 and US-1.4 (deactivate/reactivate only), new FR-1.7 to FR-1.10, new stories US-1.8 (role change) and US-1.9 (instance security settings), updated acceptance criteria for US-1.1/1.2/1.3/1.5/1.6/1.7/2.7/13.3. Added assumptions A7-A9. Applying amendments, then generating artifacts."
+**Context**: CONSTRUCTION - U1 Functional Design, answers analysed
+
+---
+
+## U1 Functional Design - Amendments Applied
+**Timestamp**: 2026-11-09T03:00:19Z
+**User Input**: N/A (follows U1 planning answers)
+**AI Response**: "Amended requirements.md (FR-1.3 deactivate/reactivate and copyable links, FR-1.5 immediate admin MFA, new FR-1.7 role changes, FR-1.8 password policy, FR-1.9 instance security settings, FR-1.10 sign-in protection). Amended stories.md (US-1.1, 1.2, 1.3, 1.4, 1.5, 1.6, 1.7, 2.7, 13.3; added US-1.8 and US-1.9); regenerated coverage (84 FRs, 0 missing), matrix, priorities (53/33/3). Updated unit-of-work.md (U1 now 12 stories), unit-of-work-dependency.md and regenerated unit-of-work-story-map.md (89 stories, each in exactly one unit)."
+**Context**: CONSTRUCTION - U1 Functional Design, before artifact generation
+
+---
+
+## U1 Functional Design - Generation Complete and Approval Prompt
+**Timestamp**: 2026-11-09T03:03:37Z
+**User Input**: N/A
+**AI Response**: "Generated construction/u1-foundation/functional-design/{domain-entities,business-logic-model,business-rules,frontend-components}.md: 15 workflows, 13 rule groups (BR-1 to BR-13), audit event catalogue, permission matrix, 5 state machines, screens with props, validation, provisional API and a responsive/theme/WCAG baseline; every U1 story traced to workflows and rules. Added US-1.7 criterion 'Also reset MFA' (assumption A11). New assumptions A10 (15-minute lockout) and A11. Security Baseline checked at functional level (SECURITY-05, 08, 12, 14, 15 compliant by design; others deferred to NFR stages). Mermaid diagrams (2) have text alternatives; not render-checked. Presented completion message: Request Changes / Continue to NFR Requirements."
+**Context**: CONSTRUCTION - U1 Functional Design awaiting approval
+
+---
+
+## U1 Functional Design - Approval
+**Timestamp**: 2026-11-09T03:05:48Z
+**AI Prompt**: "Approve the functional design and proceed to NFR Requirements (U1)?"
+**User Input**: "Confirm and continue"
+**Status**: Approved, including assumptions A10 (15-minute lockout) and A11 (Also reset MFA option).
+**Context**: Proceeding to U1 NFR Requirements
+
+---
+
+## U1 NFR Requirements - Plan Created
+**Timestamp**: 2026-11-09T03:07:06Z
+**User Input**: N/A
+**AI Response**: "Loaded security-baseline.md and resiliency-baseline.md (both enabled). Created construction/plans/u1-foundation-nfr-requirements-plan.md. Identified findings: F1 SECURITY-14 (app prunes its own audit log; retention floor below 90 days) - potentially blocking, needs a user decision; F2 SECURITY-01 (database TLS and at-rest approach); F3 alerting, dashboards and tracing. 10 working assumptions, a proposed tech-stack table, 8 questions (Argon2 tuning, audit tamper-resistance, DB TLS, component approach, performance targets, tracing, test database, vault master key) and the checklist. Asking in chat."
+**Context**: CONSTRUCTION - U1 NFR Requirements, planning questions
+
+---
+
+## U1 NFR Requirements - Planning Answers
+**Timestamp**: 2026-11-09T03:42:07Z
+**User Input (chat)**: Q1 "Benchmark at first start (Recommended)"; Q2 "No automatic pruning"; Q3 "TLS required, Compose provisions cert (Recommended)"; Q4 "Headless primitives + own CSS (Recommended)"; Q5 "Tight (Recommended)"; Q6 "OpenTelemetry, off by default (Recommended)"; Q7 "Throw-away containers (Recommended)"; Q8 "Operator-supplied key file or env var (Recommended)".
+**AI Response**: "No ambiguities or contradictions. Q2 B resolves finding F1 (SECURITY-14) by removing automatic pruning: amended FR-1.9 (retention removed), FR-15.2 (append-only), US-1.9 (retitled, retention criterion replaced by online breach-check toggle), US-2.7 (append-only criterion), unit-of-work.md and story map titles, and the U1 functional design (domain-entities, business-rules BR-10/BR-11, business-logic-model W12/W13, frontend-components). Findings F2 (DB TLS) resolved by Q3 A; F3 by Q6 A plus shipped alert and dashboard definitions. Generating NFR artifacts."
+**Context**: CONSTRUCTION - U1 NFR Requirements, answers analysed
+
+---
+
+## U1 NFR Requirements - Generation Complete and Approval Prompt
+**Timestamp**: 2026-11-09T03:43:52Z
+**User Input**: N/A
+**AI Response**: "Generated construction/u1-foundation/nfr-requirements/{nfr-requirements,tech-stack-decisions}.md: 40+ requirements across scalability, performance, availability, reliability, security (SE-1 to SE-17), observability, testing and usability; 8 misuse cases; tech decisions T1-T8 from the answers plus proposed stack. Security Baseline: all 15 rules compliant by design; no open blocking findings (F1 resolved: no automatic pruning plus append-only app role; F2: DB TLS required; F3: OpenTelemetry plus shipped alert and dashboard files in U8). Resiliency Baseline: compliant or N/A/operator-owned per rule; RESILIENCY-04 and -12 delivered in U8. Amended FR-1.9, FR-15.2, US-1.9, US-2.7 and U1 functional design for the audit decision. Presented completion message with Security and Resiliency compliance summaries: Request Changes / Continue to NFR Design."
+**Context**: CONSTRUCTION - U1 NFR Requirements awaiting approval
+
+---
+
+## U1 Functional Design and NFR Requirements - Review via Pull Request
+**Timestamp**: 2026-11-09T03:44:53Z
+**User Input**: "Great, open the required PR and I will review and merge"
+**AI Response**: "Committed U1 Functional Design and NFR Requirements (with the amendments they caused) on branch aidlc/u1-functional-design and opened a pull request against main. NFR Requirements approval is treated as given on merge; NFR Design starts after the merge."
+**Context**: CONSTRUCTION - U1, NFR Requirements awaiting merge
+
+---
