@@ -10,3 +10,10 @@ publish.workspace = true
 
 [lints]
 workspace = true
+
+[dependencies]
+async-trait = "0.1.92"
+tandem-core = { version = "0.1.0", path = "../core" }
+tandem-support = { version = "0.1.0", path = "../support" }
+thiserror = "2.0.21"
+time = "0.3.55"

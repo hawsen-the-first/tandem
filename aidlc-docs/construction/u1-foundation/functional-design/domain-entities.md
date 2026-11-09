@@ -135,6 +135,7 @@ Visible only to its owner in U1 (membership arrives in U3).
 | `id`, `chat_session_id`, `created_at` | |
 | `author_kind` | `user` or `agent` |
 | `author_id` | User id, or the agent name (`mock-agent`) |
+| `in_reply_to` | For an agent reply, the message it answers; unique, so a message gets at most one reply (BR-13.4) |
 | `body` | Text, 1 to 4000 characters in U1 |
 
 ### OutboxEvent
