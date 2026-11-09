@@ -90,6 +90,8 @@ pub struct ChatMessage {
     pub body: String,
     /// When posted.
     pub created_at: OffsetDateTime,
+    /// For an agent reply, the message it answers (at most one reply per message, BR-13.4).
+    pub in_reply_to: Option<ChatMessageId>,
 }
 
 #[cfg(test)]
