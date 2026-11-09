@@ -1,0 +1,8 @@
+[advisories]
+ignore = [
+    # libsqlite3-sys is in Cargo.lock only because sqlx-macros-core declares sqlx-sqlite as an
+    # optional dependency. Tandem enables only the postgres driver, so it is never built or linked
+    # (`cargo tree -i libsqlite3-sys` finds nothing, and `cargo deny check advisories` passes).
+    # sqlx does not yet allow libsqlite3-sys >= 0.39. Remove this once sqlx moves.
+    "RUSTSEC-2026-0459",
+]
