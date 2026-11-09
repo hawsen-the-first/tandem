@@ -497,3 +497,19 @@
 **Context**: CONSTRUCTION - U1 Code Generation, step 32
 
 ---
+## U1 Code Generation - PR 3 (steps 25-34) executed
+**Timestamp**: 2026-11-10T00:00:00Z
+**User Input**: N/A
+**AI Response**: "Executed plan steps 25-34 on branch unit-u1/persistence: PostgreSQL migrations and adapter, outbox, queue, guards, vault, credentials, breach filter, and integration tests (19 repository and privilege tests plus an end-to-end App-over-Postgres flow). Found and fixed a retention bug (job cleanup compared the database clock with application time; now uses run_at). cargo deny flagged RUSTSEC-2026-0440 (astral-tokio-tar, unmaintained, via the testcontainers dev-dependency)."
+**Context**: CONSTRUCTION - U1 Code Generation, PR 3 of 5
+
+---
+
+## U1 Code Generation - Advisory decision (RUSTSEC-2026-0440)
+**AI Prompt**: "cargo deny now flags RUSTSEC-2026-0440: astral-tokio-tar (used only by the testcontainers dev-dependency) is unmaintained, with no patched release. How should I handle it?"
+**User Input (chat)**: "Drop testcontainers"
+**AI Response**: "Replaced testcontainers with a docker CLI harness (container removed by a watchdog when the test process ends); the advisory is not ignored. Also allowed CDLA-Permissive-2.0 (webpki-roots data licence) in deny.toml and added versions to dev path dependencies."
+**Status**: Approved.
+**Context**: CONSTRUCTION - U1 Code Generation, step 34
+
+---

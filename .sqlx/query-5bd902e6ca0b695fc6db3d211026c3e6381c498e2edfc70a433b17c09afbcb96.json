@@ -1,6 +1,6 @@
 {
   "db_name": "PostgreSQL",
-  "query": "DELETE FROM jobs WHERE status IN ('done', 'failed') AND created_at < $1",
+  "query": "DELETE FROM jobs WHERE status IN ('done', 'failed') AND run_at < $1",
   "describe": {
     "columns": [],
     "parameters": {
@@ -10,5 +10,5 @@
     },
     "nullable": []
   },
-  "hash": "28f08727f9f8944dca0dfeb2103cb82a3637a7bd541142ae4eee28ba16cbbeb0"
+  "hash": "5bd902e6ca0b695fc6db3d211026c3e6381c498e2edfc70a433b17c09afbcb96"
 }

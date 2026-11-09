@@ -66,7 +66,7 @@ impl PgStore {
         .map_err(map_sqlx)?
         .rows_affected();
         let jobs = sqlx::query!(
-            "DELETE FROM jobs WHERE status IN ('done', 'failed') AND created_at < $1",
+            "DELETE FROM jobs WHERE status IN ('done', 'failed') AND run_at < $1",
             tokens_before
         )
         .execute(pool)
