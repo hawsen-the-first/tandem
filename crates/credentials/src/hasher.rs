@@ -11,7 +11,6 @@ use tandem_ports::{HashError, PasswordHasher, Verification};
 use tandem_support::{Rng, random_array};
 use tokio::sync::Semaphore;
 
-const DUMMY_PASSWORD: &str = "tandem-dummy-password-for-timing";
 const SALT_LEN: usize = 16;
 
 /// Counters the telemetry layer exports (`hash_inflight`, `hash_rejected_total`).
@@ -32,6 +31,7 @@ pub struct ArgonHasher {
     max_wait: Duration,
     rng: Arc<dyn Rng>,
     dummy_hash: String,
+    dummy_probe: String,
     stats: Arc<HasherStats>,
 }
 
@@ -96,13 +96,20 @@ impl ArgonHasher {
         max_wait: Duration,
         rng: Arc<dyn Rng>,
     ) -> Result<Self, HashError> {
-        let dummy_hash = hash_blocking(profile, &*rng, DUMMY_PASSWORD)?;
+        let random_text = || {
+            random_array::<SALT_LEN>(&*rng)
+                .map(|bytes| data_encoding::HEXLOWER.encode(&bytes))
+                .map_err(|error| HashError::Internal(error.to_string()))
+        };
+        let dummy_hash = hash_blocking(profile, &*rng, &random_text()?)?;
+        let dummy_probe = random_text()?;
         Ok(Self {
             profile,
             gate: Arc::new(Semaphore::new(concurrency.max(1))),
             max_wait,
             rng,
             dummy_hash,
+            dummy_probe,
             stats: Arc::new(HasherStats::default()),
         })
     }
@@ -158,9 +165,13 @@ impl PasswordHasher for ArgonHasher {
     }
 
     async fn dummy_verify(&self) -> Result<(), HashError> {
-        let (profile, stored) = (self.profile, self.dummy_hash.clone());
+        let (profile, stored, probe) = (
+            self.profile,
+            self.dummy_hash.clone(),
+            self.dummy_probe.clone(),
+        );
         self.run(move || {
-            verify_blocking(profile, "a different password", &stored);
+            verify_blocking(profile, &probe, &stored);
         })
         .await
     }
