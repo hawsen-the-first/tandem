@@ -1,0 +1,26 @@
+# Rust
+/target/
+**/*.rs.bk
+
+# Node / web
+node_modules/
+/web/dist/
+/web/coverage/
+/web/playwright-report/
+/web/test-results/
+
+# Development secrets and generated state (never commit)
+/dev/.env
+/dev/secrets/
+/dev/data/
+
+# Editors and OS
+.idea/
+.vscode/
+*.swp
+.DS_Store
+
+# Nix
+result
+result-*
+.direnv/

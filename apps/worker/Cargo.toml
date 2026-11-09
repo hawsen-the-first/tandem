@@ -1,0 +1,16 @@
+[package]
+name = "tandem-worker"
+description = "Job runner, outbox relay and cleanup (worker service)."
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+repository.workspace = true
+publish.workspace = true
+
+[[bin]]
+name = "tandem-worker"
+path = "src/main.rs"
+
+[lints]
+workspace = true

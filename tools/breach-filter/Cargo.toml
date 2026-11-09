@@ -1,0 +1,16 @@
+[package]
+name = "tandem-breach-filter"
+description = "Builds the offline breached-password filter from a password-hash list."
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+repository.workspace = true
+publish.workspace = true
+
+[[bin]]
+name = "tandem-breach-filter"
+path = "src/main.rs"
+
+[lints]
+workspace = true
