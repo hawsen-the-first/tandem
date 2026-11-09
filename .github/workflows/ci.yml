@@ -1,0 +1,78 @@
+# Minimal CI for U1 (build, test, lint, dependency scan). The contract, e2e and perf jobs
+# are added in later steps of the U1 code generation plan. Every third-party Action is pinned
+# to a full commit SHA (SECURITY-10, SECURITY-13); dependabot keeps the pins current.
+name: CI
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  CARGO_TERM_COLOR: always
+  CARGO_INCREMENTAL: "0"
+
+jobs:
+  rust:
+    name: rust
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - name: Install the toolchain pinned in rust-toolchain.toml
+        run: rustup toolchain install
+      - uses: Swatinem/rust-cache@d1527c8f67ef9af357290475d4af4b0fab8f12e0 # v2.9.3
+      - uses: taiki-e/install-action@cfdb7ed4ccc7c7dce37759eae89dc5674b469b39 # v2.90.3
+        with:
+          tool: cargo-audit,cargo-deny,cargo-machete
+      - name: Format
+        run: cargo fmt --all --check
+      - name: Clippy
+        run: cargo clippy --workspace --all-targets -- -D warnings
+      - name: Tests
+        run: cargo test --workspace
+      - name: Advisories
+        run: cargo audit
+      - name: Licences, bans and sources
+        run: cargo deny check
+      - name: Unused dependencies
+        run: cargo machete
+
+  web:
+    name: web
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    defaults:
+      run:
+        working-directory: web
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version-file: .node-version
+          cache: npm
+          cache-dependency-path: web/package-lock.json
+      - run: npm ci
+      - name: Lint
+        run: npm run lint
+      - name: Format check
+        run: npm run format:check
+      - name: Type check
+        run: npm run typecheck
+      - name: Unit tests
+        run: npm test
+      - name: Audit
+        run: npm audit --audit-level=high
+      - name: Build
+        run: npm run build

@@ -1,0 +1,9 @@
+# Changes to security-sensitive and pipeline files need owner review (SECURITY-13).
+*                                       @hawsen-the-first
+/.github/                               @hawsen-the-first
+/deny.toml                              @hawsen-the-first
+/flake.nix                              @hawsen-the-first
+/flake.lock                             @hawsen-the-first
+/dev/                                   @hawsen-the-first
+/crates/store-postgres/migrations/      @hawsen-the-first
+/SECURITY.md                            @hawsen-the-first
