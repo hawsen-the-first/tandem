@@ -17,7 +17,6 @@ data-encoding = "2.11.1"
 sqlx = { version = "0.9.0", default-features = false, features = ["runtime-tokio", "postgres"] }
 tandem-app = { version = "0.1.0", path = "../app" }
 tandem-config = { version = "0.1.0", path = "../config" }
-tandem-core = { version = "0.1.0", path = "../core" }
 tandem-credentials = { version = "0.1.0", path = "../credentials" }
 tandem-ports = { version = "0.1.0", path = "../ports" }
 tandem-providers = { version = "0.1.0", path = "../providers" }
@@ -26,7 +25,6 @@ tandem-support = { version = "0.1.0", path = "../support" }
 tandem-telemetry = { version = "0.1.0", path = "../telemetry" }
 tandem-vault = { version = "0.1.0", path = "../vault" }
 thiserror = "2.0.21"
-time = "0.3.55"
 tokio = { version = "1.54.1", features = ["rt", "rt-multi-thread", "macros", "signal", "sync", "time"] }
 tracing = "0.1.44"
 

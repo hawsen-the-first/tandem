@@ -2307,7 +2307,6 @@ dependencies = [
  "sqlx",
  "tandem-app",
  "tandem-config",
- "tandem-core",
  "tandem-credentials",
  "tandem-ports",
  "tandem-providers",
@@ -2317,7 +2316,6 @@ dependencies = [
  "tandem-vault",
  "tempfile",
  "thiserror",
- "time",
  "tokio",
  "tracing",
 ]
