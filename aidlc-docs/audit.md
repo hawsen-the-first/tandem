@@ -356,3 +356,77 @@
 **Context**: CONSTRUCTION - U1, NFR Requirements awaiting merge
 
 ---
+
+## U1 NFR Requirements - Approval (PR merged)
+**Timestamp**: 2026-11-09T03:45:57Z
+**User Input**: "Merged, please continue"
+**AI Response**: "PR #3 merged; NFR Requirements approved. Synced main, created branch aidlc/u1-nfr-design. Starting U1 NFR Design."
+**Context**: CONSTRUCTION - U1, NFR Design
+
+---
+
+## U1 NFR Design - Plan Created
+**Timestamp**: 2026-11-09T03:46:47Z
+**User Input**: N/A
+**AI Response**: "Created construction/plans/u1-foundation-nfr-design-plan.md: pattern areas, 13 working design assumptions (middleware order, typed authorisation, cookie and CSRF, account guard, vault envelope, outbox relay, job runner, shutdown, WebSocket, metrics and traces, DB access, log redaction, migrations), 8 questions (rate-limit storage, session caching, metrics exposure, Argon2 overload behaviour, WebSocket catch-up, token cleanup retention, configuration style, duplicate message protection), logical component list and checklist. Asking in chat."
+**Context**: CONSTRUCTION - U1 NFR Design, planning questions
+
+---
+
+## U1 NFR Design - Planning Answers
+**Timestamp**: 2026-11-09T03:52:28Z
+**User Input (chat)**: Q1 "In memory per api process (Recommended)"; Q2 "No cache (Recommended)"; Q3 "Main port with bearer token"; Q4 "Cap and shed load (Recommended)"; Q5 "Replay from last event (Recommended)"; Q6 "30 days (Recommended)"; Q7 "Env vars plus optional TOML file (Recommended)"; Q8 "Not in U1".
+**AI Response**: "No ambiguities or contradictions. Recorded answers and consequences in the plan; added assumptions D14-D16 (outbox retention 24h, public URL, trusted proxies). Generating NFR design artifacts."
+**Context**: CONSTRUCTION - U1 NFR Design, answers analysed
+
+---
+
+## U1 NFR Design - Generation Complete and Approval Prompt
+**Timestamp**: 2026-11-09T03:54:12Z
+**User Input**: N/A
+**AI Response**: "Generated construction/u1-foundation/nfr-design/{nfr-design-patterns,logical-components}.md: request pipeline, resilience, scalability, hashing-under-load, security, eventing, observability and configuration patterns; 23 logical components (LC-1 to LC-23) plus infrastructure elements; traceability from every NFR (SC, PF, AV, RL, SE, OB, MT) to a pattern and component. Security Baseline re-evaluated against the design: all 15 rules compliant, no blocking findings. Resiliency: compliant for product-scope rules; RESILIENCY-04 and -12 remain for U8. Two Mermaid diagrams plus one component diagram, all with text alternatives, not render-checked. Presented completion message: Request Changes / Continue to Infrastructure Design (U1, light)."
+**Context**: CONSTRUCTION - U1 NFR Design awaiting approval
+
+---
+
+## U1 NFR Design - Approval
+**Timestamp**: 2026-11-09T19:57:41Z
+**AI Prompt**: "Approve the NFR design and proceed to Infrastructure Design (U1, light)?"
+**User Input**: "Sounds good, approve and continue"
+**Status**: Approved, including assumptions D14-D16.
+**Context**: Proceeding to U1 Infrastructure Design (on the same branch, aidlc/u1-nfr-design, one PR for both stages)
+
+---
+
+## U1 Infrastructure Design - Plan Created
+**Timestamp**: 2026-11-09T19:58:28Z
+**User Input**: N/A
+**AI Response**: "Created construction/plans/u1-foundation-infrastructure-design-plan.md: 7 categories evaluated with applicability, 9 working assumptions (GitHub-hosted pinned runners with SHA-pinned actions, Compose v2, native api and worker in dev, generated dev credentials, pinned database image, certificate generator, localhost bindings, CI job set, repo scaffold), 7 questions (PostgreSQL version, toolchain provisioning, dependency updates, static analysis, local monitoring, task runner, dev HTTPS) and checklist. Asking in chat."
+**Context**: CONSTRUCTION - U1 Infrastructure Design, planning questions
+
+---
+
+## U1 Infrastructure Design - Planning Answers
+**Timestamp**: 2026-11-09T20:01:20Z
+**User Input (chat)**: Q1 "PostgreSQL 18 (Recommended)"; Q2 "Pinned files + Nix flake (Recommended)"; Q3 "Dependabot (Recommended)"; Q4 "CodeQL + secret scanning (Recommended)"; Q5 "Nothing extra"; Q6 "just (Recommended)"; Q7 "Plain http://localhost (Recommended)".
+**AI Response**: "No ambiguities or contradictions. Recorded answers and consequences; added assumptions I10-I12. Q7 A implies the config loader rejects non-loopback http public URLs. Generating infrastructure artifacts."
+**Context**: CONSTRUCTION - U1 Infrastructure Design, answers analysed
+
+---
+
+## U1 Infrastructure Design - Generation Complete and Approval Prompt
+**Timestamp**: 2026-11-09T20:02:22Z
+**User Input**: N/A
+**AI Response**: "Generated construction/u1-foundation/infrastructure-design/{infrastructure-design,deployment-architecture}.md and construction/shared-infrastructure.md: dev PostgreSQL 18 with TLS and two roles, certificate generator, generated dev secrets, just recipes, toolchain pins and Nix flake, plain-http dev behind Vite proxy with loopback-only http rule, CI jobs (rust, web, contract, e2e, perf) with SHA-pinned Actions, CodeQL, Dependabot, secret scanning, repository settings checklist, scaffold, dev vs U8 differences. Security Baseline (SECURITY-01, 06, 07, 09, 10, 12, 13) compliant; others N/A at infrastructure level; no blocking findings. Resiliency: RESILIENCY-03 and -06 compliant, -04 and -12 delivered in U8. Two Mermaid diagrams with text alternatives, not render-checked. Presented completion message: Request Changes / Continue to Code Generation."
+**Context**: CONSTRUCTION - U1 Infrastructure Design awaiting approval
+
+---
+
+## U1 Infrastructure Design - Approval
+**Timestamp**: 2026-11-09T20:05:46Z
+**AI Prompt**: "Approve the infrastructure design and proceed to Code Generation (U1)?"
+**User Input**: "Proceed"
+**Status**: Approved, including assumptions I10-I12. Design stages for U1 are complete; NFR Design and Infrastructure Design are being submitted as one PR; Code Generation planning starts on a follow-up branch.
+**Context**: CONSTRUCTION - U1, Code Generation next
+
+---
