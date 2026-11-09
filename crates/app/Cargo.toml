@@ -14,7 +14,7 @@ workspace = true
 [dependencies]
 async-trait = "0.1.92"
 tandem-core = { version = "0.1.0", path = "../core" }
-tandem-providers = { path = "../providers", optional = true }
+tandem-providers = { version = "0.1.0", path = "../providers", optional = true }
 tandem-ports = { version = "0.1.0", path = "../ports" }
 tandem-support = { version = "0.1.0", path = "../support" }
 thiserror = "2.0.21"
@@ -23,7 +23,7 @@ tokio = { version = "1.54.1", features = ["sync"], optional = true }
 tracing = "0.1.44"
 
 [dev-dependencies]
-tandem-providers = { path = "../providers" }
+tandem-providers = { version = "0.1.0", path = "../providers" }
 tokio = { version = "1.54.1", features = ["rt", "macros", "sync", "test-util"] }
 
 [features]

@@ -471,3 +471,11 @@
 **Context**: CONSTRUCTION - U1 Code Generation, PR 2 of 5
 
 ---
+
+## U1 Code Generation - PR 2 (steps 9-24) executed
+**Timestamp**: 2026-11-09T21:05:59Z
+**User Input**: N/A
+**AI Response**: "Executed plan steps 9-24 on branch unit-u1/domain-app: support, core, ports, providers (mock), app (all services W1-W15) with in-memory fakes and 184 tests (support 17, core 75, providers 6, app 86). just check passes. Failure injection tests cover audit-failure rollback, concurrent setup, concurrent admin demotion, busy hasher, lapsed leases, duplicate delivery. Notes: MFA sign-in is stateless two-step; ports gained SessionRepo::get, OutboxRepo::latest_id, Tx admin locks; ChatMessage.in_reply_to added; Postgres adapter must preserve insertion order for equal timestamps. cargo deny caught missing path-dependency versions (fixed). Summary in construction/u1-foundation/code/pr2-domain-application-summary.md. Opening PR 2."
+**Context**: CONSTRUCTION - U1 Code Generation, PR 2 of 5
+
+---

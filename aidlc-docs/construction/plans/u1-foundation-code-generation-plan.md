@@ -89,7 +89,7 @@ User, Invitation, PasswordReset, AuthSession, MfaCredential, RecoveryCode, SignI
 - [x] **Step 21 - `app`: skeleton.** Chat session and message services (W15), the orchestration decision step (`message.posted` enqueues `MockAgentReply`), and the mock agent job handler with idempotency. *Skeleton.*
 - [x] **Step 22 - `app` tests.** Service tests over in-memory fakes covering W1 to W15, including: audit failure fails the operation, concurrent last-admin demotion, replayed TOTP step, expired and reused links, unknown email timing path, duplicate outbox delivery.
 - [x] **Step 23 - `providers`: scripted mock provider.** Deterministic scripts behind `ModelProvider` (BR-13.5) with tests.
-- [ ] **Step 24 - PR 2 verification and summary.** Compile, clippy, unit tests in the dev shell; write `code/pr2-domain-application-summary.md`. Open PR 2.
+- [x] **Step 24 - PR 2 verification and summary.** Compile, clippy, unit tests in the dev shell; write `code/pr2-domain-application-summary.md`. Open PR 2.
 
 ### PR 3 of 5: Persistence, vault and credentials
 - [ ] **Step 25 - Migrations.** In `crates/store-postgres/migrations`: reversible up and down scripts for all U1 tables, indexes for every hot path (PF-5), the `schema_version` record, and a grants migration giving `tandem_app` data access with `INSERT` and `SELECT` only on `audit_entries`. *US-2.7, SE-7.*
