@@ -1,5 +1,5 @@
-# Minimal CI for U1 (build, test, lint, dependency scan). The contract, e2e and perf jobs
-# are added in later steps of the U1 code generation plan. Every third-party Action is pinned
+# CI for U1: build, test, lint, dependency scan, the API contract check and the performance
+# smoke test. The e2e job is added with the web client in a later step of the code generation plan. Every third-party Action is pinned
 # to a full commit SHA (SECURITY-10, SECURITY-13); dependabot keeps the pins current.
 name: CI
 
@@ -76,3 +76,31 @@ jobs:
         run: npm audit --audit-level=high
       - name: Build
         run: npm run build
+
+  contract:
+    name: contract
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - name: Install the toolchain pinned in rust-toolchain.toml
+        run: rustup toolchain install
+      - uses: Swatinem/rust-cache@d1527c8f67ef9af357290475d4af4b0fab8f12e0 # v2.9.3
+      - name: Routes match the OpenAPI description and the committed copy is current
+        run: cargo test -p tandem-api --test contract
+
+  perf:
+    name: perf
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - name: Install the toolchain pinned in rust-toolchain.toml
+        run: rustup toolchain install
+      - uses: Swatinem/rust-cache@d1527c8f67ef9af357290475d4af4b0fab8f12e0 # v2.9.3
+      - name: Latency budgets (PF-1 to PF-3) against a real PostgreSQL
+        run: cargo test -p tandem-api --test perf --release -- --ignored --nocapture

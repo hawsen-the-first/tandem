@@ -50,6 +50,14 @@ web:
 test:
     cargo test --workspace
 
+# Performance smoke test (PF-1 to PF-3): needs Docker
+perf:
+    cargo test -p tandem-api --test perf --release -- --ignored --nocapture
+
+# API contract: routes match the OpenAPI description, committed copy is current
+contract:
+    cargo test -p tandem-api --test contract
+
 # Web unit and component tests
 test-web:
     cd web && npm test

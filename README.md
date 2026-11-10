@@ -61,7 +61,7 @@ Open <http://localhost:5173>; the first-run setup screen appears.
 ### Repository settings (owner)
 Enable these in GitHub so the checks below are enforced:
 - Protect `main`: require a pull request with one approving review, require the status checks
-  (`rust`, `web`, and the CodeQL jobs; later also `contract`, `e2e`, `perf`), block force pushes and deletion.
+  (`rust`, `web`, `contract`, `perf` and the CodeQL jobs; `e2e` is added with the web client), block force pushes and deletion.
 - Enable secret scanning, push protection, Dependabot alerts and security updates, and private vulnerability reporting.
 
 ### Layout
