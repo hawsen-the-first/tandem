@@ -26,8 +26,9 @@ test('a message travels web, API, database, worker and back over the WebSocket',
     .click();
   await page.getByTestId('chat-title-input').fill('Round trip');
   await page.getByTestId('chat-create').click();
-  await expect(page.getByTestId('chat-list')).toContainText('Round trip');
-  await page.getByTestId('chat-list-link').first().click();
+  // Creating a chat opens it.
+  await expect(page).toHaveURL(/\/chats\/[0-9a-f-]+$/);
+  await expect(page.getByTestId('chat-session-page')).toBeVisible();
 
   const composer = page.getByTestId('chat-composer-input');
   await composer.fill('hello team');
@@ -61,7 +62,7 @@ test('members cannot see each other’s chats', async ({ request, browser }, tes
   await ownerPage.goto('/chats');
   await ownerPage.getByTestId('chat-title-input').fill('Private notes');
   await ownerPage.getByTestId('chat-create').click();
-  await ownerPage.getByTestId('chat-list-link').first().click();
+  await expect(ownerPage).toHaveURL(/\/chats\/[0-9a-f-]+$/);
   const chatUrl = ownerPage.url();
 
   const otherContext = await freshContext(browser, testInfo, randomClientIp());

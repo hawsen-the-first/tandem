@@ -47,7 +47,11 @@ export function AppShell() {
         >
           {t('navMenu')}
         </button>
-        <nav id="primary-nav" aria-label={t('navPrimary')} className={`XX`}>
+        <nav
+          id="primary-nav"
+          aria-label={t('navPrimary')}
+          className={cx(styles.nav, menuOpen && styles.navOpen)}
+        >
           <NavLink to="/chats" className={link}>
             {t('navChats')}
           </NavLink>

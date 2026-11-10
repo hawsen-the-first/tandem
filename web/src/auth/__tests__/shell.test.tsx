@@ -104,8 +104,15 @@ describe('application shell', () => {
     expect(button).toHaveAttribute('aria-expanded', 'false');
     await user.click(button);
     expect(button).toHaveAttribute('aria-expanded', 'true');
+    // The open state must reach the markup the stylesheet hides and shows the navigation with.
+    expect(screen.getByRole('navigation', { name: 'Main navigation' }).className).toMatch(
+      /navOpen/,
+    );
     await user.click(button);
     expect(button).toHaveAttribute('aria-expanded', 'false');
+    expect(screen.getByRole('navigation', { name: 'Main navigation' }).className).not.toMatch(
+      /navOpen/,
+    );
   });
 
   it('remembers the theme choice on the root element', async () => {

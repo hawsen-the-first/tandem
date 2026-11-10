@@ -4,10 +4,15 @@ import { clientHeaders, freshContext, randomClientIp } from './support/env';
 
 const ip = randomClientIp();
 
-// Headless Chromium starts with the page unfocused; a click on empty space gives it focus without
-// landing on any control, so the next Tab goes to the first focusable element.
+// Start from a known position: the document body, so the next Tab goes to the first focusable
+// element (headless browsers do not always start with the page focused).
 async function focusPage(page: Page): Promise<void> {
-  await page.mouse.click(1, 1);
+  await page.evaluate(() => {
+    const body = document.body;
+    body.setAttribute('tabindex', '-1');
+    body.focus();
+    body.removeAttribute('tabindex');
+  });
 }
 test.use({ extraHTTPHeaders: clientHeaders(ip) });
 
