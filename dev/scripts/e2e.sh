@@ -55,6 +55,9 @@ E2E_WEB_DIR="$PWD/web/dist"
   # dev-env.sh sets development defaults; the e2e values are applied after it.
   export TANDEM_PUBLIC_URL="$E2E_PUBLIC_URL" TANDEM_WEB_DIR="$E2E_WEB_DIR" TANDEM_LOG_LEVEL=warn
   export TANDEM_LISTEN_ADDR="127.0.0.1:${PORT_API}"
+  # The browser reaches the api from loopback; tests present distinct client addresses through
+  # X-Forwarded-For so one spec file cannot use up another file's per-source allowance.
+  export TANDEM_TRUSTED_PROXIES="127.0.0.1/32,::1/128"
   export TANDEM_WORKER_LISTEN_ADDR="127.0.0.1:${PORT_WORKER}"
   ./target/release/tandem-api >"$WORK/api.log" 2>&1 &
   echo $! >"$WORK/api.pid"

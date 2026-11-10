@@ -57,6 +57,9 @@
   "overrides": {
     "openapi-typescript": {
       "typescript": "$typescript"
+    },
+    "@axe-core/playwright": {
+      "playwright-core": "1.61.1"
     }
   }
 }
