@@ -86,11 +86,7 @@ audit:
 
 # Regenerate the OpenAPI description and the TypeScript client (added with the api layer)
 openapi:
-    @echo "OpenAPI generation is added in step 42 of the U1 code generation plan." >&2; exit 1
-
-# Performance smoke test (added with the api layer)
-perf:
-    @echo "The performance smoke test is added in step 46 of the U1 code generation plan." >&2; exit 1
+    UPDATE_OPENAPI=1 cargo test -p tandem-api --test contract
 
 # Everything CI runs, in the same order
 check: lint test test-web audit

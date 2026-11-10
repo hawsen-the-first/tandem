@@ -116,7 +116,7 @@ User, Invitation, PasswordReset, AuthSession, MfaCredential, RecoveryCode, SignI
 - [x] **Step 44 - `cli`.** `migrate up|down`, `vault rekey`, `admin issue-reset` for the last admin (BR-4.7), and the documented `audit prune` command that needs a privileged credential (Q2 B of NFR Requirements). *AV-4, SE-2, SE-15.*
 - [x] **Step 45 - Service-level tests.** Pipeline tests (CSRF, Origin, rate limit, headers, body limit, panic handling), misuse-case tests from NFR requirements section 5.1, start-up guard tests, metrics token tests, contract tests.
 - [x] **Step 46 - CI additions and performance harness.** Add the `contract` and `perf` jobs to `ci.yml`, the performance smoke harness in `tests/perf` for PF-1 to PF-3, and update the required-checks list in `README.md`. *PF-6, MT-3.*
-- [ ] **Step 47 - PR 4 verification and summary.** Compile, clippy and unit tests; start `api` and `worker` against the dev database and check `/readyz`; write `code/pr4-api-worker-cli-summary.md`. Open PR 4.
+- [x] **Step 47 - PR 4 verification and summary.** Compile, clippy and unit tests; start `api` and `worker` against the dev database and check `/readyz`; write `code/pr4-api-worker-cli-summary.md`. Open PR 4.
 
 ### PR 5 of 5: Web client and end-to-end tests
 - [ ] **Step 48 - Web foundations.** Router, TanStack Query, generated API client from the OpenAPI description, message catalogue, error mapping from `business-rules.md`, ESLint and Prettier rules. *US-13.7.*

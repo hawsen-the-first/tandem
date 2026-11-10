@@ -78,6 +78,12 @@ pub enum StartupError {
 /// [`StartupError`] when logging or metrics were already initialised or the level is bad.
 pub fn init_observability(config: &Config) -> Result<MetricsHandle, StartupError> {
     tandem_telemetry::init_logging(&config.log_level)?;
+    if config.otlp_endpoint.is_some() {
+        tracing::warn!(
+            "TANDEM_OTLP_ENDPOINT is set but this build has no OTLP exporter yet; trace IDs are still \
+             logged and propagated, nothing is exported"
+        );
+    }
     MetricsRegistry::new(env!("CARGO_PKG_VERSION"))
         .map_err(|error| StartupError::Internal(error.to_string()))?
         .install()

@@ -520,3 +520,10 @@
 **Context**: CONSTRUCTION - U1 Code Generation, PR 4 of 5
 
 ---
+## U1 Code Generation - PR 4 (steps 35-47) executed
+**Timestamp**: 2026-11-10T02:00:00Z
+**User Input**: N/A
+**AI Response**: "Executed plan steps 35-47 on branch unit-u1/api-worker-cli: config, telemetry, a shared runtime crate, the api (pipeline, route table, auth, admin, chat, WebSocket feed, assets, OpenAPI), worker and cli (the last two built in parallel by a forked agent, then reviewed). Added contract and perf CI jobs. Performance smoke test passes with wide margins (sign-in p95 183 ms, reads 3 ms, round trip 46 ms). Started api and worker against the dev database: /readyz 200, SIGTERM exits 0. Deviations recorded in code/pr4-api-worker-cli-summary.md, notably: no OTLP exporter yet (trace IDs only), header read timeout not enforced, a new runtime crate."
+**Context**: CONSTRUCTION - U1 Code Generation, PR 4 of 5
+
+---
