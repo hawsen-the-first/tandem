@@ -71,7 +71,10 @@ test('members cannot see each other’s chats', async ({ request, browser }, tes
   await otherPage.goto(chatUrl);
   await expect(otherPage.getByTestId('chat-messages-error')).toBeVisible();
   await otherPage.goto('/chats');
-  await expect(otherPage.getByTestId('chat-list')).not.toContainText('Private notes');
+  await expect(otherPage.getByTestId('chat-list-page')).toBeVisible();
+  await expect(otherPage.getByTestId('chat-list-loading')).toHaveCount(0);
+  await expect(otherPage.getByText('Private notes')).toHaveCount(0);
+  await expect(otherPage.getByTestId('chat-list')).toHaveCount(0); // no chats of their own
   await ownerContext.close();
   await otherContext.close();
 });

@@ -20,7 +20,8 @@ test('the sign-in form can be completed with the keyboard alone', async ({ brows
   const context = await freshContext(browser, testInfo, randomClientIp());
   const page = await context.newPage();
   await page.goto('/sign-in');
-  await focusPage(page);
+  // Clicking the heading sets where keyboard navigation starts, in every browser.
+  await page.getByRole('heading', { level: 1 }).click();
   await page.keyboard.press('Tab');
   await expect(page.getByTestId('signin-email-input')).toBeFocused();
   await page.keyboard.type('someone@example.test');
