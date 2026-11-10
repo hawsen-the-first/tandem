@@ -738,24 +738,24 @@ export type $defs = Record<string, never>;
 export interface operations {
   audit: {
     parameters: {
-      query?: never;
-      header?: never;
-      path: {
+      query?: {
         /** @description Only this actor. */
-        actor_id: string | null;
+        actor_id?: string;
         /** @description Only this event type, for example `auth.sign_in.failure`. */
-        event_type: string | null;
+        event_type?: string;
         /** @description Not before (RFC 3339). */
-        from: string | null;
+        from?: string;
         /** @description Not after (RFC 3339). */
-        to: string | null;
+        to?: string;
         /** @description Page cursor: the `next_after_time` of the previous page. */
-        after_time: string | null;
+        after_time?: string;
         /** @description Page cursor: the `next_after_id` of the previous page. */
-        after_id: string | null;
+        after_id?: string;
         /** @description Page size (default 50, at most 200). */
-        limit: number | null;
+        limit?: number;
       };
+      header?: never;
+      path?: never;
       cookie?: never;
     };
     requestBody?: never;

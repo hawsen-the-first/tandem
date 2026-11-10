@@ -262,6 +262,7 @@ pub async fn put_settings(
 /// Audit log filters and paging.
 #[derive(Debug, Deserialize, IntoParams, ToSchema)]
 #[serde(deny_unknown_fields)]
+#[into_params(parameter_in = Query)]
 pub struct AuditQueryParams {
     /// Only this actor.
     pub actor_id: Option<String>,

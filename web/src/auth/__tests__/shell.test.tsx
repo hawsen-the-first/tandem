@@ -9,7 +9,7 @@ describe('route guards', () => {
   it('sends a visitor who is not signed in to sign-in', async () => {
     mockApi({ 'GET /api/auth/me': UNAUTHENTICATED });
     renderApp('/chats');
-    expect(await screen.findByRole('heading', { name: 'SignInPage' })).toBeInTheDocument();
+    expect(await screen.findByTestId('signin-page')).toBeInTheDocument();
   });
 
   it('shows the not-found page for unknown paths', async () => {
@@ -19,9 +19,13 @@ describe('route guards', () => {
   });
 
   it('shows admin pages to admins', async () => {
-    mockApi({ 'GET /api/auth/me': { body: ME_ADMIN } });
+    mockApi({
+      'GET /api/auth/me': { body: ME_ADMIN },
+      'GET /api/admin/users': { body: [] },
+      'GET /api/admin/invitations': { body: [] },
+    });
     renderApp('/admin/users');
-    expect(await screen.findByRole('heading', { name: 'UsersPage' })).toBeInTheDocument();
+    expect(await screen.findByRole('heading', { level: 1, name: 'Users' })).toBeInTheDocument();
   });
 
   it('shows "not found" for admin pages to members (BR-9.2)', async () => {
@@ -31,15 +35,31 @@ describe('route guards', () => {
   });
 
   it('redirects an enrolment-only sign-in to MFA enrolment', async () => {
-    mockApi({ 'GET /api/auth/me': { body: { ...ME_ADMIN, scope: 'mfa_enrolment_only' } } });
+    mockApi({
+      'GET /api/auth/me': {
+        body: {
+          ...ME_ADMIN,
+          scope: 'mfa_enrolment_only',
+          mfa: { ...ME_ADMIN.mfa, enrolled: false },
+        },
+      },
+    });
     renderApp('/chats');
-    expect(await screen.findByRole('heading', { name: 'MfaEnrolmentPage' })).toBeInTheDocument();
+    expect(await screen.findByTestId('mfa-start')).toBeInTheDocument();
   });
 
   it('lets an enrolment-only sign-in reach the enrolment page itself', async () => {
-    mockApi({ 'GET /api/auth/me': { body: { ...ME_ADMIN, scope: 'mfa_enrolment_only' } } });
+    mockApi({
+      'GET /api/auth/me': {
+        body: {
+          ...ME_ADMIN,
+          scope: 'mfa_enrolment_only',
+          mfa: { ...ME_ADMIN.mfa, enrolled: false },
+        },
+      },
+    });
     renderApp('/mfa/enrol');
-    expect(await screen.findByRole('heading', { name: 'MfaEnrolmentPage' })).toBeInTheDocument();
+    expect(await screen.findByTestId('mfa-start')).toBeInTheDocument();
   });
 
   it('shows a retry when the session cannot be read at all', async () => {
