@@ -70,15 +70,20 @@ export const messages = {
 
 export type MessageKey = keyof typeof messages;
 
-/** Look up a message, replacing `{name}` placeholders from `values`. */
-export function t(key: MessageKey, values?: Record<string, string | number>): string {
-  let text: string = messages[key];
+/** Replace `{name}` placeholders in a message from `values`. Area-specific catalogues use this too. */
+export function format(template: string, values?: Record<string, string | number>): string {
+  let text = template;
   if (values !== undefined) {
     for (const [name, value] of Object.entries(values)) {
       text = text.replaceAll(`{${name}}`, String(value));
     }
   }
   return text;
+}
+
+/** Look up a shared message. */
+export function t(key: MessageKey, values?: Record<string, string | number>): string {
+  return format(messages[key], values);
 }
 
 /** "Too many attempts. Try again in N seconds": one wording for delay, lock and rate limit. */
