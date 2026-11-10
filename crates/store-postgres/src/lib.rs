@@ -8,22 +8,26 @@ mod convert;
 mod error;
 mod guards;
 mod identity;
+mod internal;
 mod jobs;
 mod migrate;
 mod outbox;
 mod pool;
 mod relay;
 mod settings;
+mod stats;
 mod store;
 
 pub use cleanup::CleanupReport;
 pub use error::map_sqlx;
+pub use internal::{RekeyError, RekeyReport};
 pub use migrate::{
     MIGRATOR, SchemaError, applied_schema_version, check_schema, expected_schema_version,
     migrate_down_one, migrate_up,
 };
 pub use pool::{PoolConfig, PoolError, connect_pool};
 pub use relay::RelayLease;
+pub use stats::{JobStats, OutboxStats};
 pub use store::{PgStore, PgTx};
 
 /// Name of this crate, used by smoke tests and diagnostics.

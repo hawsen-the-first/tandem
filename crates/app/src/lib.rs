@@ -14,6 +14,7 @@ mod deps;
 mod error;
 mod mfa;
 mod password;
+mod recovery;
 mod sessions;
 mod settings;
 mod setup;

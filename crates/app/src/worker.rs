@@ -41,6 +41,10 @@ pub struct EventPage {
     pub events: Vec<OutboxEvent>,
     /// The client's position is older than the retained history; it must reload its view.
     pub resync_required: bool,
+    /// The id of the last event examined, visible or not, so a feed can move past events that
+    /// belong to other users instead of rescanning them. Unchanged from `after` when nothing
+    /// newer exists.
+    pub scanned_up_to: OutboxEventId,
 }
 
 impl App {
@@ -222,16 +226,16 @@ impl App {
         let mut tx = self.store.begin().await?;
         let lowest = tx.outbox().lowest_retained_id().await?;
         let resync_required = after.0 > 0 && lowest.is_some_and(|lowest| after.0 + 1 < lowest.0);
-        let events = tx
-            .outbox()
-            .fetch_after(after, limit)
-            .await?
+        let fetched = tx.outbox().fetch_after(after, limit).await?;
+        let scanned_up_to = fetched.last().map_or(after, |event| event.id);
+        let events = fetched
             .into_iter()
             .filter(|event| event.payload.visible_to() == user_id)
             .collect();
         Ok(EventPage {
             events,
             resync_required,
+            scanned_up_to,
         })
     }
 

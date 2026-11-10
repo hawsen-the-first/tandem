@@ -1,0 +1,14 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "DELETE FROM tandem.audit_entries WHERE occurred_at < $1",
+  "describe": {
+    "columns": [],
+    "parameters": {
+      "Left": [
+        "Timestamptz"
+      ]
+    },
+    "nullable": []
+  },
+  "hash": "234c0a0b02205a0f32745689469106eae659db105a993d966b659c88ffaaeb3b"
+}

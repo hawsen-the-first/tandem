@@ -1,0 +1,32 @@
+[package]
+name = "tandem-runtime"
+description = "Shared process bootstrap for the api, worker and cli: pools, vault, start-up guards, probes, shutdown."
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+repository.workspace = true
+publish.workspace = true
+
+[lints]
+workspace = true
+
+[dependencies]
+async-trait = "0.1.92"
+data-encoding = "2.11.1"
+sqlx = { version = "0.9.0", default-features = false, features = ["runtime-tokio", "postgres"] }
+tandem-app = { version = "0.1.0", path = "../app" }
+tandem-config = { version = "0.1.0", path = "../config" }
+tandem-credentials = { version = "0.1.0", path = "../credentials" }
+tandem-ports = { version = "0.1.0", path = "../ports" }
+tandem-providers = { version = "0.1.0", path = "../providers" }
+tandem-store-postgres = { version = "0.1.0", path = "../store-postgres" }
+tandem-support = { version = "0.1.0", path = "../support" }
+tandem-telemetry = { version = "0.1.0", path = "../telemetry" }
+tandem-vault = { version = "0.1.0", path = "../vault" }
+thiserror = "2.0.21"
+tokio = { version = "1.54.1", features = ["rt", "rt-multi-thread", "macros", "signal", "sync", "time"] }
+tracing = "0.1.44"
+
+[dev-dependencies]
+tempfile = "3.27.0"

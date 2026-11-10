@@ -1,17 +1,27 @@
-//! Job runner, outbox relay and cleanup (worker service).
+//! The worker process: outbox relay, job runner and cleanup.
 
-fn main() {
-    // Skeleton: replaced in a later step of the U1 code generation plan.
-    #[allow(clippy::print_stdout)]
-    {
-        println!("tandem-worker {}", env!("CARGO_PKG_VERSION"));
-    }
+use std::process::ExitCode;
+use tandem_config::Config;
+
+#[allow(clippy::print_stderr)]
+fn report(message: &str) {
+    eprintln!("{message}");
 }
 
-#[cfg(test)]
-mod tests {
-    #[test]
-    fn version_is_set() {
-        assert!(!env!("CARGO_PKG_VERSION").is_empty());
+#[tokio::main]
+async fn main() -> ExitCode {
+    let config = match Config::from_env() {
+        Ok(config) => config,
+        Err(error) => {
+            report(&error.to_string());
+            return ExitCode::FAILURE;
+        }
+    };
+    match tandem_worker::run(config).await {
+        Ok(()) => ExitCode::SUCCESS,
+        Err(error) => {
+            report(&format!("tandem-worker: {error}"));
+            ExitCode::FAILURE
+        }
     }
 }

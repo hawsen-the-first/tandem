@@ -10,3 +10,11 @@ publish.workspace = true
 
 [lints]
 workspace = true
+
+[dependencies]
+thiserror = "2.0.21"
+toml = "1.2.1"
+url = "2.5.8"
+
+[dev-dependencies]
+tempfile = "3.27.0"
