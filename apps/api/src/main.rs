@@ -6,11 +6,11 @@ use std::time::Duration;
 use tandem_api::routes::openapi;
 use tandem_api::routes::ws::spawn_listener;
 use tandem_api::server::{StateInputs, build, serve};
-use tandem_config::Config;
-use tandem_runtime::{
+use tandem_bootstrap::{
     DatabaseProbe, Process, SchemaProbe, Services, Shutdown, VaultProbe, init_observability,
     spawn_pool_metrics, wait_for_termination,
 };
+use tandem_config::Config;
 use tandem_telemetry::{Readiness, ReadinessProbe};
 use tokio::net::TcpListener;
 

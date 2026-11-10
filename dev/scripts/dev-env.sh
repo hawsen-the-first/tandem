@@ -12,13 +12,14 @@ set -a
 set +a
 
 if [ "$_role" = migrate ]; then _pw="$TANDEM_MIGRATE_PASSWORD"; else _pw="$TANDEM_APP_PASSWORD"; fi
-export TANDEM_DATABASE_URL="postgres://tandem_${_role}:${_pw}@localhost:${TANDEM_DEV_DB_PORT}/tandem?sslmode=verify-full"
+_port="${TANDEM_DB_PORT_OVERRIDE:-$TANDEM_DEV_DB_PORT}"
+export TANDEM_DATABASE_URL="postgres://tandem_${_role}:${_pw}@localhost:${_port}/tandem?sslmode=verify-full"
 export TANDEM_DATABASE_CA_FILE="$PWD/dev/secrets/certs/ca.crt"
 export TANDEM_MASTER_KEY_FILE="$PWD/dev/secrets/master.key"
 export TANDEM_PUBLIC_URL="http://localhost:5173"
 export TANDEM_LISTEN_ADDR="127.0.0.1:8080"
 export TANDEM_LOG_LEVEL="${TANDEM_LOG_LEVEL:-debug}"
-unset _role _pw
+unset _role _pw _port
 
 # sqlx-cli (migrate, prepare) reads DATABASE_URL; it needs the CA path in the URL.
 export DATABASE_URL="${TANDEM_DATABASE_URL}&sslrootcert=${TANDEM_DATABASE_CA_FILE}"
