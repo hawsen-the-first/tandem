@@ -234,3 +234,17 @@ fn the_worker_listen_address_defaults_and_is_validated() {
     fixture.set("TANDEM_WORKER_LISTEN_ADDR", "nowhere");
     assert_eq!(fixture.problems()[0].0, "TANDEM_WORKER_LISTEN_ADDR");
 }
+
+#[test]
+fn the_web_directory_is_optional_but_must_hold_an_entry_page() {
+    let mut fixture = Fixture::new();
+    assert!(fixture.load().unwrap().web_dir.is_none());
+    let directory = fixture.dir.path().to_str().unwrap().to_owned();
+    fixture.set("TANDEM_WEB_DIR", &directory);
+    assert!(fixture.problems()[0].1.contains("no index.html"));
+    fixture.write("index.html", "<html></html>");
+    assert_eq!(
+        fixture.load().unwrap().web_dir.as_deref(),
+        Some(fixture.dir.path())
+    );
+}

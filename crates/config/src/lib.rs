@@ -27,6 +27,7 @@ const FILE_KEYS: &[&str] = &[
     "master_key_file",
     "listen_addr",
     "worker_listen_addr",
+    "web_dir",
     "trusted_proxies",
     "otlp_endpoint",
     "log_level",
@@ -109,6 +110,8 @@ pub struct Config {
     pub listen_addr: SocketAddr,
     /// The address the worker serves its health and metrics endpoints on.
     pub worker_listen_addr: SocketAddr,
+    /// The built web client directory served by the api; none means the api serves only the API.
+    pub web_dir: Option<PathBuf>,
     /// Proxies whose forwarded headers are believed.
     pub trusted_proxies: TrustedProxies,
     /// Bearer token for `/metrics`; the endpoint is disabled without one.
@@ -473,6 +476,15 @@ impl Loader {
             }),
         };
 
+        let web_dir = self.value("TANDEM_WEB_DIR").and_then(|text| {
+            let path = PathBuf::from(&text);
+            if path.join("index.html").is_file() {
+                Some(path)
+            } else {
+                self.problem("TANDEM_WEB_DIR", format!("{text} has no index.html"));
+                None
+            }
+        });
         let worker_listen_addr = match self.value("TANDEM_WORKER_LISTEN_ADDR") {
             None => SocketAddr::from(([127, 0, 0, 1], 8081)),
             Some(text) => text.parse().unwrap_or_else(|_| {
@@ -546,6 +558,7 @@ impl Loader {
             master_key: master_key?,
             listen_addr,
             worker_listen_addr,
+            web_dir,
             trusted_proxies,
             metrics_token,
             otlp_endpoint,

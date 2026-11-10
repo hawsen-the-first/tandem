@@ -57,6 +57,7 @@ impl ReadinessProbe for FlagProbe {
 pub struct Options {
     pub trusted_proxies: Option<&'static str>,
     pub metrics_token: Option<&'static str>,
+    pub web_dir: Option<std::path::PathBuf>,
 }
 
 pub struct Harness {
@@ -222,7 +223,7 @@ impl Harness {
             readiness,
             metrics: metrics(),
             shutdown: Shutdown::new(),
-            web_dir: None,
+            web_dir: options.web_dir.clone(),
         })
         .unwrap();
         Self {
@@ -235,22 +236,7 @@ impl Harness {
     }
 
     pub async fn send(&self, call: Call) -> Reply {
-        let mut builder = Request::builder().method(call.method).uri(call.path);
-        for (name, value) in call.headers {
-            builder = builder.header(name, value);
-        }
-        let mut request = builder
-            .body(Body::from(call.body.unwrap_or_default()))
-            .unwrap();
-        request.extensions_mut().insert(ConnectInfo(call.peer));
-        let response = self.router.clone().oneshot(request).await.unwrap();
-        let (parts, body) = response.into_parts();
-        let bytes = axum::body::to_bytes(body, 4_000_000).await.unwrap();
-        Reply {
-            status: parts.status,
-            headers: parts.headers,
-            text: String::from_utf8_lossy(&bytes).into_owned(),
-        }
+        send_to(&self.router, call).await
     }
 
     /// The CSRF token and ID of a signed-in user.
@@ -321,5 +307,32 @@ impl Harness {
             "email": email, "password": password
         })))
         .await
+    }
+}
+
+/// Send one request through `router` as if it arrived over the network.
+pub async fn send_to(router: &Router, call: Call) -> Reply {
+    let mut builder = Request::builder().method(call.method).uri(call.path);
+    for (name, value) in call.headers {
+        builder = builder.header(name, value);
+    }
+    let mut request = builder
+        .body(Body::from(call.body.unwrap_or_default()))
+        .unwrap();
+    request.extensions_mut().insert(ConnectInfo(call.peer));
+    let response = router.clone().oneshot(request).await.unwrap();
+    let (parts, body) = response.into_parts();
+    let bytes = axum::body::to_bytes(body, 4_000_000).await.unwrap();
+    Reply {
+        status: parts.status,
+        headers: parts.headers,
+        text: String::from_utf8_lossy(&bytes).into_owned(),
+    }
+}
+
+impl Call {
+    /// The same-origin header for an arbitrary public origin.
+    pub fn origin_of(self, origin: &str) -> Self {
+        self.header("origin", origin)
     }
 }

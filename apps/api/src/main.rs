@@ -69,7 +69,7 @@ async fn run() -> Result<(), String> {
         readiness: readiness.clone(),
         metrics,
         shutdown: shutdown.clone(),
-        web_dir: None,
+        web_dir: services.config.web_dir.clone(),
     })
     .map_err(|error| format!("route table: {error}"))?;
 
