@@ -57,7 +57,10 @@ export function SessionProvider({ children }: { children: ReactNode }) {
       await call(client.POST('/api/auth/sign-out'));
     } finally {
       setCsrfToken(null);
-      queryClient.clear();
+      // Forget everything but mark the session as ended, so the guards redirect at once; clearing the
+      // whole cache would leave the cached user in place and keep the person on a signed-in page.
+      queryClient.removeQueries({ predicate: (query) => query.queryKey[0] !== ME_KEY[0] });
+      queryClient.setQueryData(ME_KEY, null);
       void navigate('/sign-in', { replace: true });
     }
   }, [navigate, queryClient]);

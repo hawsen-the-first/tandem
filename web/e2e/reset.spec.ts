@@ -7,6 +7,7 @@ import {
   randomClientIp,
   signInViaUi,
   strongPassword,
+  waitOutSignInDelay,
 } from './support/env';
 
 const ip = randomClientIp();
@@ -55,6 +56,7 @@ test('a forced reset signs the person out everywhere and the link works once', a
   await expect(memberPage.getByTestId('signin-error')).toContainText(
     'That email and password do not match',
   );
+  await waitOutSignInDelay(memberPage);
   await signInViaUi(memberPage, member.email, newPassword);
   await expect(memberPage.getByRole('navigation', { name: 'Main navigation' })).toBeVisible();
   await memberContext.close();

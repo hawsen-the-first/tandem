@@ -33,7 +33,7 @@ test('a role change applies on the person’s very next page', async ({
   await row.getByTestId('users-change-role').click();
   await page.getByTestId('role-select-input').selectOption('admin');
   await page.getByTestId('role-dialog-confirm').click();
-  await expect(row).toContainText('admin');
+  await expect(row.locator('[data-label="Role"]')).toHaveText('Admin');
 
   await memberPage.goto('/chats');
   await expect(memberPage).toHaveURL(/\/mfa\/enrol$/);
@@ -43,7 +43,7 @@ test('a role change applies on the person’s very next page', async ({
   await row.getByTestId('users-change-role').click();
   await page.getByTestId('role-select-input').selectOption('member');
   await page.getByTestId('role-dialog-confirm').click();
-  await expect(row).toContainText('member');
+  await expect(row.locator('[data-label="Role"]')).toHaveText('Member');
   await memberPage.goto('/chats');
   await expect(memberPage.getByRole('navigation', { name: 'Main navigation' })).toBeVisible();
   await expect(memberPage.getByRole('link', { name: 'Users' })).toHaveCount(0);

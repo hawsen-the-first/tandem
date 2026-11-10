@@ -91,7 +91,7 @@ description matches the routes.
 - Secrets shown once (invitation and reset links, recovery codes) live only in component state and are cleared
   on dismissal. Link tokens are stripped from the address bar as soon as the page has read them.
 - Browsers for the end-to-end tests come from the Nix shell (`playwright-driver.browsers`). The npm
-  `@playwright/test` version is pinned to the same version as that package; bump both together.
+  `@playwright/test` version is pinned to the same version as that package in the flake lock (currently 1.64.1); bump both together.
 
 ## Releases and operations
 

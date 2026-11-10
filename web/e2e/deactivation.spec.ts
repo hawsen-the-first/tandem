@@ -6,6 +6,7 @@ import {
   freshContext,
   randomClientIp,
   signInViaUi,
+  waitOutSignInDelay,
 } from './support/env';
 
 const ip = randomClientIp();
@@ -41,6 +42,7 @@ test('deactivating signs the person out at once and reactivating lets them back 
   await row.getByTestId('users-reactivate').click();
   await page.getByTestId('action-dialog-confirm').click();
   await expect(row).toContainText('Active');
+  await waitOutSignInDelay(memberPage);
   await signInViaUi(memberPage, member.email, member.password);
   await expect(memberPage.getByRole('navigation', { name: 'Main navigation' })).toBeVisible();
   await context.close();

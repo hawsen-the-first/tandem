@@ -5,7 +5,7 @@ import {
   createMember,
   freshContext,
   randomClientIp,
-  signInViaUi,
+  signedInViaUi,
 } from './support/env';
 
 const ip = randomClientIp();
@@ -18,9 +18,12 @@ test('a message travels web, API, database, worker and back over the WebSocket',
   const member = await createMember(await adminApi(request, testInfo), testInfo, ip);
   const context = await freshContext(browser, testInfo, randomClientIp());
   const page = await context.newPage();
-  await signInViaUi(page, member.email, member.password);
+  await signedInViaUi(page, member.email, member.password);
 
-  await page.getByRole('link', { name: 'Chats' }).click();
+  await page
+    .getByRole('navigation', { name: 'Main navigation' })
+    .getByRole('link', { name: 'Chats', exact: true })
+    .click();
   await page.getByTestId('chat-title-input').fill('Round trip');
   await page.getByTestId('chat-create').click();
   await expect(page.getByTestId('chat-list')).toContainText('Round trip');
@@ -54,7 +57,7 @@ test('members cannot see each other’s chats', async ({ request, browser }, tes
   const other = await createMember(admin, testInfo, ip, 'Otto Other');
   const ownerContext = await freshContext(browser, testInfo, randomClientIp());
   const ownerPage = await ownerContext.newPage();
-  await signInViaUi(ownerPage, owner.email, owner.password);
+  await signedInViaUi(ownerPage, owner.email, owner.password);
   await ownerPage.goto('/chats');
   await ownerPage.getByTestId('chat-title-input').fill('Private notes');
   await ownerPage.getByTestId('chat-create').click();
@@ -63,7 +66,7 @@ test('members cannot see each other’s chats', async ({ request, browser }, tes
 
   const otherContext = await freshContext(browser, testInfo, randomClientIp());
   const otherPage = await otherContext.newPage();
-  await signInViaUi(otherPage, other.email, other.password);
+  await signedInViaUi(otherPage, other.email, other.password);
   await otherPage.goto(chatUrl);
   await expect(otherPage.getByTestId('chat-messages-error')).toBeVisible();
   await otherPage.goto('/chats');

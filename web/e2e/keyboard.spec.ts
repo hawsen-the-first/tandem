@@ -1,13 +1,21 @@
 import { expect, test } from '@playwright/test';
+import type { Page } from '@playwright/test';
 import { clientHeaders, freshContext, randomClientIp } from './support/env';
 
 const ip = randomClientIp();
+
+// Headless Chromium starts with the page unfocused; a click on empty space gives it focus without
+// landing on any control, so the next Tab goes to the first focusable element.
+async function focusPage(page: Page): Promise<void> {
+  await page.mouse.click(1, 1);
+}
 test.use({ extraHTTPHeaders: clientHeaders(ip) });
 
 test('the sign-in form can be completed with the keyboard alone', async ({ browser }, testInfo) => {
   const context = await freshContext(browser, testInfo, randomClientIp());
   const page = await context.newPage();
   await page.goto('/sign-in');
+  await focusPage(page);
   await page.keyboard.press('Tab');
   await expect(page.getByTestId('signin-email-input')).toBeFocused();
   await page.keyboard.type('someone@example.test');
@@ -36,6 +44,7 @@ test('an empty form moves focus to the first problem', async ({ browser }, testI
 
 test('the skip link jumps over the navigation to the content', async ({ page }) => {
   await page.goto('/account');
+  await focusPage(page);
   await page.keyboard.press('Tab');
   const skip = page.getByRole('link', { name: 'Skip to content' });
   await expect(skip).toBeFocused();
@@ -55,12 +64,16 @@ test('a dialog opens from the keyboard, traps focus, closes on Escape and return
   await expect(dialog).toBeVisible();
   for (let index = 0; index < 8; index += 1) {
     await page.keyboard.press('Tab');
-    const inside = await page.evaluate(
-      () =>
-        document.querySelector('[data-testid="invite-dialog"]')?.contains(document.activeElement) ??
-        false,
-    );
-    expect(inside, 'focus stays inside the open dialog').toBe(true);
+    // A native modal dialog makes the page behind it inert: focus may step out to the browser
+    // itself (the active element is then the body) but never onto the page behind the dialog.
+    const onBackground = await page.evaluate(() => {
+      const active = document.activeElement;
+      const dialogElement = document.querySelector('[data-testid="invite-dialog"]');
+      return (
+        active !== null && active !== document.body && dialogElement?.contains(active) !== true
+      );
+    });
+    expect(onBackground, 'focus never reaches the page behind the dialog').toBe(false);
   }
   await page.keyboard.press('Escape');
   await expect(dialog).toBeHidden();
@@ -78,11 +91,19 @@ test('the narrow-screen menu works from the keyboard', async ({ browser }, testI
   await page.goto('/');
   const menu = page.getByTestId('menu-button');
   await expect(menu).toHaveAttribute('aria-expanded', 'false');
-  await expect(page.getByRole('link', { name: 'Chats' })).toBeHidden();
+  await expect(
+    page
+      .getByRole('navigation', { name: 'Main navigation' })
+      .getByRole('link', { name: 'Chats', exact: true }),
+  ).toBeHidden();
   await menu.focus();
   await page.keyboard.press('Enter');
   await expect(menu).toHaveAttribute('aria-expanded', 'true');
-  await expect(page.getByRole('link', { name: 'Chats' })).toBeVisible();
+  await expect(
+    page
+      .getByRole('navigation', { name: 'Main navigation' })
+      .getByRole('link', { name: 'Chats', exact: true }),
+  ).toBeVisible();
   await context.close();
 });
 

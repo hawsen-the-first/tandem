@@ -135,6 +135,8 @@ describe('application shell', () => {
         api.calls.some((call) => call.method === 'POST' && call.path === '/api/auth/sign-out'),
       ).toBe(true);
     });
+    // The session is marked ended at once, so the guards send the person to sign-in without a refetch.
+    expect(await screen.findByTestId('signin-page')).toBeInTheDocument();
     expect(api.calls.find((call) => call.method === 'POST')?.headers.get('x-csrf-token')).toBe(
       'csrf-admin',
     );

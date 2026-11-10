@@ -71,7 +71,10 @@ export function AppShell() {
         <div className={styles.tools}>
           <ThemeToggle />
           <details className={styles.userMenu} data-testid="user-menu">
-            <summary aria-label={t('userMenu')}>{me?.user.display_name}</summary>
+            <summary>
+              {me?.user.display_name}
+              <span className="visually-hidden"> {t('userMenu')}</span>
+            </summary>
             <div className={styles.userMenuBody}>
               <p className={styles.userEmail}>{me?.user.email}</p>
               <button

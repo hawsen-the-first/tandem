@@ -57,7 +57,7 @@ export async function adminApi(request: APIRequestContext, testInfo: TestInfo): 
     if (!response.ok()) {
       throw new Error(`${response.url()} answered ${String(response.status())}`);
     }
-    return response.status() === 204 ? null : ((await response.json()) as unknown);
+    return response.status() === 204 ? null : await response.json();
   };
   return {
     get: async (path) => read(await request.get(path)),
@@ -107,4 +107,18 @@ export async function signInViaUi(page: Page, email: string, password: string): 
   await page.getByTestId('signin-email-input').fill(email);
   await page.getByTestId('signin-password-input').fill(password);
   await page.getByTestId('signin-submit').click();
+}
+
+/** Sign in through the form and wait until the signed-in shell is showing. */
+export async function signedInViaUi(page: Page, email: string, password: string): Promise<void> {
+  await signInViaUi(page, email, password);
+  await page.getByRole('navigation', { name: 'Main navigation' }).waitFor();
+}
+
+/**
+ * A failed sign-in starts a short delay (1 s, then doubling) for that account, so a person who
+ * fails and immediately retries is told to wait. Wait it out before the next attempt.
+ */
+export async function waitOutSignInDelay(page: Page): Promise<void> {
+  await page.waitForTimeout(1500);
 }
