@@ -1,17 +1,26 @@
-//! Operations CLI: migrations, vault rekey, admin recovery, audit prune.
+//! `tandem`: the operations command line.
 
-fn main() {
-    // Skeleton: replaced in a later step of the U1 code generation plan.
-    #[allow(clippy::print_stdout)]
-    {
-        println!("tandem {}", env!("CARGO_PKG_VERSION"));
-    }
+use clap::Parser;
+use std::collections::BTreeMap;
+use std::process::ExitCode;
+use tandem_cli::{Cli, Stdout, run};
+
+#[allow(clippy::print_stderr)]
+fn report(message: &str) {
+    eprintln!("{message}");
 }
 
-#[cfg(test)]
-mod tests {
-    #[test]
-    fn version_is_set() {
-        assert!(!env!("CARGO_PKG_VERSION").is_empty());
+#[tokio::main]
+async fn main() -> ExitCode {
+    let cli = Cli::parse();
+    let environment: BTreeMap<String, String> = std::env::vars()
+        .filter(|(name, _)| name.starts_with("TANDEM_"))
+        .collect();
+    match run(cli, &environment, &mut Stdout).await {
+        Ok(()) => ExitCode::SUCCESS,
+        Err(error) => {
+            report(&format!("tandem: {error}"));
+            ExitCode::FAILURE
+        }
     }
 }

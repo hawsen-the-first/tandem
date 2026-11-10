@@ -4,6 +4,7 @@ mod admin_tests;
 mod chat_worker_tests;
 mod mfa_tests;
 mod password_tests;
+mod recovery_tests;
 mod session_tests;
 mod settings_audit_tests;
 mod setup_tests;

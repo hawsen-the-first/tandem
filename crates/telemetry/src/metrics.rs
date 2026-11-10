@@ -249,3 +249,36 @@ pub fn update_process_metrics() {
 pub fn set_gauge_with_state(name: &'static str, state: &'static str, value: f64) {
     metrics::gauge!(name, "state" => state).set(value);
 }
+
+/// Count one HTTP request and record its latency, labelled by route template and status.
+pub fn record_http_request(
+    requests: &'static str,
+    duration: &'static str,
+    route: &str,
+    status: u16,
+    seconds: f64,
+) {
+    metrics::counter!(requests, "route" => route.to_owned(), "status" => status.to_string())
+        .increment(1);
+    metrics::histogram!(duration, "route" => route.to_owned()).record(seconds);
+}
+
+/// Count one request refused by the rate limiter.
+pub fn count_rate_limited(name: &'static str, bucket: &'static str) {
+    metrics::counter!(name, "bucket" => bucket).increment(1);
+}
+
+/// Count one event with an `outcome` label (sign-in attempts).
+pub fn count_outcome(name: &'static str, outcome: &'static str) {
+    metrics::counter!(name, "outcome" => outcome).increment(1);
+}
+
+/// Count one event with no labels.
+pub fn count(name: &'static str) {
+    metrics::counter!(name).increment(1);
+}
+
+/// Set an unlabelled gauge.
+pub fn set_gauge(name: &'static str, value: f64) {
+    metrics::gauge!(name).set(value);
+}

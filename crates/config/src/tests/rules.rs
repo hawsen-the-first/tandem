@@ -221,3 +221,16 @@ fn the_error_lists_every_problem_one_per_line() {
     assert!(text.starts_with("invalid configuration (4 problems)"));
     assert_eq!(text.lines().count(), 5);
 }
+
+#[test]
+fn the_worker_listen_address_defaults_and_is_validated() {
+    let mut fixture = Fixture::new();
+    assert_eq!(
+        fixture.load().unwrap().worker_listen_addr,
+        "127.0.0.1:8081".parse().unwrap()
+    );
+    fixture.set("TANDEM_WORKER_LISTEN_ADDR", "0.0.0.0:9101");
+    assert_eq!(fixture.load().unwrap().worker_listen_addr.port(), 9101);
+    fixture.set("TANDEM_WORKER_LISTEN_ADDR", "nowhere");
+    assert_eq!(fixture.problems()[0].0, "TANDEM_WORKER_LISTEN_ADDR");
+}

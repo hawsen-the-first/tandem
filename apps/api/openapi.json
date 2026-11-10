@@ -1,0 +1,2019 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "Tandem API",
+    "description": "Authentication, administration and the chat skeleton. Cookie-authenticated; state-changing calls need the X-CSRF-Token header returned by GET /api/auth/me.",
+    "license": {
+      "name": "GPL-3.0-only"
+    },
+    "version": "0.1.0"
+  },
+  "paths": {
+    "/api/admin/audit": {
+      "get": {
+        "tags": [
+          "admin"
+        ],
+        "summary": "Query the audit log, newest first.",
+        "operationId": "audit",
+        "parameters": [
+          {
+            "name": "actor_id",
+            "in": "path",
+            "description": "Only this actor.",
+            "required": true,
+            "schema": {
+              "type": [
+                "string",
+                "null"
+              ]
+            }
+          },
+          {
+            "name": "event_type",
+            "in": "path",
+            "description": "Only this event type, for example `auth.sign_in.failure`.",
+            "required": true,
+            "schema": {
+              "type": [
+                "string",
+                "null"
+              ]
+            }
+          },
+          {
+            "name": "from",
+            "in": "path",
+            "description": "Not before (RFC 3339).",
+            "required": true,
+            "schema": {
+              "type": [
+                "string",
+                "null"
+              ]
+            }
+          },
+          {
+            "name": "to",
+            "in": "path",
+            "description": "Not after (RFC 3339).",
+            "required": true,
+            "schema": {
+              "type": [
+                "string",
+                "null"
+              ]
+            }
+          },
+          {
+            "name": "after_time",
+            "in": "path",
+            "description": "Page cursor: the `next_after_time` of the previous page.",
+            "required": true,
+            "schema": {
+              "type": [
+                "string",
+                "null"
+              ]
+            }
+          },
+          {
+            "name": "after_id",
+            "in": "path",
+            "description": "Page cursor: the `next_after_id` of the previous page.",
+            "required": true,
+            "schema": {
+              "type": [
+                "string",
+                "null"
+              ]
+            }
+          },
+          {
+            "name": "limit",
+            "in": "path",
+            "description": "Page size (default 50, at most 200).",
+            "required": true,
+            "schema": {
+              "type": [
+                "integer",
+                "null"
+              ],
+              "minimum": 0
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AuditPageDto"
+                }
+              }
+            }
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/admin/invitations": {
+      "get": {
+        "tags": [
+          "admin"
+        ],
+        "summary": "List invitations.",
+        "operationId": "list_invitations",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/InvitationDto"
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "admin"
+        ],
+        "summary": "Invite someone. Nothing is emailed; the link is returned once.",
+        "operationId": "create_invitation",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/InviteRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InviteCreatedDto"
+                }
+              }
+            }
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/admin/invitations/{id}": {
+      "delete": {
+        "tags": [
+          "admin"
+        ],
+        "summary": "Revoke a pending invitation.",
+        "operationId": "revoke_invitation",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Invitation ID",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "204": {},
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/admin/settings": {
+      "get": {
+        "tags": [
+          "admin"
+        ],
+        "summary": "The instance security settings.",
+        "operationId": "get_settings",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SecuritySettingsDto"
+                }
+              }
+            }
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "admin"
+        ],
+        "summary": "Replace the instance security settings.",
+        "operationId": "put_settings",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SecuritySettingsDto"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SecuritySettingsDto"
+                }
+              }
+            }
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/admin/users": {
+      "get": {
+        "tags": [
+          "admin"
+        ],
+        "summary": "List users.",
+        "operationId": "list_users",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/AdminUserDto"
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/admin/users/{id}/deactivate": {
+      "post": {
+        "tags": [
+          "admin"
+        ],
+        "summary": "Deactivate a user and end their sign-ins.",
+        "operationId": "deactivate_user",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "User ID",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "204": {},
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            }
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/admin/users/{id}/reactivate": {
+      "post": {
+        "tags": [
+          "admin"
+        ],
+        "summary": "Reactivate a user.",
+        "operationId": "reactivate_user",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "User ID",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "204": {},
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/admin/users/{id}/reset-link": {
+      "post": {
+        "tags": [
+          "admin"
+        ],
+        "summary": "Issue a one-time password-reset link for a user.",
+        "operationId": "issue_reset_link",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "User ID",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ResetLinkRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResetLinkDto"
+                }
+              }
+            }
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/admin/users/{id}/role": {
+      "put": {
+        "tags": [
+          "admin"
+        ],
+        "summary": "Change a user's role.",
+        "operationId": "change_role",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "User ID",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RoleRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "204": {},
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            }
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/auth/me": {
+      "get": {
+        "tags": [
+          "auth"
+        ],
+        "summary": "The signed-in user, their scope and the CSRF token.",
+        "operationId": "me",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MeResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/auth/mfa/confirm": {
+      "post": {
+        "tags": [
+          "mfa"
+        ],
+        "summary": "Confirm enrolment with a code; returns the recovery codes once.",
+        "operationId": "mfa_confirm",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CodeRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RecoveryCodesResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/auth/mfa/disable": {
+      "post": {
+        "tags": [
+          "mfa"
+        ],
+        "summary": "Turn MFA off (members only).",
+        "operationId": "mfa_disable",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/DisableMfaRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "204": {},
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            }
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/auth/mfa/enrol": {
+      "post": {
+        "tags": [
+          "mfa"
+        ],
+        "summary": "Begin MFA enrolment: returns the secret to show once.",
+        "operationId": "mfa_enrol",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/EnrolmentResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/auth/mfa/recovery-codes": {
+      "post": {
+        "tags": [
+          "mfa"
+        ],
+        "summary": "Replace the recovery codes; returns the new set once.",
+        "operationId": "mfa_recovery_codes",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RecoveryCodesResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/auth/password": {
+      "post": {
+        "tags": [
+          "auth"
+        ],
+        "summary": "Change the signed-in user's password.",
+        "operationId": "change_password",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ChangePasswordRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "204": {},
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/auth/sign-in": {
+      "post": {
+        "tags": [
+          "auth"
+        ],
+        "summary": "Sign in with email, password and, when enrolled, a second factor.",
+        "operationId": "sign_in",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SignInRequestDto"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SignInResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            }
+          },
+          "429": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            }
+          },
+          "503": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/auth/sign-out": {
+      "post": {
+        "tags": [
+          "auth"
+        ],
+        "summary": "End the current sign-in.",
+        "operationId": "sign_out",
+        "responses": {
+          "204": {},
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/chat/sessions": {
+      "get": {
+        "tags": [
+          "chat"
+        ],
+        "summary": "The caller's chat sessions, newest first.",
+        "operationId": "list_sessions",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ChatSessionDto"
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "chat"
+        ],
+        "summary": "Start a chat session.",
+        "operationId": "create_session",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateChatSessionRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ChatSessionDto"
+                }
+              }
+            }
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/chat/sessions/{id}/messages": {
+      "get": {
+        "tags": [
+          "chat"
+        ],
+        "summary": "The messages of one of the caller's sessions, oldest first.",
+        "operationId": "list_messages",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Session ID",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ChatMessageDto"
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "chat"
+        ],
+        "summary": "Post a message; the agent's reply arrives over the event feed.",
+        "operationId": "post_message",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Session ID",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PostMessageRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ChatMessageDto"
+                }
+              }
+            }
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            }
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/invitations/accept": {
+      "post": {
+        "tags": [
+          "invitations"
+        ],
+        "summary": "Accept an invitation: creates the account and signs in.",
+        "operationId": "accept_invitation",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AcceptInvitationRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SessionStarted"
+                }
+              }
+            }
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            }
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/invitations/validate": {
+      "post": {
+        "tags": [
+          "invitations"
+        ],
+        "summary": "Check an invitation link.",
+        "operationId": "validate_invitation",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/TokenRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InvitationInfoDto"
+                }
+              }
+            }
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/password-resets/complete": {
+      "post": {
+        "tags": [
+          "password-resets"
+        ],
+        "summary": "Finish a password reset.",
+        "operationId": "complete_reset",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CompleteResetRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "204": {},
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            }
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/password-resets/validate": {
+      "post": {
+        "tags": [
+          "password-resets"
+        ],
+        "summary": "Check a password-reset link.",
+        "operationId": "validate_reset",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/TokenRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResetInfoDto"
+                }
+              }
+            }
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/setup": {
+      "get": {
+        "tags": [
+          "setup"
+        ],
+        "summary": "Whether first-run setup is still open.",
+        "operationId": "setup_status",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SetupStatus"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "setup"
+        ],
+        "summary": "Create the first admin and sign in with an enrolment-only scope.",
+        "operationId": "setup",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SetupRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SessionStarted"
+                }
+              }
+            }
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            }
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "AcceptInvitationRequest": {
+        "type": "object",
+        "description": "Accept an invitation.",
+        "required": [
+          "token",
+          "display_name",
+          "password"
+        ],
+        "properties": {
+          "display_name": {
+            "type": "string",
+            "description": "The new user's display name."
+          },
+          "password": {
+            "type": "string",
+            "description": "The new user's password."
+          },
+          "token": {
+            "type": "string",
+            "description": "The token from the link."
+          }
+        },
+        "additionalProperties": false
+      },
+      "AdminUserDto": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/UserDto",
+            "description": "The user."
+          },
+          {
+            "type": "object",
+            "required": [
+              "mfa_enrolled"
+            ],
+            "properties": {
+              "mfa_enrolled": {
+                "type": "boolean",
+                "description": "Whether the user has confirmed MFA."
+              }
+            }
+          }
+        ],
+        "description": "A user in the admin list, with their MFA state."
+      },
+      "AuditEntryDto": {
+        "type": "object",
+        "description": "An audit entry.",
+        "required": [
+          "id",
+          "occurred_at",
+          "actor_label",
+          "event_type",
+          "outcome",
+          "details"
+        ],
+        "properties": {
+          "actor_id": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "The acting user, if any."
+          },
+          "actor_label": {
+            "type": "string",
+            "description": "The actor's name at the time."
+          },
+          "details": {
+            "type": "object",
+            "description": "Extra facts, with secrets already removed.",
+            "additionalProperties": {
+              "type": "string"
+            },
+            "propertyNames": {
+              "type": "string"
+            }
+          },
+          "event_type": {
+            "type": "string",
+            "description": "The event type, for example `auth.sign_in.failure`."
+          },
+          "id": {
+            "type": "string",
+            "description": "The entry ID."
+          },
+          "object_id": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "Which one."
+          },
+          "object_type": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "What it concerned."
+          },
+          "occurred_at": {
+            "type": "string",
+            "description": "When it happened."
+          },
+          "outcome": {
+            "type": "string",
+            "description": "`success`, `failure` or `denied`."
+          },
+          "request_id": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "The request it came from."
+          },
+          "source": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "The source address."
+          }
+        }
+      },
+      "AuditPageDto": {
+        "type": "object",
+        "description": "A page of audit entries, newest first.",
+        "required": [
+          "entries"
+        ],
+        "properties": {
+          "entries": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/AuditEntryDto"
+            },
+            "description": "The entries."
+          },
+          "next_after_id": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "See `next_after_time`."
+          },
+          "next_after_time": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "Pass these two values back as `after_time` and `after_id` for the next page."
+          }
+        }
+      },
+      "ChangePasswordRequest": {
+        "type": "object",
+        "description": "Change the signed-in user's password.",
+        "required": [
+          "current_password",
+          "new_password"
+        ],
+        "properties": {
+          "current_password": {
+            "type": "string",
+            "description": "The current password."
+          },
+          "new_password": {
+            "type": "string",
+            "description": "The new password."
+          }
+        },
+        "additionalProperties": false
+      },
+      "ChatMessageDto": {
+        "type": "object",
+        "description": "A chat message.",
+        "required": [
+          "id",
+          "chat_session_id",
+          "author_kind",
+          "author",
+          "body",
+          "created_at"
+        ],
+        "properties": {
+          "author": {
+            "type": "string",
+            "description": "The user ID or the agent's name."
+          },
+          "author_kind": {
+            "type": "string",
+            "description": "`user` or `agent`."
+          },
+          "body": {
+            "type": "string",
+            "description": "The text."
+          },
+          "chat_session_id": {
+            "type": "string",
+            "description": "The session it belongs to."
+          },
+          "created_at": {
+            "type": "string",
+            "description": "Posted at."
+          },
+          "id": {
+            "type": "string",
+            "description": "The message ID."
+          },
+          "in_reply_to": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "The message this answers, for agent replies."
+          }
+        }
+      },
+      "ChatSessionDto": {
+        "type": "object",
+        "description": "A chat session.",
+        "required": [
+          "id",
+          "title",
+          "created_at"
+        ],
+        "properties": {
+          "created_at": {
+            "type": "string",
+            "description": "Created at."
+          },
+          "id": {
+            "type": "string",
+            "description": "The session ID."
+          },
+          "title": {
+            "type": "string",
+            "description": "Its title."
+          }
+        }
+      },
+      "CodeRequest": {
+        "type": "object",
+        "description": "A code to confirm enrolment.",
+        "required": [
+          "code"
+        ],
+        "properties": {
+          "code": {
+            "type": "string",
+            "description": "A 6-digit authenticator code."
+          }
+        },
+        "additionalProperties": false
+      },
+      "CompleteResetRequest": {
+        "type": "object",
+        "description": "Finish a password reset.",
+        "required": [
+          "token",
+          "new_password"
+        ],
+        "properties": {
+          "new_password": {
+            "type": "string",
+            "description": "The new password."
+          },
+          "token": {
+            "type": "string",
+            "description": "The token from the link."
+          }
+        },
+        "additionalProperties": false
+      },
+      "CreateChatSessionRequest": {
+        "type": "object",
+        "description": "Create a chat session.",
+        "required": [
+          "title"
+        ],
+        "properties": {
+          "title": {
+            "type": "string",
+            "description": "The title."
+          }
+        },
+        "additionalProperties": false
+      },
+      "DisableMfaRequest": {
+        "type": "object",
+        "description": "Turn MFA off (members only).",
+        "required": [
+          "password",
+          "code"
+        ],
+        "properties": {
+          "code": {
+            "type": "string",
+            "description": "A current authenticator or recovery code."
+          },
+          "password": {
+            "type": "string",
+            "description": "The current password."
+          }
+        },
+        "additionalProperties": false
+      },
+      "EnrolmentResponse": {
+        "type": "object",
+        "description": "The MFA secret to show once.",
+        "required": [
+          "secret_base32",
+          "otpauth_uri"
+        ],
+        "properties": {
+          "otpauth_uri": {
+            "type": "string",
+            "description": "The `otpauth://` URI for a QR code."
+          },
+          "secret_base32": {
+            "type": "string",
+            "description": "The secret for manual entry."
+          }
+        }
+      },
+      "ErrorBody": {
+        "type": "object",
+        "description": "The body of every error answer.",
+        "required": [
+          "code",
+          "message"
+        ],
+        "properties": {
+          "code": {
+            "type": "string",
+            "description": "A stable machine-readable code."
+          },
+          "fields": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/FieldProblem"
+            },
+            "description": "Field problems, for validation errors."
+          },
+          "message": {
+            "type": "string",
+            "description": "A plain-words message safe to show to the user."
+          }
+        }
+      },
+      "ErrorEnvelope": {
+        "type": "object",
+        "description": "The error envelope: `{\"error\": {...}}`.",
+        "required": [
+          "error"
+        ],
+        "properties": {
+          "error": {
+            "$ref": "#/components/schemas/ErrorBody",
+            "description": "The error."
+          }
+        }
+      },
+      "FieldProblem": {
+        "type": "object",
+        "description": "One field problem in a validation answer.",
+        "required": [
+          "field",
+          "message"
+        ],
+        "properties": {
+          "field": {
+            "type": "string",
+            "description": "The field as the client knows it."
+          },
+          "message": {
+            "type": "string",
+            "description": "What to fix."
+          }
+        }
+      },
+      "InvitationDto": {
+        "type": "object",
+        "description": "An invitation in the admin list.",
+        "required": [
+          "id",
+          "email",
+          "role",
+          "status",
+          "created_at",
+          "expires_at"
+        ],
+        "properties": {
+          "created_at": {
+            "type": "string",
+            "description": "Created at."
+          },
+          "email": {
+            "type": "string",
+            "description": "Invited email."
+          },
+          "expires_at": {
+            "type": "string",
+            "description": "Expires at."
+          },
+          "id": {
+            "type": "string",
+            "description": "The invitation ID."
+          },
+          "role": {
+            "type": "string",
+            "description": "Offered role."
+          },
+          "status": {
+            "type": "string",
+            "description": "`pending`, `accepted`, `revoked` or `expired`."
+          }
+        }
+      },
+      "InvitationInfoDto": {
+        "type": "object",
+        "description": "What an invitation link is for.",
+        "required": [
+          "email",
+          "role"
+        ],
+        "properties": {
+          "email": {
+            "type": "string",
+            "description": "The invited email."
+          },
+          "role": {
+            "type": "string",
+            "description": "The role being offered."
+          }
+        }
+      },
+      "InviteCreatedDto": {
+        "type": "object",
+        "description": "A new invitation with its one-time link.",
+        "required": [
+          "invitation",
+          "link"
+        ],
+        "properties": {
+          "invitation": {
+            "$ref": "#/components/schemas/InvitationDto",
+            "description": "The invitation."
+          },
+          "link": {
+            "type": "string",
+            "description": "The link to give to the invitee; shown once."
+          }
+        }
+      },
+      "InviteRequest": {
+        "type": "object",
+        "description": "Create an invitation.",
+        "required": [
+          "email",
+          "role"
+        ],
+        "properties": {
+          "email": {
+            "type": "string",
+            "description": "Who to invite."
+          },
+          "role": {
+            "type": "string",
+            "description": "`admin` or `member`."
+          }
+        },
+        "additionalProperties": false
+      },
+      "MeResponse": {
+        "type": "object",
+        "description": "The signed-in user, their scope and the CSRF token for state-changing calls.",
+        "required": [
+          "user",
+          "scope",
+          "mfa",
+          "csrf_token"
+        ],
+        "properties": {
+          "csrf_token": {
+            "type": "string",
+            "description": "Send as `X-CSRF-Token` on POST, PUT, PATCH and DELETE."
+          },
+          "mfa": {
+            "$ref": "#/components/schemas/MfaStatusDto",
+            "description": "MFA state."
+          },
+          "scope": {
+            "type": "string",
+            "description": "`full` or `mfa_enrolment_only`."
+          },
+          "user": {
+            "$ref": "#/components/schemas/UserDto",
+            "description": "The user."
+          }
+        }
+      },
+      "MfaStatusDto": {
+        "type": "object",
+        "description": "MFA state.",
+        "required": [
+          "enrolled",
+          "recovery_codes_remaining",
+          "remind_regenerate"
+        ],
+        "properties": {
+          "enrolled": {
+            "type": "boolean",
+            "description": "MFA is confirmed."
+          },
+          "recovery_codes_remaining": {
+            "type": "integer",
+            "description": "Unused recovery codes left.",
+            "minimum": 0
+          },
+          "remind_regenerate": {
+            "type": "boolean",
+            "description": "Suggest generating a new set."
+          }
+        }
+      },
+      "PostMessageRequest": {
+        "type": "object",
+        "description": "Post a chat message.",
+        "required": [
+          "body"
+        ],
+        "properties": {
+          "body": {
+            "type": "string",
+            "description": "The text."
+          }
+        },
+        "additionalProperties": false
+      },
+      "RecoveryCodesResponse": {
+        "type": "object",
+        "description": "Recovery codes, shown once.",
+        "required": [
+          "recovery_codes"
+        ],
+        "properties": {
+          "recovery_codes": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "The codes."
+          }
+        }
+      },
+      "ResetInfoDto": {
+        "type": "object",
+        "description": "Whose password a reset link is for.",
+        "required": [
+          "display_name"
+        ],
+        "properties": {
+          "display_name": {
+            "type": "string",
+            "description": "The user's display name."
+          }
+        }
+      },
+      "ResetLinkDto": {
+        "type": "object",
+        "description": "A reset link, shown once.",
+        "required": [
+          "link",
+          "expires_at",
+          "user_display_name"
+        ],
+        "properties": {
+          "expires_at": {
+            "type": "string",
+            "description": "When it stops working."
+          },
+          "link": {
+            "type": "string",
+            "description": "The link to give to the user."
+          },
+          "user_display_name": {
+            "type": "string",
+            "description": "Whose password it resets."
+          }
+        }
+      },
+      "ResetLinkRequest": {
+        "type": "object",
+        "description": "Issue a reset link.",
+        "properties": {
+          "reset_mfa": {
+            "type": "boolean",
+            "description": "Also remove the user's MFA enrolment."
+          }
+        },
+        "additionalProperties": false
+      },
+      "RoleRequest": {
+        "type": "object",
+        "description": "Change a user's role.",
+        "required": [
+          "role"
+        ],
+        "properties": {
+          "role": {
+            "type": "string",
+            "description": "`admin` or `member`."
+          }
+        },
+        "additionalProperties": false
+      },
+      "SecondFactorDto": {
+        "type": "object",
+        "description": "A second factor submitted with sign-in.",
+        "required": [
+          "kind",
+          "code"
+        ],
+        "properties": {
+          "code": {
+            "type": "string",
+            "description": "The code."
+          },
+          "kind": {
+            "type": "string",
+            "description": "`totp` or `recovery`."
+          }
+        },
+        "additionalProperties": false
+      },
+      "SecuritySettingsDto": {
+        "type": "object",
+        "description": "The instance security settings.",
+        "required": [
+          "idle_timeout_seconds",
+          "absolute_duration_seconds",
+          "online_breach_check"
+        ],
+        "properties": {
+          "absolute_duration_seconds": {
+            "type": "integer",
+            "format": "int64",
+            "description": "Sign out after this many seconds in total."
+          },
+          "idle_timeout_seconds": {
+            "type": "integer",
+            "format": "int64",
+            "description": "Sign out after this many idle seconds."
+          },
+          "online_breach_check": {
+            "type": "boolean",
+            "description": "Also check passwords against the online breach service."
+          }
+        },
+        "additionalProperties": false
+      },
+      "SessionStarted": {
+        "type": "object",
+        "description": "A session started by setup or invitation acceptance.",
+        "required": [
+          "user",
+          "scope"
+        ],
+        "properties": {
+          "scope": {
+            "type": "string",
+            "description": "`full` or `mfa_enrolment_only`."
+          },
+          "user": {
+            "$ref": "#/components/schemas/UserDto",
+            "description": "The user."
+          }
+        }
+      },
+      "SetupRequest": {
+        "type": "object",
+        "description": "First-run setup.",
+        "required": [
+          "display_name",
+          "email",
+          "password"
+        ],
+        "properties": {
+          "display_name": {
+            "type": "string",
+            "description": "The admin's display name."
+          },
+          "email": {
+            "type": "string",
+            "description": "The admin's email."
+          },
+          "password": {
+            "type": "string",
+            "description": "The admin's password."
+          }
+        },
+        "additionalProperties": false
+      },
+      "SetupStatus": {
+        "type": "object",
+        "description": "Whether first-run setup is still open.",
+        "required": [
+          "available"
+        ],
+        "properties": {
+          "available": {
+            "type": "boolean",
+            "description": "True until the first admin exists."
+          }
+        }
+      },
+      "SignInRequestDto": {
+        "type": "object",
+        "description": "Sign-in.",
+        "required": [
+          "email",
+          "password"
+        ],
+        "properties": {
+          "email": {
+            "type": "string",
+            "description": "Email as typed."
+          },
+          "password": {
+            "type": "string",
+            "description": "Password."
+          },
+          "second_factor": {
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/SecondFactorDto",
+                "description": "Required when the account has MFA."
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        "additionalProperties": false
+      },
+      "SignInResponse": {
+        "type": "object",
+        "description": "The result of a sign-in step.",
+        "required": [
+          "status"
+        ],
+        "properties": {
+          "scope": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "`full` or `mfa_enrolment_only`, when signed in."
+          },
+          "status": {
+            "type": "string",
+            "description": "`signed_in` or `mfa_required`."
+          },
+          "user": {
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/UserDto",
+                "description": "The user, when signed in."
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        }
+      },
+      "TokenRequest": {
+        "type": "object",
+        "description": "A link token from an invitation or reset link.",
+        "required": [
+          "token"
+        ],
+        "properties": {
+          "token": {
+            "type": "string",
+            "description": "The token from the link."
+          }
+        },
+        "additionalProperties": false
+      },
+      "UserDto": {
+        "type": "object",
+        "description": "A user as the client sees them.",
+        "required": [
+          "id",
+          "email",
+          "display_name",
+          "role",
+          "status",
+          "created_at"
+        ],
+        "properties": {
+          "created_at": {
+            "type": "string",
+            "description": "When the account was created."
+          },
+          "display_name": {
+            "type": "string",
+            "description": "Display name."
+          },
+          "email": {
+            "type": "string",
+            "description": "Sign-in email."
+          },
+          "id": {
+            "type": "string",
+            "description": "The user's ID."
+          },
+          "last_sign_in_at": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "The last successful sign-in, if any."
+          },
+          "role": {
+            "type": "string",
+            "description": "`admin` or `member`."
+          },
+          "status": {
+            "type": "string",
+            "description": "`active` or `deactivated`."
+          }
+        }
+      }
+    }
+  }
+}

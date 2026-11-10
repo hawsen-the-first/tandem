@@ -26,6 +26,7 @@ const FILE_KEYS: &[&str] = &[
     "database_ca_file",
     "master_key_file",
     "listen_addr",
+    "worker_listen_addr",
     "trusted_proxies",
     "otlp_endpoint",
     "log_level",
@@ -106,6 +107,8 @@ pub struct Config {
     pub master_key: MasterKeySource,
     /// The address the API listens on.
     pub listen_addr: SocketAddr,
+    /// The address the worker serves its health and metrics endpoints on.
+    pub worker_listen_addr: SocketAddr,
     /// Proxies whose forwarded headers are believed.
     pub trusted_proxies: TrustedProxies,
     /// Bearer token for `/metrics`; the endpoint is disabled without one.
@@ -163,6 +166,26 @@ impl Config {
     /// The public origin as the `Origin` header carries it (no trailing slash).
     pub fn public_origin(&self) -> String {
         self.public_url.origin().ascii_serialization()
+    }
+}
+
+/// Read one secret from `NAME` or `NAME_FILE` in `environment` without loading the whole
+/// configuration (for the operations CLI, which needs only a database credential).
+///
+/// # Errors
+/// [`ConfigError`] when both forms are set, or the file is missing or empty.
+pub fn secret_from_env(
+    environment: &BTreeMap<String, String>,
+    name: &str,
+) -> Result<Option<Secret>, ConfigError> {
+    let mut loader = Loader::new(environment);
+    let secret = loader.secret(name);
+    if loader.problems.is_empty() {
+        Ok(secret)
+    } else {
+        Err(ConfigError {
+            problems: loader.problems,
+        })
     }
 }
 
@@ -450,6 +473,14 @@ impl Loader {
             }),
         };
 
+        let worker_listen_addr = match self.value("TANDEM_WORKER_LISTEN_ADDR") {
+            None => SocketAddr::from(([127, 0, 0, 1], 8081)),
+            Some(text) => text.parse().unwrap_or_else(|_| {
+                self.problem("TANDEM_WORKER_LISTEN_ADDR", "must look like 127.0.0.1:8081");
+                SocketAddr::from(([127, 0, 0, 1], 8081))
+            }),
+        };
+
         let trusted_proxies = match self.value("TANDEM_TRUSTED_PROXIES") {
             None => TrustedProxies::default(),
             Some(text) => TrustedProxies::parse(&text).unwrap_or_else(|errors| {
@@ -514,6 +545,7 @@ impl Loader {
             },
             master_key: master_key?,
             listen_addr,
+            worker_listen_addr,
             trusted_proxies,
             metrics_token,
             otlp_endpoint,

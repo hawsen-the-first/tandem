@@ -88,3 +88,21 @@ fn an_unreadable_or_malformed_file_is_one_problem_that_quotes_nothing() {
     assert!(problems[0].1.contains("not valid TOML"));
     assert!(!problems[0].1.contains("leaky"));
 }
+
+#[test]
+fn a_single_secret_can_be_read_without_the_rest_of_the_configuration() {
+    let fixture = Fixture::new();
+    let path = fixture.write("priv.url", "postgres://owner@db/t?sslmode=verify-full\n");
+    let mut environment = BTreeMap::new();
+    assert_eq!(
+        secret_from_env(&environment, "TANDEM_PRIVILEGED_DATABASE_URL").unwrap(),
+        None
+    );
+    environment.insert("TANDEM_PRIVILEGED_DATABASE_URL_FILE".to_owned(), path);
+    let secret = secret_from_env(&environment, "TANDEM_PRIVILEGED_DATABASE_URL")
+        .unwrap()
+        .unwrap();
+    assert!(secret.expose().starts_with("postgres://owner@"));
+    environment.insert("TANDEM_PRIVILEGED_DATABASE_URL".to_owned(), "x".to_owned());
+    assert!(secret_from_env(&environment, "TANDEM_PRIVILEGED_DATABASE_URL").is_err());
+}

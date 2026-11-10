@@ -67,3 +67,107 @@ impl PgStore {
         Ok(())
     }
 }
+
+/// Why a re-key stopped (and rolled back).
+#[derive(Debug, thiserror::Error)]
+pub enum RekeyError {
+    /// Storage failed.
+    #[error(transparent)]
+    Store(#[from] StoreError),
+    /// A value could not be opened or re-sealed.
+    #[error("{0}")]
+    Value(String),
+}
+
+/// What a vault re-seal changed.
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Default)]
+pub struct RekeyReport {
+    /// MFA secrets re-sealed.
+    pub mfa_secrets: u64,
+    /// Whether the vault canary was re-sealed.
+    pub canary: bool,
+    /// Values already sealed under the current key.
+    pub already_current: u64,
+}
+
+impl PgStore {
+    /// Re-seal every sealed value (MFA secrets and the vault canary) with `rekey`, all in one
+    /// transaction. `rekey(purpose, row_id, sealed)` returns the new sealed value, or `None` when
+    /// it is already current. Any error (a value that cannot be opened, for example) rolls back
+    /// everything, so a partial re-key never happens.
+    ///
+    /// # Errors
+    /// [`StoreError`] for storage failures or the first message `rekey` returns.
+    pub async fn rekey_sealed_values<F>(&self, mut rekey: F) -> Result<RekeyReport, RekeyError>
+    where
+        F: FnMut(&str, &str, &[u8]) -> Result<Option<Vec<u8>>, String> + Send,
+    {
+        let mut report = RekeyReport::default();
+        let mut tx = self.pool().begin().await.map_err(map_sqlx)?;
+        let secrets = sqlx::query!("SELECT user_id, secret_sealed FROM mfa_credentials FOR UPDATE")
+            .fetch_all(&mut *tx)
+            .await
+            .map_err(map_sqlx)?;
+        for row in secrets {
+            let row_id = row.user_id.to_string();
+            match rekey("mfa_secret", &row_id, &row.secret_sealed).map_err(RekeyError::Value)? {
+                Some(sealed) => {
+                    sqlx::query!(
+                        "UPDATE mfa_credentials SET secret_sealed = $2 WHERE user_id = $1",
+                        row.user_id,
+                        sealed
+                    )
+                    .execute(&mut *tx)
+                    .await
+                    .map_err(map_sqlx)?;
+                    report.mfa_secrets += 1;
+                }
+                None => report.already_current += 1,
+            }
+        }
+        let canary = sqlx::query!(
+            "SELECT value FROM instance_settings WHERE key = 'internal.vault_canary' FOR UPDATE"
+        )
+        .fetch_optional(&mut *tx)
+        .await
+        .map_err(map_sqlx)?;
+        if let Some(canary) = canary {
+            let sealed = data_encoding::HEXLOWER
+                .decode(canary.value.as_bytes())
+                .map_err(|_| {
+                    RekeyError::Value("the stored vault canary is not valid".to_owned())
+                })?;
+            match rekey("vault_canary", "canary", &sealed).map_err(RekeyError::Value)? {
+                Some(resealed) => {
+                    sqlx::query!(
+                        "UPDATE instance_settings SET value = $1 WHERE key = 'internal.vault_canary'",
+                        data_encoding::HEXLOWER.encode(&resealed)
+                    )
+                    .execute(&mut *tx)
+                    .await
+                    .map_err(map_sqlx)?;
+                    report.canary = true;
+                }
+                None => report.already_current += 1,
+            }
+        }
+        tx.commit().await.map_err(map_sqlx)?;
+        Ok(report)
+    }
+
+    /// Delete audit entries older than `cutoff`. The application role cannot do this (it has
+    /// INSERT and SELECT only): call it on a pool connected with a privileged role.
+    ///
+    /// # Errors
+    /// [`StoreError`] when the statement fails, including a permission error for the app role.
+    pub async fn prune_audit_before(&self, cutoff: OffsetDateTime) -> Result<u64, StoreError> {
+        let result = sqlx::query!(
+            "DELETE FROM tandem.audit_entries WHERE occurred_at < $1",
+            cutoff
+        )
+        .execute(self.pool())
+        .await
+        .map_err(map_sqlx)?;
+        Ok(result.rows_affected())
+    }
+}

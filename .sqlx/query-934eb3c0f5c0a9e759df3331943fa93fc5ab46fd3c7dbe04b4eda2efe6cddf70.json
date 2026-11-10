@@ -1,0 +1,15 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "UPDATE mfa_credentials SET secret_sealed = $2 WHERE user_id = $1",
+  "describe": {
+    "columns": [],
+    "parameters": {
+      "Left": [
+        "Uuid",
+        "Bytea"
+      ]
+    },
+    "nullable": []
+  },
+  "hash": "934eb3c0f5c0a9e759df3331943fa93fc5ab46fd3c7dbe04b4eda2efe6cddf70"
+}

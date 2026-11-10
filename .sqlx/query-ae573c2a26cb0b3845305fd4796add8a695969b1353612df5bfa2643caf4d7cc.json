@@ -1,0 +1,14 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "UPDATE instance_settings SET value = $1 WHERE key = 'internal.vault_canary'",
+  "describe": {
+    "columns": [],
+    "parameters": {
+      "Left": [
+        "Text"
+      ]
+    },
+    "nullable": []
+  },
+  "hash": "ae573c2a26cb0b3845305fd4796add8a695969b1353612df5bfa2643caf4d7cc"
+}
