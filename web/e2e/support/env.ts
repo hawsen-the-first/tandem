@@ -1,4 +1,4 @@
-import { randomBytes } from 'node:crypto';
+import { randomBytes, randomInt } from 'node:crypto';
 import type { APIRequestContext, Browser, BrowserContext, Page, TestInfo } from '@playwright/test';
 import { request as playwrightRequest } from '@playwright/test';
 
@@ -11,8 +11,7 @@ export const PAGE_ORIGIN = (testInfo: TestInfo): string =>
  * per-source allowance, and it exercises the proxy path.
  */
 export function randomClientIp(): string {
-  const bytes = randomBytes(3);
-  return `10.${String(bytes[0])}.${String(bytes[1])}.${String(1 + ((bytes[2] ?? 0) % 250))}`;
+  return `10.${String(randomInt(0, 256))}.${String(randomInt(0, 256))}.${String(randomInt(1, 251))}`;
 }
 
 export function clientHeaders(ip: string): Record<string, string> {
