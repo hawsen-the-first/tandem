@@ -4,7 +4,7 @@
 - **Project Name**: Tandem
 - **Project Type**: Greenfield
 - **Start Date**: 2026-09-28T03:32:30Z
-- **Current Stage**: CONSTRUCTION - U1 Foundation and walking skeleton, Code Generation Part 4 (PR 1 to 3 merged; PR 4 steps 35-47 done, awaiting merge; Step 48 next)
+- **Current Stage**: CONSTRUCTION - U1 Foundation and walking skeleton: Code Generation COMPLETE (all 58 steps; PR 5 awaiting merge). Next: U2 Instance administration, Functional Design
 - **AI-DLC Rules Version**: v1.0.1 (awslabs/aidlc-workflows @ e40f6a93a59d1a22be78314ff32585fdd6b60936)
 
 ## Workspace State
@@ -38,7 +38,7 @@
 - [x] Units Generation (APPROVED - 9 units, 87 stories mapped)
 
 ### 🟢 CONSTRUCTION PHASE
-- [ ] Per-unit design and code generation (U1 design stages APPROVED; Code Generation plan APPROVED, executing (see construction/plans/u1-foundation-code-generation-plan.md); units U1-U9 per unit-of-work.md)
+- [ ] Per-unit design and code generation (U1 COMPLETE pending PR 5 merge: design stages and code generation done, see construction/u1-foundation/code/u1-code-generation-summary.md; U2 to U9 remain, per unit-of-work.md)
 - [ ] Build and Test
 
 ### 🟡 OPERATIONS PHASE

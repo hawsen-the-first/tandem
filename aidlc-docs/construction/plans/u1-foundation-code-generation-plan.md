@@ -127,9 +127,9 @@ User, Invitation, PasswordReset, AuthSession, MfaCredential, RecoveryCode, SignI
 - [x] **Step 53 - Administration pages.** `UsersPage` (table, invite, role, reset link, deactivate, reactivate dialogs with last-admin protection), `SettingsPage`, `AuditLogPage`. *US-1.3, 1.4, 1.7, 1.8, 1.9, 2.7.*
 - [x] **Step 54 - Skeleton pages and WebSocket client.** `ChatSessionListPage`, `ChatSessionPage`, WebSocket client with reconnect backoff, replay from the last event ID and resync. *Skeleton.*
 - [x] **Step 55 - Component tests and accessibility.** Vitest and Testing Library tests for every page and shared component, with axe checks and keyboard interaction tests. *US-13.7, MT-5.*
-- [ ] **Step 56 - End-to-end tests and CI job.** Playwright suites for first-run setup to MFA, invitation to sign-in, forced reset, role change, deactivation, throttling UI, skeleton round trip, axe checks and a keyboard walk-through, in Chromium and Firefox; add the `e2e` job to `ci.yml`. *MT-4, MT-5, R3.*
-- [ ] **Step 57 - Documentation.** Update `README.md`, add `docs/development.md` and API notes, update `unit-of-work.md` with the three added crates and the breach-filter tool, and refresh `shared-infrastructure.md` for anything added.
-- [ ] **Step 58 - Final verification and close-out.** Run `just check`; produce the BR-to-test table; tick every story in the traceability table; write `code/u1-code-generation-summary.md` and update `aidlc-state.md`. Open PR 5.
+- [x] **Step 56 - End-to-end tests and CI job.** Playwright suites for first-run setup to MFA, invitation to sign-in, forced reset, role change, deactivation, throttling UI, skeleton round trip, axe checks and a keyboard walk-through, in Chromium and Firefox; add the `e2e` job to `ci.yml`. *MT-4, MT-5, R3.*
+- [x] **Step 57 - Documentation.** Update `README.md`, add `docs/development.md` and API notes, update `unit-of-work.md` with the three added crates and the breach-filter tool, and refresh `shared-infrastructure.md` for anything added.
+- [x] **Step 58 - Final verification and close-out.** Run `just check`; produce the BR-to-test table; tick every story in the traceability table; write `code/u1-code-generation-summary.md` and update `aidlc-state.md`. Open PR 5.
 
 ## 4. Pull request plan
 | PR | Branch | Steps | Contents |
@@ -145,18 +145,18 @@ Each PR is based on `main` after the previous PR is merged. The aidlc documents 
 ## 5. Story traceability (stories ticked when their steps are done)
 | Done | Story | Steps |
 |---|---|---|
-| [ ] | US-1.1 First-run admin setup | 10, 11, 18, 22, 39, 51, 56 |
-| [ ] | US-1.2 Sign in | 11, 18, 27, 31, 38, 39, 51, 56 |
-| [ ] | US-1.3 Invite users | 12, 18, 20, 39, 40, 51, 53, 56 |
-| [ ] | US-1.4 Deactivate and reactivate | 11, 12, 17, 20, 40, 53, 56 |
-| [ ] | US-1.5 Multi-factor authentication | 19, 30, 31, 39, 52, 56 |
-| [ ] | US-1.6 Change my password | 19, 39, 52, 56 |
-| [ ] | US-1.7 Force a password reset | 19, 39, 40, 44, 51, 53, 56 |
-| [ ] | US-1.8 Change a user's role | 11, 17, 20, 40, 53, 56 |
-| [ ] | US-1.9 Set sign-in duration and breach check | 13, 20, 40, 53 |
-| [ ] | US-2.7 View the security audit log | 13, 20, 25, 27, 40, 53 |
-| [ ] | US-13.3 Lockout after repeated failures | 11, 18, 29, 38, 51 |
-| [ ] | US-13.7 Mobile, themes, WCAG baseline | 48, 49, 50, 55, 56 |
+| [x] | US-1.1 First-run admin setup | 10, 11, 18, 22, 39, 51, 56 |
+| [x] | US-1.2 Sign in | 11, 18, 27, 31, 38, 39, 51, 56 |
+| [x] | US-1.3 Invite users | 12, 18, 20, 39, 40, 51, 53, 56 |
+| [x] | US-1.4 Deactivate and reactivate | 11, 12, 17, 20, 40, 53, 56 |
+| [x] | US-1.5 Multi-factor authentication | 19, 30, 31, 39, 52, 56 |
+| [x] | US-1.6 Change my password | 19, 39, 52, 56 |
+| [x] | US-1.7 Force a password reset | 19, 39, 40, 44, 51, 53, 56 |
+| [x] | US-1.8 Change a user's role | 11, 17, 20, 40, 53, 56 |
+| [x] | US-1.9 Set sign-in duration and breach check | 13, 20, 40, 53 |
+| [x] | US-2.7 View the security audit log | 13, 20, 25, 27, 40, 53 |
+| [x] | US-13.3 Lockout after repeated failures | 11, 18, 29, 38, 51 |
+| [x] | US-13.7 Mobile, themes, WCAG baseline | 48, 49, 50, 55, 56 |
 | n/a | Skeleton (no story completion) | 14, 21, 28, 41, 43, 54, 56 |
 
 ## 6. Extension compliance (planning)
