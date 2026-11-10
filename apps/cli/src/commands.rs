@@ -138,7 +138,7 @@ async fn rekey_command(
         })?;
     out.line(&format!(
         "re-sealed {} MFA secret(s){}; {} value(s) were already under the current key (current key: {})",
-        report.mfa_secrets,
+        report.mfa_credentials_resealed,
         if report.canary { " and the vault canary" } else { "" },
         report.already_current,
         vault.current_key_id()

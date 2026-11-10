@@ -82,8 +82,8 @@ pub enum RekeyError {
 /// What a vault re-seal changed.
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Default)]
 pub struct RekeyReport {
-    /// MFA secrets re-sealed.
-    pub mfa_secrets: u64,
+    /// Number of MFA credentials re-sealed (a count; no secret value).
+    pub mfa_credentials_resealed: u64,
     /// Whether the vault canary was re-sealed.
     pub canary: bool,
     /// Values already sealed under the current key.
@@ -120,7 +120,7 @@ impl PgStore {
                     .execute(&mut *tx)
                     .await
                     .map_err(map_sqlx)?;
-                    report.mfa_secrets += 1;
+                    report.mfa_credentials_resealed += 1;
                 }
                 None => report.already_current += 1,
             }
