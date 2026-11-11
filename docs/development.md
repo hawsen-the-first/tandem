@@ -51,6 +51,7 @@ The loader reports every problem at once and never prints a secret.
 | `TANDEM_TRUSTED_PROXIES` | Comma-separated IPs and CIDRs whose `X-Forwarded-For` is believed. Empty: forwarded headers are ignored |
 | `TANDEM_METRICS_TOKEN` | Bearer token for `/metrics`. Without it `/metrics` answers 404 |
 | `TANDEM_WEB_DIR` | The built client (`web/dist`). Optional |
+| `TANDEM_SOURCE_URL` | Where the Corresponding Source of this running version can be obtained (AGPL section 13). Defaults to the upstream project. **If you run a modified version for users over a network, set it to where your modified source is published.** The footer links to it |
 | `TANDEM_OTLP_ENDPOINT` | Validated, but this build has no OTLP exporter yet (trace IDs are logged only) |
 | `TANDEM_LOG_LEVEL`, `TANDEM_HASH_MEMORY_BUDGET_MB`, `TANDEM_DB_*` | Optional tuning, see `crates/config` |
 

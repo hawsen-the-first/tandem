@@ -209,3 +209,33 @@ async fn br_8_5_a_person_can_hold_several_sessions_at_once() {
         StatusCode::OK
     );
 }
+
+#[tokio::test]
+async fn the_legal_notices_are_public_and_name_the_licence_and_the_source() {
+    let harness = Harness::new();
+    let about = harness.send(get("/api/about")).await;
+    assert_eq!(about.status, StatusCode::OK);
+    let body = about.json();
+    assert_eq!(body["name"], "Tandem");
+    assert_eq!(body["license"], "AGPL-3.0-only");
+    assert_eq!(
+        body["license_url"],
+        "https://www.gnu.org/licenses/agpl-3.0.html"
+    );
+    assert!(
+        body["copyright"]
+            .as_str()
+            .unwrap()
+            .starts_with("Copyright (C)")
+    );
+    assert_eq!(
+        body["upstream_url"],
+        "https://github.com/hawsen-the-first/tandem"
+    );
+    // Unless an operator of a modified version says otherwise, the source is the upstream project.
+    assert_eq!(
+        body["source_url"],
+        "https://github.com/hawsen-the-first/tandem"
+    );
+    assert!(!body["version"].as_str().unwrap().is_empty());
+}

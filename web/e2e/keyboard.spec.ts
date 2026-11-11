@@ -122,3 +122,22 @@ test('the theme choice sticks across a reload', async ({ page }) => {
   await page.getByTestId('theme-toggle').selectOption('system');
   await expect(page.locator('html')).not.toHaveAttribute('data-theme', /.+/);
 });
+
+test('every page ends with the legal notices, the source link and the credit', async ({
+  page,
+  browser,
+}, testInfo) => {
+  for (const path of ['/', '/account', '/admin/users']) {
+    await page.goto(path);
+    const footer = page.getByTestId('site-footer');
+    await expect(footer).toContainText('ABSOLUTELY NO WARRANTY');
+    await expect(footer.getByTestId('footer-license')).toHaveAttribute('href', /agpl-3\.0/);
+    await expect(footer.getByTestId('footer-source')).toBeVisible();
+    await expect(footer).toContainText('Based on Tandem');
+  }
+  const context = await freshContext(browser, testInfo, randomClientIp());
+  const anonymous = await context.newPage();
+  await anonymous.goto('/sign-in');
+  await expect(anonymous.getByTestId('site-footer')).toContainText('Based on Tandem');
+  await context.close();
+});

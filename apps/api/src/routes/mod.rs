@@ -2,6 +2,7 @@
 //! wraps it in the matching guard, so a route that is neither public nor guarded cannot exist
 //! (SE-9; the start-up check).
 
+pub mod about;
 pub mod admin;
 pub mod assets;
 pub mod auth;
@@ -184,6 +185,7 @@ impl RouteTable {
 pub fn all_routes() -> Result<(Router<AppState>, RouteInfoMap), RouteError> {
     let table = RouteTable::new();
     let table = health::register(table);
+    let table = about::register(table);
     let table = auth::register(table);
     let table = admin::register(table);
     let table = chat::register(table);

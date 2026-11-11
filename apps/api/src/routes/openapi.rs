@@ -2,7 +2,7 @@
 //! `/api/openapi.json`. A copy is committed as `openapi.json` and a test keeps it current.
 
 use crate::pipeline::rate_limit::Bucket;
-use crate::routes::{RouteTable, admin, auth, chat};
+use crate::routes::{RouteTable, about, admin, auth, chat};
 use axum::Json;
 use axum::http::Method;
 use utoipa::OpenApi;
@@ -14,9 +14,10 @@ use utoipa::OpenApi;
         title = "Tandem API",
         description = "Authentication, administration and the chat skeleton. Cookie-authenticated; \
             state-changing calls need the X-CSRF-Token header returned by GET /api/auth/me.",
-        license(name = "GPL-3.0-only")
+        license(name = "AGPL-3.0-only")
     ),
     paths(
+        about::about,
         auth::setup_status,
         auth::setup,
         auth::sign_in,

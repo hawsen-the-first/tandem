@@ -4,11 +4,31 @@
     "title": "Tandem API",
     "description": "Authentication, administration and the chat skeleton. Cookie-authenticated; state-changing calls need the X-CSRF-Token header returned by GET /api/auth/me.",
     "license": {
-      "name": "GPL-3.0-only"
+      "name": "AGPL-3.0-only"
     },
     "version": "0.1.0"
   },
   "paths": {
+    "/api/about": {
+      "get": {
+        "tags": [
+          "about"
+        ],
+        "summary": "The version, licence and source location of this running copy.",
+        "operationId": "about",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AboutDto"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/admin/audit": {
       "get": {
         "tags": [
@@ -1156,6 +1176,49 @@
   },
   "components": {
     "schemas": {
+      "AboutDto": {
+        "type": "object",
+        "description": "The legal notices and provenance of this running copy.",
+        "required": [
+          "name",
+          "version",
+          "copyright",
+          "license",
+          "license_url",
+          "source_url",
+          "upstream_url"
+        ],
+        "properties": {
+          "copyright": {
+            "type": "string",
+            "description": "The copyright line."
+          },
+          "license": {
+            "type": "string",
+            "description": "The licence, as an SPDX identifier."
+          },
+          "license_url": {
+            "type": "string",
+            "description": "Where to read the licence text."
+          },
+          "name": {
+            "type": "string",
+            "description": "The product name."
+          },
+          "source_url": {
+            "type": "string",
+            "description": "Where the Corresponding Source of this running version is (AGPL section 13)."
+          },
+          "upstream_url": {
+            "type": "string",
+            "description": "The original project, credited as \"Based on Tandem\"."
+          },
+          "version": {
+            "type": "string",
+            "description": "The version of this build."
+          }
+        }
+      },
       "AcceptInvitationRequest": {
         "type": "object",
         "description": "Accept an invitation.",

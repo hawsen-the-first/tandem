@@ -1,0 +1,12 @@
+Tandem
+Copyright (C) 2026 Reuben Hawthorne-Jensen and Tandem contributors
+
+Tandem is free software, licensed under the GNU Affero General Public License,
+version 3 only (see LICENSE), with the additional terms in LICENSE-TERMS.md that
+section 7 of that license permits: attribution, and marking of modified versions.
+
+The notices Tandem shows in its own interface (the footer of every page) are
+"Appropriate Legal Notices" in the sense of the license. Keep them.
+
+AI-DLC workflow rules under .aidlc-rule-details/ are MIT-0 licensed; see LICENSE-AIDLC.
+Third-party components keep their own licenses; see THIRD-PARTY-NOTICES.md.
