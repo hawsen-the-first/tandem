@@ -1,6 +1,6 @@
 # Tandem: Unit of Work to Story Map
 
-Every one of the 89 stories in `stories.md` is assigned to **exactly one** unit: the unit in which the story is first fully demonstrable and its acceptance checklist can be passed. Priority is the story's first-listed MoSCoW priority.
+Every one of the 91 stories in `stories.md` is assigned to **exactly one** unit: the unit in which the story is first fully demonstrable and its acceptance checklist can be passed. Priority is the story's first-listed MoSCoW priority.
 
 ## Summary
 
@@ -10,12 +10,12 @@ Every one of the 89 stories in `stories.md` is assigned to **exactly one** unit:
 | U2 | Instance administration | 6 | 5 | 1 | 0 |
 | U3 | Collaboration core | 21 | 12 | 9 | 0 |
 | U4 | Agent runtime and question rounds | 15 | 9 | 6 | 0 |
-| U5 | Workspaces and GitHub | 7 | 5 | 2 | 0 |
+| U5 | Workspaces and GitHub | 8 | 5 | 3 | 0 |
 | U6 | Plan, tasks and artifacts | 20 | 16 | 4 | 0 |
 | U7 | Container sandbox runner | 1 | 0 | 1 | 0 |
 | U8 | Hardening and delivery | 4 | 0 | 4 | 0 |
-| U9 | Backlog (Could-have) | 3 | 0 | 0 | 3 |
-| **Total** | | **89** | **53** | **33** | **3** |
+| U9 | Backlog (Could-have) | 4 | 0 | 0 | 4 |
+| **Total** | | **91** | **53** | **34** | **4** |
 
 ## Assignments
 
@@ -104,6 +104,7 @@ Every one of the 89 stories in `stories.md` is assigned to **exactly one** unit:
 | US-11.2 | Commit and push to the session branch | DEV, OWN | Must |
 | US-11.3 | Open a pull request | DEV, OWN | Should |
 | US-11.5 | Workspace is cleaned up when a session ends | OWN, ADM | Must |
+| US-2.13 | Authenticate GitHub with a GitHub App | ADM | Should |
 
 ### U6 Plan, tasks and artifacts
 
@@ -151,6 +152,7 @@ Every one of the 89 stories in `stories.md` is assigned to **exactly one** unit:
 |---|---|---|---|
 | US-2.8 | See token usage per session | ADM, OWN | Could |
 | US-2.10 | Configure the optional Agent SDK provider | ADM | Could |
+| US-2.12 | Allow and block lists for outbound hosts | ADM | Could |
 | US-10.5 | Save an artifact into the workspace | DEV, OWN | Could |
 
 ## Assignment notes
@@ -164,3 +166,4 @@ Every one of the 89 stories in `stories.md` is assigned to **exactly one** unit:
 - **US-13.7 (mobile, themes, WCAG)** gets its baseline in U1's web shell; every later unit's UI must conform and is checked in its own Build and Test.
 - **U7** owns only US-2.11 but also extends the enforcement tests for US-6.8 and US-9.3.
 - **US-2.2** was split into US-2.2 (Anthropic API, Should, U8) and US-2.10 (Agent SDK, Could, U9); US-2.11 was added to give U7 an owner story.
+- **US-2.6** was narrowed to fine-grained token authentication in U2; authenticating with a GitHub App became **US-2.13** (Should, U5), decided during U2 Functional Design. **US-2.12** (allow and block lists for outbound hosts, Could, U9) was added at the same time.

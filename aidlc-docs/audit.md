@@ -548,3 +548,14 @@
 **Context**: CONSTRUCTION - U2 Functional Design, Step 1 (analyse unit context)
 
 ---
+## U2 Functional Design - decisions
+**Timestamp**: 2026-11-12T01:00:00Z
+**AI Prompt (chat, round 1)**: "Outbound URL safety; how models and capabilities are learned; what to do with a default lacking a capability; GitHub authentication scope for U2."
+**User Input (chat)**: "Use the recommended approach, but we add a white/blacklist feature to the could have features." / "Admin lists models; test probes them (Recommended)" / "Warn, allow, and refuse at run time (Recommended)" / "Token now, App in a later unit"
+**AI Prompt (chat, round 2)**: "What may the screen show about a saved secret; how many search providers are active; sandbox network rule and limits; what happens when removing a provider in use."
+**User Input (chat)**: "Set or not set only (Recommended)" / "One active provider (Recommended)" / "Network none or host list; limits: time, output, files (Recommended)" / "Allow with a warning and clear the defaults"
+**AI Response**: "Recorded in plans/u2-instance-administration-functional-design-plan.md. Scope changes applied to earlier artifacts: new story US-2.12 (allow and block lists for outbound hosts, Could, U9, FR-15.3) and new story US-2.13 (GitHub App authentication, Should, U5); US-2.6 narrowed to fine-grained tokens; FR-12.2 annotated; story map and counts updated (91 stories: Must 53, Should 34, Could 4). Generated functional design artifacts (domain-entities, business-rules BR-14 to BR-21, business-logic-model W16 to W24, frontend-components) under construction/u2-instance-administration/functional-design/. Fifteen working assumptions are listed in the plan for confirmation at approval."
+**Status**: Awaiting approval of the functional design
+**Context**: CONSTRUCTION - U2 Functional Design, Steps 5 to 7
+
+---
