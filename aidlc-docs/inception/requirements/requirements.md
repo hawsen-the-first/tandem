@@ -212,7 +212,7 @@ flowchart TD
 
 ### FR-12 Connectors (plugin interface)
 - **FR-12.1** A connector/adapter interface for external tools, designed so new connectors can be added without changing core code.
-- **FR-12.2** **GitHub connector** (first plugin, in MVP): authenticate (fine-grained PAT or GitHub App, admin-configured), list accessible repos, clone, push session branches, open pull requests.
+- **FR-12.2** **GitHub connector** (first plugin, in MVP): authenticate (fine-grained PAT in U2; GitHub App authentication is US-2.13, delivered in a later unit; admin-configured), list accessible repos, clone, push session branches, open pull requests.
 - **FR-12.3** Connector credentials are stored encrypted and never exposed to the browser or to model prompts.
 
 ### FR-13 Artifacts
@@ -228,6 +228,7 @@ flowchart TD
 ### FR-15 Administration
 - **FR-15.1** Admin settings: users, model providers and defaults, search providers, connectors, instance settings.
 - **FR-15.2** Admin can view an audit log of security-relevant events (FR-SEC). The log is append-only: the running application cannot update or delete entries, there is no automatic pruning, and operators prune only with a documented command using a privileged credential.
+- **FR-15.3** (Could) Admin allow and block lists for the hosts and networks Tandem calls for providers, search and connectors, layered over the built-in outbound URL rules.
 
 ### FR-16 Sandbox policy
 - **FR-16.1** The admin sets one **instance-wide sandbox policy**: default runner tier (`in-process` or `container`), tool allow-list, network rule (default deny) and resource limits.

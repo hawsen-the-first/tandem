@@ -129,7 +129,7 @@
 ### US-2.6 Configure the GitHub connector
 **As an** Instance Admin, **I want** to connect GitHub with a fine-grained token or a GitHub App, **so that** sessions can clone repos, push session branches and open pull requests.
 **Personas**: ADM · **Reqs**: FR-12.1, FR-12.2, FR-12.3, SECURITY-06 · **Priority**: Must
-- [ ] I can enter credentials, see which repos they reach, and test the connection
+- [ ] I can enter a fine-grained access token, see which repos it reaches, and test the connection (authenticating with a GitHub App is US-2.13)
 - [ ] Credentials are stored encrypted and never appear in the browser, logs or model prompts
 - [ ] The screen states the minimum GitHub permissions required
 - [ ] GitHub is delivered through the connector interface so other connectors can be added later without core changes
@@ -174,6 +174,22 @@
 - [ ] No model or connector credentials are present inside the container
 - [ ] If the container cannot start, the run fails closed with a clear reason and never falls back to the in-process runner
 - [ ] Containers and scratch space are removed when the run ends
+
+### US-2.12 Allow and block lists for outbound hosts
+**As an** Instance Admin, **I want** to allow or block specific hosts and networks that Tandem may call for providers, search and connectors, **so that** I can tighten or loosen the built-in outbound URL safety rules for my environment.
+**Personas**: ADM · **Reqs**: FR-15.3, SECURITY-05 · **Priority**: Could
+- [ ] I can add hosts or networks to an allow list and a block list, and the built-in rules (private networks allowed, link-local and cloud-metadata addresses always blocked) are shown beside them
+- [ ] A block list entry always wins over an allow list entry
+- [ ] Adding or removing an entry is recorded in the audit log
+- [ ] Saving a provider, search or connector URL that the lists forbid is refused with the reason
+
+### US-2.13 Authenticate GitHub with a GitHub App
+**As an** Instance Admin, **I want** to connect GitHub with a GitHub App instead of a personal token, **so that** access is scoped to an installation and does not depend on one person's account.
+**Personas**: ADM · **Reqs**: FR-12.2, FR-12.3, SECURITY-06 · **Priority**: Should
+- [ ] I can enter the app ID, installation ID and private key; the private key is stored encrypted and never shown again
+- [ ] A test action confirms the app can obtain an installation token and lists the repos it reaches
+- [ ] Short-lived installation tokens are used for clone, push and pull requests and are never stored or shown
+- [ ] The screen states the minimum app permissions required
 
 ---
 
@@ -775,7 +791,7 @@ Every functional requirement (FR) in `requirements.md` maps to at least one stor
 | FR-11.6 | US-11.5 |
 | FR-11.7 | US-3.5 |
 | FR-12.1 | US-2.6 |
-| FR-12.2 | US-2.6, US-3.2 |
+| FR-12.2 | US-2.6, US-2.13, US-3.2 |
 | FR-12.3 | US-2.6 |
 | FR-13.1 | US-10.2 |
 | FR-13.2 | US-10.1 |
@@ -785,6 +801,7 @@ Every functional requirement (FR) in `requirements.md` maps to at least one stor
 | FR-14.1 | US-12.1, US-12.2 |
 | FR-15.1 | US-1.9, US-2.1 |
 | FR-15.2 | US-2.7 |
+| FR-15.3 | US-2.12 |
 | FR-16.1 | US-2.9, US-2.11, US-9.3 |
 | FR-16.2 | US-2.11, US-6.8, US-9.2 |
 | FR-16.3 | US-2.11, US-6.8, US-9.3 |
@@ -800,7 +817,7 @@ Every functional requirement (FR) in `requirements.md` maps to at least one stor
 
 | Persona | Stories (primary or beneficiary) | Count |
 |---|---|---|
-| ADM | US-1.1, US-1.2, US-1.3, US-1.4, US-1.5, US-1.7, US-1.8, US-1.9, US-2.1, US-2.2, US-2.3, US-2.4, US-2.5, US-2.6, US-2.7, US-2.8, US-2.9, US-2.10, US-2.11, US-9.3, US-11.5, US-13.3, US-13.4, US-13.5,  | 24 |
+| ADM | US-1.1, US-1.2, US-1.3, US-1.4, US-1.5, US-1.7, US-1.8, US-1.9, US-2.1, US-2.2, US-2.3, US-2.4, US-2.5, US-2.6, US-2.7, US-2.8, US-2.9, US-2.10, US-2.11, US-2.12, US-2.13, US-9.3, US-11.5, US-13.3, US-13.4, US-13.5,  | 24 |
 | OWN | US-1.2, US-1.5, US-1.6, US-2.8, US-2.11, US-3.1, US-3.2, US-3.3, US-3.4, US-3.5, US-3.6, US-3.7, US-4.1, US-4.2, US-4.3, US-4.4, US-4.5, US-5.1, US-5.2, US-5.3, US-5.4, US-5.5, US-5.6, US-5.7, US-5.8, US-6.1, US-6.2, US-6.3, US-6.4, US-6.5, US-6.6, US-6.7, US-6.8, US-6.9, US-7.1, US-7.2, US-7.3, US-8.1, US-8.2, US-8.3, US-8.4, US-8.5, US-8.6, US-8.7, US-9.1, US-9.2, US-9.3, US-9.4, US-9.5, US-9.6, US-9.7, US-9.8, US-9.9, US-10.1, US-10.2, US-10.3, US-10.4, US-10.5, US-11.1, US-11.2, US-11.3, US-11.4, US-11.5, US-11.6, US-12.1, US-12.2, US-12.3, US-13.1, US-13.2, US-13.3, US-13.5, US-13.6, US-13.7,  | 73 |
 | NTM | US-1.2, US-1.5, US-1.6, US-3.3, US-3.5, US-3.7, US-4.1, US-4.2, US-4.3, US-4.4, US-4.5, US-5.1, US-5.2, US-5.3, US-5.4, US-5.5, US-5.6, US-5.7, US-5.8, US-6.1, US-6.2, US-6.4, US-6.5, US-6.6, US-6.7, US-7.1, US-7.2, US-7.3, US-8.1, US-8.2, US-8.3, US-8.4, US-8.5, US-8.6, US-9.2, US-9.4, US-9.6, US-9.7, US-9.8, US-10.1, US-10.2, US-10.3, US-10.4, US-11.6, US-12.1, US-12.2, US-12.3, US-13.1, US-13.2, US-13.3, US-13.6, US-13.7,  | 52 |
 | DEV | US-1.2, US-1.5, US-1.6, US-3.2, US-3.5, US-3.7, US-4.1, US-4.2, US-4.3, US-4.4, US-4.5, US-5.1, US-5.2, US-5.3, US-5.4, US-5.5, US-5.6, US-5.7, US-5.8, US-6.1, US-6.2, US-6.3, US-6.4, US-6.6, US-6.7, US-6.8, US-6.9, US-7.1, US-7.2, US-7.3, US-8.1, US-8.2, US-8.3, US-8.4, US-8.5, US-8.6, US-9.1, US-9.2, US-9.4, US-9.5, US-9.7, US-9.8, US-9.9, US-10.1, US-10.2, US-10.3, US-10.4, US-10.5, US-11.1, US-11.2, US-11.3, US-11.6, US-12.1, US-12.2, US-12.3, US-13.1, US-13.2, US-13.3, US-13.6, US-13.7,  | 60 |
@@ -812,8 +829,8 @@ Every functional requirement (FR) in `requirements.md` maps to at least one stor
 | Priority (first listed) | Stories |
 |---|---|
 | Must | 53 |
-| Should | 33 |
-| Could | 3 |
+| Should | 34 |
+| Could | 4 |
 
 ---
 
