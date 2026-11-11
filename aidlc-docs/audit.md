@@ -541,3 +541,10 @@
 **Context**: CONSTRUCTION - U1 Code Generation, PR 5 of 5
 
 ---
+## U1 PR 5 merged; U2 Functional Design started
+**Timestamp**: 2026-11-12T00:00:00Z
+**User Input**: "Merged, continue"
+**AI Response**: "PR #10 merged: U1 code generation is complete. Synced main, created branch aidlc/u2-functional-design. U2 (Instance administration: US-2.1, 2.3, 2.4, 2.5, 2.6, 2.9) design stages are Functional Design Light, NFR Requirements Light, NFR Design Light, Infrastructure Design skipped. Starting Functional Design: reading stories FR-9, FR-10, FR-12, FR-15, FR-16, then asking questions in chat."
+**Context**: CONSTRUCTION - U2 Functional Design, Step 1 (analyse unit context)
+
+---
