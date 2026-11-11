@@ -2476,10 +2476,10 @@ dependencies = [
  "sha1 0.11.0",
  "sqlx",
  "tandem-app",
+ "tandem-bootstrap",
  "tandem-config",
  "tandem-core",
  "tandem-ports",
- "tandem-runtime",
  "tandem-store-postgres",
  "tandem-support",
  "tandem-telemetry",
@@ -2510,6 +2510,28 @@ dependencies = [
 ]
 
 [[package]]
+name = "tandem-bootstrap"
+version = "0.1.0"
+dependencies = [
+ "async-trait",
+ "data-encoding",
+ "sqlx",
+ "tandem-app",
+ "tandem-config",
+ "tandem-credentials",
+ "tandem-ports",
+ "tandem-providers",
+ "tandem-store-postgres",
+ "tandem-support",
+ "tandem-telemetry",
+ "tandem-vault",
+ "tempfile",
+ "thiserror",
+ "tokio",
+ "tracing",
+]
+
+[[package]]
 name = "tandem-breach-filter"
 version = "0.1.0"
 dependencies = [
@@ -2526,10 +2548,10 @@ dependencies = [
  "rcgen",
  "sqlx",
  "tandem-app",
+ "tandem-bootstrap",
  "tandem-config",
  "tandem-core",
  "tandem-ports",
- "tandem-runtime",
  "tandem-store-postgres",
  "tandem-support",
  "tandem-vault",
@@ -2600,28 +2622,6 @@ dependencies = [
  "async-trait",
  "tandem-ports",
  "tokio",
-]
-
-[[package]]
-name = "tandem-runtime"
-version = "0.1.0"
-dependencies = [
- "async-trait",
- "data-encoding",
- "sqlx",
- "tandem-app",
- "tandem-config",
- "tandem-credentials",
- "tandem-ports",
- "tandem-providers",
- "tandem-store-postgres",
- "tandem-support",
- "tandem-telemetry",
- "tandem-vault",
- "tempfile",
- "thiserror",
- "tokio",
- "tracing",
 ]
 
 [[package]]
@@ -2700,10 +2700,10 @@ dependencies = [
  "serde_json",
  "sqlx",
  "tandem-app",
+ "tandem-bootstrap",
  "tandem-config",
  "tandem-core",
  "tandem-ports",
- "tandem-runtime",
  "tandem-store-postgres",
  "tandem-support",
  "tandem-telemetry",

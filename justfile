@@ -62,9 +62,9 @@ contract:
 test-web:
     cd web && npm test
 
-# End-to-end tests with accessibility checks (added in the web layer of U1)
-e2e:
-    @echo "The end-to-end suite is added in step 56 of the U1 code generation plan." >&2; exit 1
+# End-to-end tests (Chromium and Firefox, with accessibility checks) against an isolated stack; needs Docker
+e2e *args:
+    ./dev/scripts/e2e.sh {{args}}
 
 # Formatting, lint and type checks
 lint:

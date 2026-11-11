@@ -7,7 +7,7 @@ Plan steps 35 to 47 of `construction/plans/u1-foundation-code-generation-plan.md
 |---|---|---|
 | `config` | Environment, optional TOML file (`TANDEM_CONFIG`), `*_FILE` secrets, environment-wins precedence, one message per problem, secrets in the file rejected, `https` required unless loopback, `sslmode=verify-*` required on the database URL, trusted proxy CIDRs, optional web directory and worker listen address | 26 |
 | `telemetry` | JSON log layer with correlation IDs and a redaction layer (SE-4), W3C trace context, metrics registry with every OB-1 metric (plus `hash_*`, `outbox_*`, `job_*`, `ws_connections`, process memory and CPU), readiness aggregation with per-probe timeout and shutdown flag | 22 |
-| `runtime` (new, see below) | Shared start-up for api, worker and cli: pool, vault, schema guard, vault canary guard, hashing profile benchmark and storage, hasher and breach checker wiring, readiness probes, shutdown | 3 |
+| `bootstrap` (new, see below) | Shared start-up for api, worker and cli: pool, vault, schema guard, vault canary guard, hashing profile benchmark and storage, hasher and breach checker wiring, readiness probes, shutdown | 3 |
 | `api` | Request pipeline in the order of NFR design section 1, a route table that makes "public or guarded" structural, authentication, MFA, invitation and reset endpoints, administration endpoints, chat endpoints, the event WebSocket, the asset server, `/healthz`, `/readyz`, `/metrics`, generated OpenAPI with a committed copy | 42 (+1 perf) |
 | `worker` | Outbox relay under the advisory lock (`NOTIFY` wake-up plus 1 s poll), job runner with retries, lapsed-lease recovery, daily cleanup, queue gauges, health and metrics server, graceful shutdown | 8 |
 | `cli` (`tandem`) | `migrate up` and `down --yes`, `vault rekey`, `admin issue-reset` (last-admin recovery, BR-4.7), `audit prune` with a privileged credential and a 90-day floor (SE-15) | 9 |
@@ -28,7 +28,7 @@ The links the API returns point at client routes the web client (PR 5) must prov
 ## Design notes and deviations
 | Item | Detail |
 |---|---|
-| New `runtime` crate | Not in the plan. The api, worker and cli all need the same start-up guards; a shared crate avoids three copies |
+| New `bootstrap` crate | Not in the plan (named `bootstrap` because the unit plan reserves `runtime` for the later agent loop). The api, worker and cli all need the same start-up guards; a shared crate avoids three copies |
 | OTLP export not implemented | `TANDEM_OTLP_ENDPOINT` is accepted and validated, trace IDs appear in every log line and travel in outbox rows and jobs, but no exporter is compiled in: the OpenTelemetry stack adds a large dependency tree. Start-up logs a warning when the endpoint is set. **Needs a decision**: add the exporter in a follow-up PR |
 | HTTP header read timeout (10 s) not enforced | `axum::serve` does not expose it. The 30 s per-request timeout is enforced. Slow-header attacks are best handled by the reverse proxy; a manual accept loop can add it later |
 | Statement timeout | The pool uses `TANDEM_DB_STATEMENT_TIMEOUT_SECS` (default 30) for api and worker alike; the design said 5 s for requests. Operators can set it lower |

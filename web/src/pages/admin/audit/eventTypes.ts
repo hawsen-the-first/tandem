@@ -1,0 +1,23 @@
+/** The audit catalogue (BR-11.5), in the order of crates/core/src/audit.rs. */
+export const AUDIT_EVENT_TYPES = [
+  'auth.setup',
+  'auth.sign_in.success',
+  'auth.sign_in.failure',
+  'auth.sign_in.locked',
+  'auth.sign_out',
+  'auth.mfa.enrolled',
+  'auth.mfa.disabled',
+  'auth.mfa.recovery_used',
+  'auth.mfa.recovery_regenerated',
+  'auth.password.changed',
+  'auth.password.reset_issued',
+  'auth.password.reset_completed',
+  'user.invited',
+  'user.invite_revoked',
+  'user.invite_accepted',
+  'user.deactivated',
+  'user.reactivated',
+  'user.role_changed',
+  'settings.changed',
+  'authz.denied',
+] as const;

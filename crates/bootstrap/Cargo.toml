@@ -1,5 +1,5 @@
 [package]
-name = "tandem-runtime"
+name = "tandem-bootstrap"
 description = "Shared process bootstrap for the api, worker and cli: pools, vault, start-up guards, probes, shutdown."
 version.workspace = true
 edition.workspace = true

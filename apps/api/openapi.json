@@ -19,86 +19,65 @@
         "parameters": [
           {
             "name": "actor_id",
-            "in": "path",
+            "in": "query",
             "description": "Only this actor.",
-            "required": true,
+            "required": false,
             "schema": {
-              "type": [
-                "string",
-                "null"
-              ]
+              "type": "string"
             }
           },
           {
             "name": "event_type",
-            "in": "path",
+            "in": "query",
             "description": "Only this event type, for example `auth.sign_in.failure`.",
-            "required": true,
+            "required": false,
             "schema": {
-              "type": [
-                "string",
-                "null"
-              ]
+              "type": "string"
             }
           },
           {
             "name": "from",
-            "in": "path",
+            "in": "query",
             "description": "Not before (RFC 3339).",
-            "required": true,
+            "required": false,
             "schema": {
-              "type": [
-                "string",
-                "null"
-              ]
+              "type": "string"
             }
           },
           {
             "name": "to",
-            "in": "path",
+            "in": "query",
             "description": "Not after (RFC 3339).",
-            "required": true,
+            "required": false,
             "schema": {
-              "type": [
-                "string",
-                "null"
-              ]
+              "type": "string"
             }
           },
           {
             "name": "after_time",
-            "in": "path",
+            "in": "query",
             "description": "Page cursor: the `next_after_time` of the previous page.",
-            "required": true,
+            "required": false,
             "schema": {
-              "type": [
-                "string",
-                "null"
-              ]
+              "type": "string"
             }
           },
           {
             "name": "after_id",
-            "in": "path",
+            "in": "query",
             "description": "Page cursor: the `next_after_id` of the previous page.",
-            "required": true,
+            "required": false,
             "schema": {
-              "type": [
-                "string",
-                "null"
-              ]
+              "type": "string"
             }
           },
           {
             "name": "limit",
-            "in": "path",
+            "in": "query",
             "description": "Page size (default 50, at most 200).",
-            "required": true,
+            "required": false,
             "schema": {
-              "type": [
-                "integer",
-                "null"
-              ],
+              "type": "integer",
               "minimum": 0
             }
           }

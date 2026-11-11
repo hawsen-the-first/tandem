@@ -122,6 +122,10 @@ tandem/
     ports/                  port traits
     app/                    application services (C4 to C13) and orchestration use cases
     store-postgres/         repositories, queue, outbox, LISTEN/NOTIFY, migrations
+    config/                 configuration loader (environment, TOML, secret files)
+    credentials/            Argon2id hasher, breached-password checker, TOTP
+    support/                clock, random source, circuit breaker, supervised tasks
+    bootstrap/              shared start-up for api, worker and cli (pools, vault, guards, probes)
     vault/                  envelope encryption
     providers/              model provider adapters (openai-compatible, anthropic, agent-sdk, mock)
     search/                 SearXNG, Brave, Tavily adapters
@@ -129,14 +133,16 @@ tandem/
     gitws/                  libgit2 workspace adapter
     blob-local/             local-disk blob store
     sandbox/                policy, in-process runner, container runner
-    runtime/                agent loop, context builder, tool layer
+    runtime/                agent loop, context builder, tool layer (U4 onwards; not the U1 `bootstrap` crate)
     telemetry/              logging, metrics, health
   apps/
     api/                    HTTP and WebSocket server, serves web/dist
     worker/                 job runner, orchestration, agents, workspaces
     cli/                    operations CLI (C27)
   web/                      Vite + React SPA (PWA), generated API types
-  tests/                    cross-crate integration and end-to-end tests
+  tools/
+    breach-filter/         builds the offline breached-password filter (U1)
+  tests/                    cross-crate integration and end-to-end tests (U1: end-to-end suite is in web/e2e, performance smoke test in apps/api/tests)
   dev/                      dev-only compose file (U1)
   deploy/                   Dockerfiles, reference Compose, release files (U8)
   docs/                     self-hosting guide, operator documentation (U8)

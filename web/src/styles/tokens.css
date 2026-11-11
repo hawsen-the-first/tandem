@@ -1,0 +1,78 @@
+/* Design tokens. Components use only these custom properties, never raw colours, so both themes
+   stay in step. The theme is chosen by the root attribute data-theme ("light" or "dark"); with no
+   attribute the operating-system preference applies. */
+:root {
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 0.75rem;
+  --space-4: 1rem;
+  --space-5: 1.5rem;
+  --space-6: 2rem;
+  --radius: 0.375rem;
+  --font-body: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  --font-mono: ui-monospace, 'SFMono-Regular', Menlo, Consolas, monospace;
+  --measure: 70ch;
+  --content-max: 68rem;
+  --target-min: 1.5rem;
+  --target-primary: 2.75rem;
+
+  --color-bg: #f4f5f9;
+  --color-surface: #ffffff;
+  --color-surface-raised: #ffffff;
+  --color-text: #1a1e2e;
+  --color-text-muted: #4a5470;
+  --color-border: #c9cfe0;
+  --color-accent: #2c46cf;
+  --color-accent-hover: #2237ab;
+  --color-on-accent: #ffffff;
+  --color-danger: #a8221b;
+  --color-on-danger: #ffffff;
+  --color-success: #18703d;
+  --color-warning-bg: #fff4d6;
+  --color-warning-text: #5c4300;
+  --color-focus: #2c46cf;
+  --shadow: 0 1px 2px rgb(20 24 50 / 0.12), 0 4px 16px rgb(20 24 50 / 0.08);
+  color-scheme: light;
+}
+
+:root[data-theme='dark'] {
+  --color-bg: #11131b;
+  --color-surface: #1a1d29;
+  --color-surface-raised: #222637;
+  --color-text: #e8ebf5;
+  --color-text-muted: #a9b1c9;
+  --color-border: #3a4160;
+  --color-accent: #9aabff;
+  --color-accent-hover: #b6c2ff;
+  --color-on-accent: #0d1233;
+  --color-danger: #ff9188;
+  --color-on-danger: #2a0805;
+  --color-success: #75d9a0;
+  --color-warning-bg: #3a2e0a;
+  --color-warning-text: #ffe29a;
+  --color-focus: #9aabff;
+  --shadow: 0 1px 2px rgb(0 0 0 / 0.5), 0 4px 16px rgb(0 0 0 / 0.35);
+  color-scheme: dark;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme]) {
+    --color-bg: #11131b;
+    --color-surface: #1a1d29;
+    --color-surface-raised: #222637;
+    --color-text: #e8ebf5;
+    --color-text-muted: #a9b1c9;
+    --color-border: #3a4160;
+    --color-accent: #9aabff;
+    --color-accent-hover: #b6c2ff;
+    --color-on-accent: #0d1233;
+    --color-danger: #ff9188;
+    --color-on-danger: #2a0805;
+    --color-success: #75d9a0;
+    --color-warning-bg: #3a2e0a;
+    --color-warning-text: #ffe29a;
+    --color-focus: #9aabff;
+    --shadow: 0 1px 2px rgb(0 0 0 / 0.5), 0 4px 16px rgb(0 0 0 / 0.35);
+    color-scheme: dark;
+  }
+}

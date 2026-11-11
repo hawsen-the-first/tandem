@@ -8,8 +8,8 @@ use std::collections::HashMap;
 use std::path::PathBuf;
 use std::sync::Arc;
 use tandem_app::App;
+use tandem_bootstrap::Shutdown;
 use tandem_config::Config;
-use tandem_runtime::Shutdown;
 use tandem_telemetry::{MetricsHandle, Readiness};
 
 /// What the pipeline needs to know about a route.

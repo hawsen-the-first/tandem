@@ -2,7 +2,7 @@
 
 A collaboration workspace for teams to build with AI.
 
-> Status: **Construction, unit U1 (foundation and walking skeleton).** Early scaffold; not usable yet.
+> Status: **Construction, unit U1 (foundation and walking skeleton).** Sign-in, MFA, invitations, administration, the audit log and a chat skeleton with a mock agent work end to end; there is no release or image yet.
 
 ## How this project is built
 
@@ -44,10 +44,11 @@ just dev-up            # PostgreSQL 18 with TLS; creates certificates on first s
 just migrate           # applies migrations under the migration role
 just api               # in separate terminals: just worker, just web
 ```
-Open <http://localhost:5173>; the first-run setup screen appears.
+Open <http://localhost:5173>; the first-run setup screen appears. Setup creates the first admin, who must then enrol an authenticator app. Invitations and reset links are copied from the Users page (nothing is emailed).
 
 ### Everyday loop
 `just check` runs everything CI runs (format, clippy, tests, web checks, dependency and licence audits).
+`just e2e` runs the Playwright suite against an isolated stack; `just perf` and `just contract` run the latency budgets and the API contract check. See [docs/development.md](docs/development.md) for conventions and [docs/api.md](docs/api.md) for the API.
 `just dev-reset` gives a clean database and fresh secrets. `just --list` shows every command.
 
 ### Notes
@@ -61,16 +62,17 @@ Open <http://localhost:5173>; the first-run setup screen appears.
 ### Repository settings (owner)
 Enable these in GitHub so the checks below are enforced:
 - Protect `main`: require a pull request with one approving review, require the status checks
-  (`rust`, `web`, `contract`, `perf` and the CodeQL jobs; `e2e` is added with the web client), block force pushes and deletion.
+  (`rust`, `web`, `contract`, `perf`, `e2e` and the CodeQL jobs), block force pushes and deletion.
 - Enable secret scanning, push protection, Dependabot alerts and security updates, and private vulnerability reporting.
 
 ### Layout
 ```text
-crates/   shared libraries (core, ports, app, support, config, credentials, store-postgres, vault, providers, telemetry)
+crates/   shared libraries (core, ports, app, support, config, credentials, store-postgres, vault, providers, telemetry, bootstrap)
 apps/     api, worker, cli
 web/      Vite + React client
 tools/    breach-filter (builds the offline breached-password filter)
-tests/    cross-crate integration, end-to-end and performance tests
+docs/     development guide and API notes
+tests/    reserved for cross-crate tests (the end-to-end suite is in web/e2e, the performance smoke test in apps/api/tests)
 dev/      development Compose file and scripts
 aidlc-docs/  AI-DLC workflow artifacts (requirements, designs, plans)
 ```

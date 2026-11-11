@@ -1,7 +1,7 @@
 //! CLI errors. Messages are single lines and carry no secret values.
 
+use tandem_bootstrap::StartupError;
 use tandem_config::ConfigError;
-use tandem_runtime::StartupError;
 
 /// Why a command failed.
 #[derive(Debug, thiserror::Error)]

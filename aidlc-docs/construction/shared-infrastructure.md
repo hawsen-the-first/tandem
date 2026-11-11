@@ -13,6 +13,10 @@ Infrastructure created in one unit and reused by later units. Created in U1 unle
 | Branch protection and required checks on `main` | U1 (owner enables) | Every unit; the list of required checks grows with the CI | Repository owner |
 | Database roles `tandem_migrate` and `tandem_app` and the TLS requirement | U1 | Every unit adds migrations and grants under the same roles | Migrations under CODEOWNERS review |
 | Certificate directory (`dev/secrets/certs`) and CA | U1 | U8 reference Compose | Same |
+| End-to-end stack script `dev/scripts/e2e.sh` (isolated Compose project, volume and port; api serving `web/dist`; worker) and the Playwright suite in `web/e2e` | U1 | Every unit adds scenarios; U8 can reuse the script against built images | Same |
+| Offline SQL metadata `.sqlx/` (regenerate with `just sqlx-prepare`) and the committed OpenAPI description `apps/api/openapi.json` with generated web types | U1 | Every unit that changes a query or an endpoint | Same; CI fails when stale |
+| Internal settings (`internal.*` keys in `instance_settings`: vault canary, hashing profile) | U1 | Every unit; never shown by the settings API | Same |
+| `docs/development.md` and `docs/api.md` | U1 | Every unit updates them with its conventions and endpoints | Same |
 | `SECURITY.md` and `CODEOWNERS` | U1 | Every unit | Repository owner |
 
 ## Rules for later units

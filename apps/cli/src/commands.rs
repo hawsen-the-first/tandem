@@ -10,8 +10,8 @@ use std::collections::BTreeMap;
 use std::path::PathBuf;
 use std::time::Duration;
 use tandem_app::AppError;
+use tandem_bootstrap::{Process, Services, load_vault};
 use tandem_config::{Config, secret_from_env};
-use tandem_runtime::{Process, Services, load_vault};
 use tandem_store_postgres::{
     PgStore, PoolConfig, RekeyError, applied_schema_version, connect_pool, expected_schema_version,
     migrate_down_one, migrate_up,

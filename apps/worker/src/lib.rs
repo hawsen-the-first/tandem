@@ -6,11 +6,11 @@ mod loops;
 use std::net::SocketAddr;
 use std::sync::Arc;
 use std::time::Duration;
-use tandem_config::{Config, Secret};
-use tandem_runtime::{
+use tandem_bootstrap::{
     DatabaseProbe, Process, SchemaProbe, Services, Shutdown, StartupError, VaultProbe,
     init_observability, spawn_pool_metrics, wait_for_termination,
 };
+use tandem_config::{Config, Secret};
 use tandem_support::{Backoff, supervise};
 use tandem_telemetry::{MetricsHandle, Readiness, ReadinessProbe};
 use tokio::sync::RwLock;

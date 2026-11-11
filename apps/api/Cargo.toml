@@ -25,7 +25,7 @@ tandem-app = { version = "0.1.0", path = "../../crates/app" }
 tandem-config = { version = "0.1.0", path = "../../crates/config" }
 tandem-core = { version = "0.1.0", path = "../../crates/core" }
 tandem-ports = { version = "0.1.0", path = "../../crates/ports" }
-tandem-runtime = { version = "0.1.0", path = "../../crates/runtime" }
+tandem-bootstrap = { version = "0.1.0", path = "../../crates/bootstrap" }
 tandem-support = { version = "0.1.0", path = "../../crates/support" }
 tandem-telemetry = { version = "0.1.0", path = "../../crates/telemetry" }
 thiserror = "2.0.21"

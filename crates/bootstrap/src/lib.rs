@@ -13,7 +13,7 @@ pub use probes::{DatabaseProbe, SchemaProbe, VaultProbe, spawn_pool_metrics};
 pub use shutdown::{Shutdown, wait_for_termination};
 
 /// Name of this crate, used by smoke tests and diagnostics.
-pub const CRATE_NAME: &str = "tandem-runtime";
+pub const CRATE_NAME: &str = "tandem-bootstrap";
 
 #[cfg(test)]
 mod tests;
