@@ -166,4 +166,5 @@ Every one of the 91 stories in `stories.md` is assigned to **exactly one** unit:
 - **US-13.7 (mobile, themes, WCAG)** gets its baseline in U1's web shell; every later unit's UI must conform and is checked in its own Build and Test.
 - **U7** owns only US-2.11 but also extends the enforcement tests for US-6.8 and US-9.3.
 - **US-2.2** was split into US-2.2 (Anthropic API, Should, U8) and US-2.10 (Agent SDK, Could, U9); US-2.11 was added to give U7 an owner story.
+- **US-2.5** (first acceptance bullet: SearXNG runs as an optional internal Compose service) is verified in U8 with the reference Compose file; U2 delivers the SearXNG adapter, its URL setting and its test action (decided in U2 NFR Requirements).
 - **US-2.6** was narrowed to fine-grained token authentication in U2; authenticating with a GitHub App became **US-2.13** (Should, U5), decided during U2 Functional Design. **US-2.12** (allow and block lists for outbound hosts, Could, U9) was added at the same time.

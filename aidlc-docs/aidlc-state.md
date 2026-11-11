@@ -4,7 +4,7 @@
 - **Project Name**: Tandem
 - **Project Type**: Greenfield
 - **Start Date**: 2026-09-28T03:32:30Z
-- **Current Stage**: CONSTRUCTION - U2 Instance administration, Functional Design (Light) generated, awaiting approval; next: NFR Requirements (Light)
+- **Current Stage**: CONSTRUCTION - U2 Instance administration, NFR Requirements (Light) generated, awaiting approval; next: NFR Design (Light)
 - **AI-DLC Rules Version**: v1.0.1 (awslabs/aidlc-workflows @ e40f6a93a59d1a22be78314ff32585fdd6b60936)
 
 ## Workspace State
