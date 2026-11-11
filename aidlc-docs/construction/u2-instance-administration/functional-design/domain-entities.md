@@ -94,10 +94,10 @@ The list of reachable repositories is fetched on demand for display and is **not
 
 ## 6. Sandbox policy (US-2.9)
 
-### SandboxPolicy (one record per scope; `instance` is the only scope in the MVP, `session` is reserved, FR-16.6)
+### SandboxPolicy (one record per scope; `instance` is the only scope in the MVP, `session` is reserved and follows BR-18.8, FR-16.6)
 | Field | Meaning and rules |
 |---|---|
-| `scope` | `instance` |
+| `scope` | `instance` (the only scope in the MVP; `session` reserved) |
 | `runner_tier` | `in_process` or `container` (BR-18.2) |
 | `tool_allow_list` | A set of tool identifiers from the registry (A1); `command_run` can never be in it (BR-18.3) |
 | `network` | `none` (default) or `allow_hosts` with a list of host names (BR-18.4) |
@@ -107,6 +107,8 @@ The list of reachable repositories is fetched on demand for display and is **not
 | `limits.max_files_written` | Number of files a run may create or change |
 | `limits.memory_mebibytes`, `limits.cpu_millicores` | Container runner only (enforced from U7) |
 | `updated_at`, `updated_by` | Audit facts |
+
+**Factory defaults** (A2) are constants in code that seed a new instance and back "Reset to default"; the stored values are the instance's own and are what runs use.
 
 Concrete file paths are never part of the policy; they come from each session's grants (US-3.2, US-6.9).
 

@@ -62,7 +62,7 @@ Navigation: the U1 header gains one admin link, "Integrations", opening `AdminIn
 
 ### SandboxPolicyPage (US-2.9)
 - **State**: current policy, edited policy, dirty flag, container runtime probe result.
-- **Behaviour**: `RunnerTierField` offers "In-process" always and "Container" only after a successful runtime check (button "Check container runtime"); `ToolAllowListField` lists the registry with descriptions, `command_run` disabled with "Commands are not available in this version"; `NetworkRuleField` defaults to "No network access" and offers a host list; `LimitsFields` show default, range and unit, with a note that memory and CPU are enforced by the container runner only. A banner states "Changes apply to runs that start after you save. Runs in progress keep their policy." Saving shows the audit-logged toast.
+- **Behaviour**: `RunnerTierField` offers "In-process" always and "Container" only after a successful runtime check (button "Check container runtime"); `ToolAllowListField` lists the registry with descriptions, `command_run` disabled with "Commands are not available in this version"; `NetworkRuleField` defaults to "No network access" and offers a host list; `LimitsFields` show default, range and unit, a "Reset to default" button per field, with a note that memory and CPU are enforced by the container runner only. A banner states "Changes apply to runs that start after you save. Runs in progress keep their policy." Saving shows the audit-logged toast.
 - **API**: `GET /api/admin/sandbox-policy`; `PUT /api/admin/sandbox-policy`; `POST /api/admin/sandbox-policy/check-runtime`.
 
 ## 4. Form validation rules (server always re-validates)
@@ -75,7 +75,7 @@ Navigation: the U1 header gains one admin link, "Integrations", opening `AdminIn
 | SearXNG URL | As Base URL | As above |
 | API key, token | Any non-empty text; never trimmed in the middle | "Enter the key" (only when required to set one) |
 | Network host | Host name, optional single leading `*.`, at most 253 characters | "Enter a host name such as api.example.com" |
-| Limits | Ranges of A2 | The range and the unit |
+| Limits | Ranges of A2; each field shows its factory default and a "Reset to default" action | The range and the unit |
 
 ## 5. Interaction flows
 ```text

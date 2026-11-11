@@ -46,7 +46,7 @@ Workflows continue the U1 numbering (W1 to W15). Rules are **BR-n** in `business
 1. The admin sees the current policy: runner tier, tool allow-list (with `command_run` disabled), network rule and limits, with a note that memory and CPU limits are enforced by the container runner only.
 2. For the tier `container`: run the runtime probe (A14); if unreachable the option is unavailable and saving is refused (BR-18.2).
 3. Validate the whole policy (BR-18.3 to BR-18.6).
-4. Save; record audit `config.sandbox_policy.updated` with before and after. Runs already in progress are unaffected (BR-18.1).
+4. Save; record audit `config.sandbox_policy.updated` with before and after. (Per-session policies, when added, are validated against this one as a ceiling, BR-18.8.) Runs already in progress are unaffected (BR-18.1).
 
 ## W23 Check the container runtime (US-2.9)
 1. The admin chooses "Check container runtime".

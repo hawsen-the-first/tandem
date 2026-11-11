@@ -35,13 +35,14 @@ Numbering continues from U1 (BR-1 to BR-13). "Admin" means a signed-in user with
 - **BR-17.6** Removing the token turns the connector off: repo sessions cannot clone or push; managed-folder sessions are unaffected.
 
 ## BR-18 Sandbox policy (US-2.9)
-- **BR-18.1** There is one instance-wide policy; a `scope` is stored so per-session overrides can be added later (FR-16.6). A saved change applies to runs started afterwards; runs in progress keep the policy they started with (FR-16.5).
+- **BR-18.1** There is one instance-wide policy; a `scope` is stored so per-session overrides can be added later (FR-16.6; resolution in BR-18.8). A saved change applies to runs started afterwards; runs in progress keep the policy they started with (FR-16.5).
 - **BR-18.2** `runner_tier` is `in_process` or `container`. Saving `container` requires that a runtime probe succeeds at that moment (A14); the choice is not offered when no runtime is reachable. If the container runner cannot start later, the run fails closed and never falls back to a looser tier (FR-16.4; behaviour delivered in U7).
 - **BR-18.3** The tool allow-list may contain only registered tool identifiers (A1). `command_run` is shown as disabled and the server refuses to save a policy that contains it (FR-8.3).
 - **BR-18.4** The network rule is `none` (the default) or an allow-list of host names (no schemes, paths or wildcards beyond a single leading `*.`; each at most 253 characters; at most 50 entries). Entries are lower-cased and unique. An allow-list does not weaken BR-19: addresses that are always blocked stay blocked.
-- **BR-18.5** Limits must lie in the ranges of A2. Memory and CPU limits are stored but enforced only by the container runner; the screen says so.
+- **BR-18.5** Every limit is configurable per instance: the admin may set any limit within its allowed range (A2), a saved value always wins over the factory default, and "Reset to default" returns a field to the factory value. The factory defaults are the starting values of a new instance and are not hard-wired into any run. Memory and CPU limits are stored but enforced only by the container runner; the screen says so.
 - **BR-18.6** Concrete file paths cannot be entered in the policy (they come from session grants).
 - **BR-18.7** Every change is audited with before and after values.
+- **BR-18.8** *Resolution order (per-session limits are post-MVP, FR-16.6, but the rule is fixed now).* The effective policy for a run is the session policy where one exists, otherwise the instance policy. A session policy may **tighten but not exceed** the instance policy: every numeric limit at most the instance value, the tool allow-list a subset, the network rule no wider (`none` stays `none`; a host list a subset), the runner tier never looser than the instance tier. The instance policy is the ceiling; saving a session value above it is refused with the reason. If an admin later lowers the instance policy, existing session values above the new ceiling are clamped when a run starts. A run captures its effective policy when it starts (BR-18.1).
 
 ## BR-19 Outbound URLs (all of U2; Q1)
 Applies to every URL the server calls on an admin's behalf: provider base URLs, the SearXNG URL and test calls.

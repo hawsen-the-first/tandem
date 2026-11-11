@@ -559,3 +559,11 @@
 **Context**: CONSTRUCTION - U2 Functional Design, Steps 5 to 7
 
 ---
+## U2 Functional Design - review feedback
+**Timestamp**: 2026-11-12T02:00:00Z
+**User Input (chat)**: "My only feedback is that we need to ensure the limits defaults are configurable either per instance, or possibly per session if required."
+**AI Response**: "Made explicit that the limit values in A2 are factory defaults only: every limit is editable per instance, shown with its factory default and a 'Reset to default' action, and a saved value always wins (BR-18.5). Added the resolution rule for per-session limits, which stay post-MVP (FR-16.6) but are now designed in (A16, BR-18.8): a session policy has the same shape under scope = session, the effective policy is the session's where it exists, and a session value may tighten but never exceed the instance policy, which is the ceiling. Updated the plan, domain entities, business rules, workflow W22 and the frontend components. Pushed to the existing PR."
+**Status**: Awaiting approval of the revised functional design
+**Context**: CONSTRUCTION - U2 Functional Design, review
+
+---
