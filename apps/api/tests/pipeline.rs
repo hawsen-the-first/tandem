@@ -846,6 +846,7 @@ async fn every_route_is_public_or_guarded_and_the_public_list_is_deliberate() {
     assert_eq!(
         public,
         vec![
+            "GET /api/about",
             "GET /api/openapi.json",
             "GET /api/setup",
             "GET /healthz",

@@ -22,7 +22,7 @@ members = [
 version = "0.1.0"
 edition = "2024"
 rust-version = "1.99"
-license = "GPL-3.0-only"
+license = "AGPL-3.0-only"
 repository = "https://github.com/hawsen-the-first/tandem"
 publish = false
 

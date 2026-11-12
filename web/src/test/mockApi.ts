@@ -28,7 +28,9 @@ export interface MockApi {
  * with no handler fails the test with a clear message instead of reaching the network.
  */
 export function mockApi(initial: Record<string, MockHandler> = {}): MockApi {
-  const handlers = new Map<string, MockHandler>(Object.entries(initial));
+  const handlers = new Map<string, MockHandler>(
+    Object.entries({ 'GET /api/about': { body: ABOUT }, ...initial }),
+  );
   const calls: MockRequest[] = [];
   vi.stubGlobal('fetch', async (input: Request | string, init?: RequestInit) => {
     const request =
@@ -103,4 +105,14 @@ export const ME_MEMBER = {
 export const UNAUTHENTICATED = {
   status: 401,
   body: { error: { code: 'unauthenticated', message: 'You need to sign in.' } },
+};
+
+export const ABOUT = {
+  name: 'Tandem',
+  version: '0.1.0',
+  copyright: 'Copyright (C) 2026 Reuben Hawthorne-Jensen and Tandem contributors',
+  license: 'AGPL-3.0-only',
+  license_url: 'https://www.gnu.org/licenses/agpl-3.0.html',
+  source_url: 'https://git.example.test/team/our-fork',
+  upstream_url: 'https://github.com/hawsen-the-first/tandem',
 };

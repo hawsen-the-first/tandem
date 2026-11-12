@@ -248,3 +248,31 @@ fn the_web_directory_is_optional_but_must_hold_an_entry_page() {
         Some(fixture.dir.path())
     );
 }
+
+#[test]
+fn the_source_url_defaults_to_upstream_and_must_be_a_safe_url() {
+    let mut fixture = Fixture::new();
+    assert_eq!(
+        fixture.load().unwrap().source_url.as_str(),
+        "https://github.com/hawsen-the-first/tandem"
+    );
+    fixture.set(
+        "TANDEM_SOURCE_URL",
+        "https://git.example.test/team/our-tandem-fork",
+    );
+    assert_eq!(
+        fixture.load().unwrap().source_url.as_str(),
+        "https://git.example.test/team/our-tandem-fork"
+    );
+    for bad in [
+        "http://git.example.test/x",
+        "https://user:pw@git.example.test/x",
+        "ftp://git.example.test/x",
+        "not a url",
+    ] {
+        fixture.set("TANDEM_SOURCE_URL", bad);
+        assert_eq!(fixture.problems().len(), 1, "{bad}");
+    }
+    fixture.set("TANDEM_SOURCE_URL", "http://localhost:3000/x");
+    assert!(fixture.load().is_ok());
+}

@@ -577,3 +577,11 @@
 **Context**: CONSTRUCTION - U2 NFR Requirements
 
 ---
+## Project licence changed from GPL-3.0 to AGPL-3.0 with additional terms
+**Timestamp**: 2026-11-12T04:00:00Z
+**User Input (chat)**: "I'm second guessing MIT as I want this to be opensource, and I'm fine with commercial use but I would rather limit reseller/whitelabelling at least without attribution." Then, after the options were explained: "Yeah agpl sounds like the way forward."
+**AI Response**: "Noted that the repository was GPL-3.0 (NFR-7.4), not MIT. Recommended AGPL-3.0 with a section 7 attribution term and a trademark policy (source-available licences that ban resale are not open source). Implemented on branch chore/agpl-licence: LICENSE replaced with the AGPL-3.0 text (from GitHub's licence API); LICENSE-TERMS.md (section 7(b) attribution and legal notices, 7(c) marking of modified versions, 7(e) names, section 13 source for network use), NOTICE, TRADEMARK.md, README licence section; SPDX AGPL-3.0-only in Cargo and web manifests and the OpenAPI info; cargo-deny allows AGPL-3.0 (GPL-3.0 dependencies remain compatible under GPLv3 section 13); NFR-7.4 rewritten. Code: TANDEM_SOURCE_URL setting, public GET /api/about, and a footer on every page showing the Appropriate Legal Notices (copyright, no warranty, licence link, source link of this running version, 'Based on Tandem'), with unit and end-to-end tests. Historical records that mention GPL-3.0 are left as they were. The copyright holder line uses the git author name and needs the owner's confirmation; a lawyer should review the wording before the first public release."
+**Status**: PR opened for review
+**Context**: Project governance (outside the unit workflow)
+
+---

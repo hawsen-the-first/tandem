@@ -81,3 +81,11 @@ aidlc-docs/  AI-DLC workflow artifacts (requirements, designs, plans)
 
 Tandem is licensed under the [GNU General Public License v3.0](LICENSE).
 The vendored AI-DLC rules in `.aidlc-rule-details/` are MIT-0 (see `.aidlc-rule-details/LICENSE-AIDLC`).
+
+## Licence
+
+Tandem is free software under the **GNU Affero General Public License v3.0** (`LICENSE`), with additional attribution
+and naming terms that the license permits (`LICENSE-TERMS.md`, `NOTICE`, `TRADEMARK.md`). In short: use it, change it,
+run it for your team or as a service, commercially too; if you change it and offer it over a network you must offer
+your users the source; and you must keep the credit ("Based on Tandem") and the legal notices in the interface, and
+not pass a modified version off as the original or under the Tandem name.

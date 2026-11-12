@@ -1,4 +1,4 @@
-# cargo-deny configuration: advisories, licences (GPL-3.0-compatible only) and sources.
+# cargo-deny configuration: advisories, licences (AGPL-3.0-compatible only; GPL-3.0 dependencies may be combined with AGPL-3.0 works under GPLv3 section 13) and sources.
 [graph]
 all-features = true
 
@@ -22,6 +22,8 @@ allow = [
     "Unicode-3.0",
     "CDLA-Permissive-2.0",
     "MPL-2.0",
+    "AGPL-3.0-only",
+    "AGPL-3.0-or-later",
     "GPL-3.0-only",
     "GPL-3.0-or-later",
 ]

@@ -494,3 +494,22 @@ pub struct PostMessageRequest {
     /// The text.
     pub body: String,
 }
+
+/// The legal notices and provenance of this running copy.
+#[derive(Debug, Serialize, ToSchema)]
+pub struct AboutDto {
+    /// The product name.
+    pub name: String,
+    /// The version of this build.
+    pub version: String,
+    /// The copyright line.
+    pub copyright: String,
+    /// The licence, as an SPDX identifier.
+    pub license: String,
+    /// Where to read the licence text.
+    pub license_url: String,
+    /// Where the Corresponding Source of this running version is (AGPL section 13).
+    pub source_url: String,
+    /// The original project, credited as "Based on Tandem".
+    pub upstream_url: String,
+}

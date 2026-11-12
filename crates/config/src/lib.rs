@@ -28,6 +28,7 @@ const FILE_KEYS: &[&str] = &[
     "listen_addr",
     "worker_listen_addr",
     "web_dir",
+    "source_url",
     "trusted_proxies",
     "otlp_endpoint",
     "log_level",
@@ -39,6 +40,9 @@ const FILE_KEYS: &[&str] = &[
 
 /// Settings that are secrets: never accepted from the TOML file.
 const SECRET_KEYS: &[&str] = &["database_url", "master_key", "metrics_token"];
+
+/// The upstream source location, used unless an operator of a modified version says otherwise.
+pub const DEFAULT_SOURCE_URL: &str = "https://github.com/hawsen-the-first/tandem";
 
 const LOG_LEVELS: &[&str] = &["error", "warn", "info", "debug", "trace"];
 const MIN_METRICS_TOKEN_LEN: usize = 16;
@@ -112,6 +116,9 @@ pub struct Config {
     pub worker_listen_addr: SocketAddr,
     /// The built web client directory served by the api; none means the api serves only the API.
     pub web_dir: Option<PathBuf>,
+    /// Where the Corresponding Source of this running version can be obtained (AGPL section 13); the
+    /// footer links to it. Operators of a modified version must point it at their own source.
+    pub source_url: Url,
     /// Proxies whose forwarded headers are believed.
     pub trusted_proxies: TrustedProxies,
     /// Bearer token for `/metrics`; the endpoint is disabled without one.
@@ -352,6 +359,33 @@ impl Loader {
         }
     }
 
+    fn source_url(&mut self) -> Option<Url> {
+        let name = "TANDEM_SOURCE_URL";
+        let text = self
+            .value(name)
+            .unwrap_or_else(|| DEFAULT_SOURCE_URL.to_owned());
+        match Url::parse(&text) {
+            Ok(url)
+                if url.host().is_some()
+                    && url.username().is_empty()
+                    && url.password().is_none()
+                    && url.fragment().is_none()
+                    && (url.scheme() == "https"
+                        || (url.scheme() == "http"
+                            && url.host().as_ref().is_some_and(is_loopback))) =>
+            {
+                Some(url)
+            }
+            _ => {
+                self.problem(
+                    name,
+                    "must be an https:// URL (http:// only for loopback) with no credentials",
+                );
+                None
+            }
+        }
+    }
+
     fn public_url(&mut self) -> Option<Url> {
         let name = "TANDEM_PUBLIC_URL";
         let Some(text) = self.value(name) else {
@@ -485,6 +519,7 @@ impl Loader {
                 None
             }
         });
+        let source_url = self.source_url();
         let worker_listen_addr = match self.value("TANDEM_WORKER_LISTEN_ADDR") {
             None => SocketAddr::from(([127, 0, 0, 1], 8081)),
             Some(text) => text.parse().unwrap_or_else(|_| {
@@ -559,6 +594,7 @@ impl Loader {
             listen_addr,
             worker_listen_addr,
             web_dir,
+            source_url: source_url?,
             trusted_proxies,
             metrics_token,
             otlp_endpoint,

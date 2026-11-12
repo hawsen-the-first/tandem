@@ -66,6 +66,13 @@ export const messages = {
   validationTotp: 'Enter the 6-digit code',
   validationRecovery: 'Enter one of your recovery codes',
   validationRequired: 'This field is required',
+
+  footerLabel: 'Legal notices',
+  footerWarranty:
+    'This program comes with ABSOLUTELY NO WARRANTY. It is free software: you may redistribute and modify it under the terms of the GNU Affero General Public License, version 3.',
+  footerViewLicense: 'View the licence',
+  footerSource: 'Source code',
+  footerBasedOn: 'Based on',
 } as const;
 
 export type MessageKey = keyof typeof messages;

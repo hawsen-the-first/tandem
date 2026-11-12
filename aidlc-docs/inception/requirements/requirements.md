@@ -307,7 +307,7 @@ Per round 3, the extension applies to **the product**, and deployment decisions 
 - **NFR-7.1** Unit and integration tests for back-end services; component tests for key UI; one end-to-end test of the core loop.
 - **NFR-7.2** Property-based testing: **not required** (extension disabled).
 - **NFR-7.3** Model calls are mockable so tests run without a live LLM.
-- **NFR-7.4** Licence: **GPL-3.0** (chosen by the owner; `LICENSE` in repo root). CI checks that every dependency's licence is GPL-3.0-compatible. Note: GPL-3.0 does not require publishing changes to a modified version offered only as a network service; AGPL-3.0 would. Recorded for the owner's awareness.
+- **NFR-7.4** Licence: **AGPL-3.0-only** with the additional attribution, modified-version and naming terms that section 7 permits (`LICENSE`, `LICENSE-TERMS.md`, `NOTICE`, `TRADEMARK.md`). Chosen by the owner, who changed it from GPL-3.0 to close the hosted-service gap (a modified version offered over a network must offer its source) and to require attribution. CI checks that every dependency's licence is AGPL-3.0-compatible. The interface shows the Appropriate Legal Notices (copyright, no warranty, licence link, source link, "Based on Tandem") on every page.
 
 ---
 
