@@ -567,3 +567,13 @@
 **Context**: CONSTRUCTION - U2 Functional Design, review
 
 ---
+## U2 NFR Requirements
+**Timestamp**: 2026-11-12T03:00:00Z
+**User Input**: "Approved, continue" (functional design PR #11 merged)
+**AI Prompt (chat)**: "Container runtime probe: which runtimes and how configured; SearXNG optional dev Compose service in U2; GitHub REST client approach."
+**User Input (chat)**: "Docker only" / "No, leave it all to U8" / "Plain REST calls on our own HTTP client (Recommended)"
+**AI Response**: "Generated plans/u2-instance-administration-nfr-requirements-plan.md, construction/u2-instance-administration/nfr-requirements/nfr-requirements.md (SC-5 to SE-26, OB-5, OB-6, MT-9 to MT-12, US-5) and tech-stack-decisions.md (T5 to T15). Noted in the story map that US-2.5's first acceptance bullet (bundled SearXNG service) is verified in U8. Found a gap in U1's log redaction (api_key was not treated as sensitive); requirement SE-21 closes it in code generation. Six working assumptions are listed in the plan for confirmation."
+**Status**: Awaiting approval of the NFR requirements
+**Context**: CONSTRUCTION - U2 NFR Requirements
+
+---
