@@ -66,6 +66,12 @@ id_type!(/// Identifies a skeleton chat message.
     ChatMessageId);
 id_type!(/// Identifies a job.
     JobId);
+id_type!(/// Identifies a model provider.
+    ProviderId);
+id_type!(/// Identifies a model listed under a provider.
+    ProviderModelId);
+id_type!(/// Identifies a configuration test run.
+    TestRunId);
 
 /// Identifies an outbox event; assigned by the store as an increasing sequence number.
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash, PartialOrd, Ord)]

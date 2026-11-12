@@ -76,3 +76,25 @@ fn process_metrics_read_proc() {
     assert!(bytes > 1_000_000.0);
     assert!(text.contains("process_cpu_seconds "));
 }
+
+#[test]
+fn the_outbound_and_config_test_helpers_record_with_target_labels_only() {
+    let registry = MetricsRegistry::new("0").unwrap();
+    metrics::with_local_recorder(registry.recorder(), || {
+        crate::metrics::record_outbound("provider", "ok", 0.3);
+        crate::metrics::count_config_test("search", "reachable");
+    });
+    let text = registry.render();
+    assert!(
+        text.contains("outbound_requests_total{target=\"provider\",outcome=\"ok\"} 1"),
+        "{text}"
+    );
+    assert!(
+        text.contains("outbound_request_duration_seconds_count{target=\"provider\"} 1"),
+        "{text}"
+    );
+    assert!(
+        text.contains("config_test_total{target=\"search\",status=\"reachable\"} 1"),
+        "{text}"
+    );
+}

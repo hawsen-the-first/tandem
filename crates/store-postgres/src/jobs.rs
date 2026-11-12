@@ -5,7 +5,7 @@ use crate::error::{corrupt, map_sqlx};
 use crate::store::PgTx;
 use async_trait::async_trait;
 use serde_json::{Value, json};
-use tandem_core::ids::{ChatMessageId, JobId};
+use tandem_core::ids::{ChatMessageId, JobId, TestRunId};
 use tandem_core::job::{Job, JobKind, JobStatus};
 use tandem_ports::{JobQueue, StoreError};
 use time::{Duration, OffsetDateTime};
@@ -33,6 +33,7 @@ fn parse_status(text: &str) -> Result<JobStatus, StoreError> {
 fn kind_to_json(kind: &JobKind) -> Value {
     match kind {
         JobKind::MockAgentReply { message_id } => json!({ "message_id": message_id.to_string() }),
+        JobKind::ConfigTest { run_id } => json!({ "run_id": run_id.to_string() }),
     }
 }
 
@@ -46,6 +47,17 @@ fn kind_from_json(name: &str, payload: &Value) -> Result<JobKind, StoreError> {
             Ok(JobKind::MockAgentReply {
                 message_id: id
                     .parse::<ChatMessageId>()
+                    .map_err(|_| corrupt("job payload"))?,
+            })
+        }
+        "config_test" => {
+            let id = payload
+                .get("run_id")
+                .and_then(Value::as_str)
+                .ok_or_else(|| corrupt("job payload"))?;
+            Ok(JobKind::ConfigTest {
+                run_id: id
+                    .parse::<TestRunId>()
                     .map_err(|_| corrupt("job payload"))?,
             })
         }
@@ -199,6 +211,20 @@ mod tests {
             kind
         );
         assert!(kind_from_json("other", &json!({})).is_err());
+    }
+
+    #[test]
+    fn the_config_test_job_kind_round_trips_and_rejects_a_bad_payload() {
+        let kind = JobKind::ConfigTest {
+            run_id: TestRunId::generate(&FakeClock::at_unix(0), &FakeRng::new(2)).unwrap(),
+        };
+        assert_eq!(kind.name(), "config_test");
+        assert_eq!(
+            kind_from_json(kind.name(), &kind_to_json(&kind)).unwrap(),
+            kind
+        );
+        assert!(kind_from_json("config_test", &json!({})).is_err());
+        assert!(kind_from_json("config_test", &json!({ "run_id": "nope" })).is_err());
     }
 
     #[test]

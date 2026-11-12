@@ -67,7 +67,7 @@ Enable these in GitHub so the checks below are enforced:
 
 ### Layout
 ```text
-crates/   shared libraries (core, ports, app, support, config, credentials, store-postgres, vault, providers, telemetry, bootstrap)
+crates/   shared libraries (core, ports, app, support, config, credentials, store-postgres, vault, providers, telemetry, bootstrap, outbound, search, github, sandbox)
 apps/     api, worker, cli
 web/      Vite + React client
 tools/    breach-filter (builds the offline breached-password filter)

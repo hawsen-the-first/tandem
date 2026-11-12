@@ -72,6 +72,10 @@ lint:
     cargo clippy --workspace --all-targets -- -D warnings
     cd web && npm run lint && npm run format:check && npm run typecheck
 
+# Prove the lint that keeps HTTP clients inside tandem-outbound still fails the build
+check-outbound-lint:
+    ./dev/scripts/check-outbound-lint.sh
+
 # Apply formatting
 fmt:
     cargo fmt --all

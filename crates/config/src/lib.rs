@@ -29,6 +29,7 @@ const FILE_KEYS: &[&str] = &[
     "worker_listen_addr",
     "web_dir",
     "source_url",
+    "container_socket",
     "trusted_proxies",
     "otlp_endpoint",
     "log_level",
@@ -119,6 +120,9 @@ pub struct Config {
     /// Where the Corresponding Source of this running version can be obtained (AGPL section 13); the
     /// footer links to it. Operators of a modified version must point it at their own source.
     pub source_url: Url,
+    /// The container runtime socket the container-tier probe uses (SE-23). None: not configured,
+    /// so the container tier is unavailable. Access to this socket is root-equivalent on the host.
+    pub container_socket: Option<PathBuf>,
     /// Proxies whose forwarded headers are believed.
     pub trusted_proxies: TrustedProxies,
     /// Bearer token for `/metrics`; the endpoint is disabled without one.
@@ -386,6 +390,21 @@ impl Loader {
         }
     }
 
+    fn container_socket(&mut self) -> Option<PathBuf> {
+        let name = "TANDEM_CONTAINER_SOCKET";
+        let text = self.value(name)?;
+        let path = PathBuf::from(&text);
+        // A Unix socket path must be absolute and fit in `sockaddr_un` (108 bytes including the NUL).
+        if !path.is_absolute() || text.contains('\0') || text.len() > 107 {
+            self.problem(
+                name,
+                "must be the absolute path of a Unix socket (at most 107 characters)",
+            );
+            return None;
+        }
+        Some(path)
+    }
+
     fn public_url(&mut self) -> Option<Url> {
         let name = "TANDEM_PUBLIC_URL";
         let Some(text) = self.value(name) else {
@@ -520,6 +539,7 @@ impl Loader {
             }
         });
         let source_url = self.source_url();
+        let container_socket = self.container_socket();
         let worker_listen_addr = match self.value("TANDEM_WORKER_LISTEN_ADDR") {
             None => SocketAddr::from(([127, 0, 0, 1], 8081)),
             Some(text) => text.parse().unwrap_or_else(|_| {
@@ -595,6 +615,7 @@ impl Loader {
             worker_listen_addr,
             web_dir,
             source_url: source_url?,
+            container_socket,
             trusted_proxies,
             metrics_token,
             otlp_endpoint,

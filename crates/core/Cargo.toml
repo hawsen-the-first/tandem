@@ -17,4 +17,5 @@ sha2 = "0.11.1"
 tandem-support = { version = "0.1.0", path = "../support" }
 thiserror = "2.0.21"
 time = "0.3.55"
+url = "2.5.8"
 uuid = "1.29.2"
