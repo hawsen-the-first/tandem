@@ -42,6 +42,8 @@ Text alternative: a provider offers several models and has one stored last-test 
 | `context_tokens` | Whole number or unknown, with `source` `detected` or `declared` (BR-14.5) |
 
 ### TestResult (shared shape; stored last result only, BR-14.6)
+> Refined in NFR Design: each test is a stored **run** (`queued`, `running`, `succeeded` or `failed`, with who started it and when) whose per-probe results use the shape below. The "last result" shown on the screens is the latest finished run; the latest run per target and up to the last 10 for 30 days are kept (NFR Design D3).
+
 | Field | Meaning |
 |---|---|
 | `status` | `ok`, `unreachable`, `timeout`, `unauthorised`, `unknown_model`, `bad_response`, `refused_address`, `not_configured` |

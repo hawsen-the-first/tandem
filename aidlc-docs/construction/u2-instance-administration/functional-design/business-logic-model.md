@@ -10,6 +10,8 @@ Workflows continue the U1 numbering (W1 to W15). Rules are **BR-n** in `business
 5. Show the saved provider with "Key saved" status and an offer to run a test.
 
 ## W17 Test a provider (US-2.3)
+> Decided in NFR Design: a test is a **background job** (a run with progress), not one long request; the steps below are what the job does. See `nfr-design/nfr-design-patterns.md` pattern 2.
+
 1. The admin chooses Test on a provider.
 2. One test runs at a time per provider; a second request while one runs is refused with "A test is already running".
 3. Resolve and check the host (BR-19.4). If refused, store `refused_address` and stop.

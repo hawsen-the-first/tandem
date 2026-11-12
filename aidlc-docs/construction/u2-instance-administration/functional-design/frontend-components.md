@@ -45,10 +45,10 @@ Navigation: the U1 header gains one admin link, "Integrations", opening `AdminIn
 - **State**: providers with models, defaults, test results, dialog state, per-provider test in progress.
 - **Table columns**: name, kind, base URL, key (Saved / None), last test (badge, time), models (count), actions (Test, Edit, Remove).
 - **ProviderDialog**: name, base URL (`UrlField`), key (`SecretField`), model rows (`ModelListEditor`). Errors beside fields (BR-14.2, BR-19); duplicate names reported against the right field.
-- **Test**: runs W17; while running the button is disabled and a live region says "Testing"; results show per model: reachable, tool calling (supported, unsupported, unknown, with source detected or declared) and context length. A model lacking a needed capability shows `CapabilityWarning`.
+- **Test**: starts a background run (NFR Design pattern 2) and polls its status once a second for at most 90 s; runs W17 in the worker; the button is disabled and a live region says "Testing" while the run is queued or running; results arrive per model as they land: reachable, tool calling (supported, unsupported, unknown, with source detected or declared) and context length. A model lacking a needed capability shows `CapabilityWarning`.
 - **DefaultModelsCard**: two selects listing "{provider} / {model}" with the provider named; suitability warnings beside them (BR-15.2); an unsuitable pick needs "Use anyway".
 - **Remove**: `RemoveProviderDialog` lists what will be cleared and which sessions are affected (BR-15.3, W18).
-- **API**: `GET /api/admin/providers`; `POST /api/admin/providers`; `PUT /api/admin/providers/{id}`; `DELETE /api/admin/providers/{id}` (with `GET .../{id}/impact`); `POST /api/admin/providers/{id}/test`; `GET/PUT /api/admin/model-defaults`.
+- **API**: `GET /api/admin/providers`; `POST /api/admin/providers`; `PUT /api/admin/providers/{id}`; `DELETE /api/admin/providers/{id}` (with `GET .../{id}/impact`); `POST /api/admin/providers/{id}/test` (starts a run), `GET /api/admin/test-runs/{id}`; `GET/PUT /api/admin/model-defaults`.
 
 ### SearchPage (US-2.5)
 - **State**: three `SearchKindCard`s, active kind, test results.
