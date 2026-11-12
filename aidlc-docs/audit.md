@@ -595,3 +595,11 @@
 **Context**: CONSTRUCTION - U2 NFR Design
 
 ---
+## U2 Code Generation - Part 1 (planning)
+**Timestamp**: 2026-11-13T02:00:00Z
+**User Input**: "Approved continue" (NFR design PR #14 merged)
+**AI Response**: "Created plans/u2-instance-administration-code-generation-plan.md: 41 steps in five pull requests by layer (foundations, adapters, persistence and application, API, web and end-to-end), eight risks with mitigations, new crates outbound, search, github and sandbox, story traceability for US-2.1, 2.3, 2.4, 2.5, 2.6 and 2.9, and the decisions fixed for generation (loopback mock servers only; the credentials crate exempt from the one-HTTP-path lint because its host is fixed; the GitHub test action covered by adapter tests only because its API base is fixed to api.github.com)."
+**Status**: Awaiting approval of the code generation plan
+**Context**: CONSTRUCTION - U2 Code Generation, Part 1
+
+---
