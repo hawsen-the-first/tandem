@@ -585,3 +585,13 @@
 **Context**: Project governance (outside the unit workflow)
 
 ---
+## U2 NFR Design
+**Timestamp**: 2026-11-13T01:00:00Z
+**User Input**: "merged, continue" (NFR requirements PR #12 and licence PR #13 merged)
+**AI Prompt (chat)**: "How is one test at a time per target enforced across instances; how do configuration changes reach other processes; do tests run as one waiting request or a background job."
+**User Input (chat)**: "PostgreSQL advisory lock per target (Recommended)" / "Time-limited cache only, 5 s (Recommended)" / "Background job, the screen polls (Recommended)"
+**AI Response**: "Generated plans/u2-instance-administration-nfr-design-plan.md, construction/u2-instance-administration/nfr-design/nfr-design-patterns.md (ten patterns) and logical-components.md (LC-24 to LC-34, API surface, changes to existing components). Because tests are background jobs, every test action (provider, search, GitHub, container probe) is a config_test job with a stored run, a unique active run per target and an advisory lock in the worker. Cross-referenced the functional design (W17, frontend, test run entity). Seven working assumptions (D1 to D7) are listed in the plan for confirmation. Infrastructure Design is skipped for U2 per the unit plan."
+**Status**: Awaiting approval of the NFR design
+**Context**: CONSTRUCTION - U2 NFR Design
+
+---
