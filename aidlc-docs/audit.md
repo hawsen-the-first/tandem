@@ -627,3 +627,11 @@
 **AI Response**: "Executed steps 17 to 27 on branch unit-u2/persistence-app: migration 0005 with a partial unique index for one active run per target; configuration repositories and PgLocks (advisory lock on a held connection); the administration service, test start and read, the test runner (job handler with lock contention, retry, crash and recovery paths), the config read port with a 5 second cache; worker recovery sweep and run pruning; vault rekey over the new sealed columns; Docker-backed integration tests including two workers and one run. All gates pass. Summary in construction/u2-instance-administration/code/pr3-persistence-application-summary.md."
 **Status**: PR 3 opened for review
 **Context**: CONSTRUCTION - U2 Code Generation, Part 2
+
+---
+## U2 Code Generation - Part 2, PR 4 (API)
+**Timestamp**: 2026-11-13T12:00:00Z
+**User Input**: "merged continue" (PR 3 merged)
+**AI Response**: "Executed steps 28 to 32 on branch unit-u2/api: admin-only routes for providers, default models, search, the GitHub connector, the sandbox policy, the runtime check and test runs; write-only secrets (saved flag and time only); 202 for test starts with 409 and the active run id when one is running; a separate Test rate-limit bucket (10 per minute); field-named validation errors including the outbound URL reasons; OpenAPI and web types regenerated. Tests: 18 in-memory API tests and a Docker Postgres end-to-end test through the real provider adapter, including a check that no key reaches a response, audit entry or log line. Summary in construction/u2-instance-administration/code/pr4-api-summary.md."
+**Status**: PR 4 opened for review
+**Context**: CONSTRUCTION - U2 Code Generation, Part 2

@@ -38,6 +38,42 @@ export interface paths {
     patch?: never;
     trace?: never;
   };
+  '/api/admin/connectors/github': {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    /** The GitHub connector's status. */
+    get: operations['get_connector'];
+    /** Save or replace the GitHub token. The token is never returned. */
+    put: operations['put_connector'];
+    post?: never;
+    /** Remove the GitHub token; the connector is then off. */
+    delete: operations['delete_connector'];
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  '/api/admin/connectors/github/test': {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
+    /** Test the GitHub token: the account, its expiry and the repositories it reaches. */
+    post: operations['test_connector'];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
   '/api/admin/invitations': {
     parameters: {
       query?: never;
@@ -73,6 +109,198 @@ export interface paths {
     patch?: never;
     trace?: never;
   };
+  '/api/admin/model-defaults': {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    /** The default models, with where each comes from and any warnings. */
+    get: operations['get_defaults'];
+    /** Choose the default models. A model with warnings is allowed; the warnings come back. */
+    put: operations['put_defaults'];
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  '/api/admin/providers': {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    /** List model providers with their models and last test. */
+    get: operations['list_providers'];
+    put?: never;
+    /** Add a provider. */
+    post: operations['create_provider'];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  '/api/admin/providers/{id}': {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    /** One provider. */
+    get: operations['get_provider'];
+    /** Change a provider. An empty `api_key` keeps the saved key; `remove_api_key` deletes it. */
+    put: operations['update_provider'];
+    post?: never;
+    /** Remove a provider, its models and key, clearing the defaults that used them. */
+    delete: operations['delete_provider'];
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  '/api/admin/providers/{id}/removal-impact': {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    /** What removing a provider would do, for the confirmation. */
+    get: operations['removal_impact'];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  '/api/admin/providers/{id}/test': {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
+    /** Test a provider and each of its models. Runs in the background: poll the run. */
+    post: operations['test_provider'];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  '/api/admin/runtime/check': {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
+    /** Check whether the container runtime answers, without starting anything. */
+    post: operations['check_runtime'];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  '/api/admin/sandbox-policy': {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    /** The sandbox policy with the factory values, allowed ranges and the tool registry. */
+    get: operations['get_policy'];
+    /** Save the sandbox policy. Choosing the container tier needs a runtime that answers right now. */
+    put: operations['put_policy'];
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  '/api/admin/search': {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    /** All search providers and which one is active. */
+    get: operations['get_search'];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  '/api/admin/search/active': {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    /** Turn one search provider on (the others go off), or search off with no `kind`. */
+    put: operations['put_active_search'];
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  '/api/admin/search/kinds/{kind}': {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    /** Save one search provider's settings; the overview comes back. */
+    put: operations['put_search_kind'];
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  '/api/admin/search/kinds/{kind}/test': {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
+    /** Test one search provider with a small query. */
+    post: operations['test_search'];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
   '/api/admin/settings': {
     parameters: {
       query?: never;
@@ -84,6 +312,23 @@ export interface paths {
     get: operations['get_settings'];
     /** Replace the instance security settings. */
     put: operations['put_settings'];
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  '/api/admin/test-runs/{id}': {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    /** A test run, for the screen that polls it. */
+    get: operations['get_test_run'];
+    put?: never;
     post?: never;
     delete?: never;
     options?: never;
@@ -464,6 +709,18 @@ export interface components {
       /** @description The token from the link. */
       token: string;
     };
+    /** @description The result of turning search on or off. */
+    ActivationDto: {
+      /** @description The active kind afterwards. */
+      active?: string | null;
+      /** @description The provider has never passed a test. */
+      untested: boolean;
+    };
+    /** @description Which search provider to turn on; leave out to turn search off. */
+    ActiveSearchRequest: {
+      /** @description `searxng`, `brave` or `tavily`. */
+      kind?: string | null;
+    };
     /** @description A user in the admin list, with their MFA state. */
     AdminUserDto: components['schemas']['UserDto'] & {
       /** @description Whether the user has confirmed MFA. */
@@ -550,10 +807,48 @@ export interface components {
       /** @description The token from the link. */
       token: string;
     };
+    /** @description The GitHub connector. The token is never included. */
+    ConnectorDto: {
+      /** @description The account the token belongs to, after a successful test. */
+      account_login?: string | null;
+      /** @description A test queued or running now. */
+      active_test_id?: string | null;
+      /** @description A token is saved. */
+      configured: boolean;
+      last_test?: components['schemas']['TestRunDto'] | null;
+      /** @description When the token was saved. */
+      saved_at?: string | null;
+      /** @description When the token expires, when GitHub says. */
+      token_expires_at?: string | null;
+    };
+    /** @description The token as entered. */
+    ConnectorRequest: {
+      /** @description A fine-grained personal access token. */
+      token: string;
+    };
     /** @description Create a chat session. */
     CreateChatSessionRequest: {
       /** @description The title. */
       title: string;
+    };
+    /** @description One default model and where it comes from. */
+    DefaultChoiceDto: {
+      /** @description The model. */
+      model: components['schemas']['ModelDto'];
+      /** @description The provider's name. */
+      provider_name: string;
+    };
+    /** @description The two default models. A default with `warnings` is allowed but flagged. */
+    DefaultsDto: {
+      agents?: components['schemas']['DefaultChoiceDto'] | null;
+      orchestrator?: components['schemas']['DefaultChoiceDto'] | null;
+    };
+    /** @description The picks, by model ID; leave one out to unset it. */
+    DefaultsRequest: {
+      /** @description The model for thread and task agents. */
+      agents_model_id?: string | null;
+      /** @description The orchestrator's model. */
+      orchestrator_model_id?: string | null;
     };
     /** @description Turn MFA off (members only). */
     DisableMfaRequest: {
@@ -577,11 +872,20 @@ export interface components {
       fields?: components['schemas']['FieldProblem'][];
       /** @description A plain-words message safe to show to the user. */
       message: string;
+      /** @description The run already in progress, for `already_running`. */
+      run_id?: string | null;
     };
     /** @description The error envelope: `{"error": {...}}`. */
     ErrorEnvelope: {
       /** @description The error. */
       error: components['schemas']['ErrorBody'];
+    };
+    /** @description Why a run failed as a whole. */
+    FailureDto: {
+      /** @description `could_not_complete` or `no_worker_available`. */
+      code: string;
+      /** @description A fixed sentence. */
+      message: string;
     };
     /** @description One field problem in a validation answer. */
     FieldProblem: {
@@ -626,6 +930,39 @@ export interface components {
       /** @description `admin` or `member`. */
       role: string;
     };
+    /** @description Resource limits. */
+    LimitsDto: {
+      /**
+       * Format: int64
+       * @description CPU in millicores (enforced by the container runner only).
+       */
+      cpu_millicores: number;
+      /**
+       * Format: int64
+       * @description Largest single file a run may write.
+       */
+      max_file_bytes: number;
+      /**
+       * Format: int64
+       * @description Files a run may create or change.
+       */
+      max_files_written: number;
+      /**
+       * Format: int64
+       * @description Output bytes per run.
+       */
+      max_output_bytes: number;
+      /**
+       * Format: int64
+       * @description Memory in MiB (enforced by the container runner only).
+       */
+      memory_mebibytes: number;
+      /**
+       * Format: int64
+       * @description Wall-clock seconds per run.
+       */
+      wall_clock_seconds: number;
+    };
     /** @description The signed-in user, their scope and the CSRF token for state-changing calls. */
     MeResponse: {
       /** @description Send as `X-CSRF-Token` on POST, PUT, PATCH and DELETE. */
@@ -646,15 +983,221 @@ export interface components {
       /** @description Suggest generating a new set. */
       remind_regenerate: boolean;
     };
+    /** @description A model with what a test found and what an admin declared. */
+    ModelDto: {
+      /**
+       * Format: int32
+       * @description Context length as used.
+       */
+      context_tokens?: number | null;
+      /**
+       * Format: int32
+       * @description What an admin declared.
+       */
+      declared_context_tokens?: number | null;
+      /** @description What an admin declared. */
+      declared_tool_calling?: string | null;
+      /**
+       * Format: int32
+       * @description What a test found.
+       */
+      detected_context_tokens?: number | null;
+      /** @description What a test found. */
+      detected_tool_calling: string;
+      /** @description A declared value disagrees with what a test found. */
+      disagrees_with_detection: boolean;
+      /** @description The model's ID. */
+      id: string;
+      /** @description An optional friendly label. */
+      label?: string | null;
+      /** @description The name the provider's API expects. */
+      name: string;
+      /** @description The provider it belongs to. */
+      provider_id: string;
+      /** @description Tool calling as used: declared if declared, otherwise detected. */
+      tool_calling: string;
+      /** @description Why this model may not suit a job; empty when it does. */
+      warnings: components['schemas']['WarningDto'][];
+    };
+    /** @description A model as entered. */
+    ModelRequest: {
+      /**
+       * Format: int32
+       * @description Declare the context length in tokens.
+       */
+      declared_context_tokens?: number | null;
+      /** @description Declare tool calling: `supported`, `unsupported` or `unknown`. */
+      declared_tool_calling?: string | null;
+      /** @description The existing model this edits; leave out for a new one. */
+      id?: string | null;
+      /** @description An optional friendly label. */
+      label?: string;
+      /** @description The name the provider's API expects. */
+      name: string;
+    };
+    /** @description The network rule. */
+    NetworkDto: {
+      /** @description The allowed host names (only for `allow_hosts`). */
+      hosts?: string[];
+      /** @description `none` or `allow_hosts`. */
+      mode: string;
+    };
+    /** @description The sandbox policy. */
+    PolicyDto: {
+      /** @description Limits. */
+      limits: components['schemas']['LimitsDto'];
+      /** @description The network rule. */
+      network: components['schemas']['NetworkDto'];
+      /** @description `in_process` or `container`. */
+      runner_tier: string;
+      /** @description Allowed tools. */
+      tool_allow_list: string[];
+      /**
+       * Format: int32
+       * @description Rises with every saved change.
+       */
+      version: number;
+    };
+    /** @description The policy as entered. The version and scope are not accepted. */
+    PolicyRequest: {
+      /** @description Limits. */
+      limits: components['schemas']['LimitsDto'];
+      /** @description The network rule. */
+      network: components['schemas']['NetworkDto'];
+      /** @description `in_process` or `container`. */
+      runner_tier: string;
+      /** @description Allowed tools. */
+      tool_allow_list: string[];
+    };
+    /** @description The policy with what the editor needs: factory values, ranges and the tool registry. */
+    PolicyViewDto: {
+      /** @description The factory default, for "Reset to default". */
+      factory: components['schemas']['PolicyDto'];
+      /** @description The policy in force. */
+      policy: components['schemas']['PolicyDto'];
+      /** @description Allowed ranges. */
+      ranges: components['schemas']['RangeDto'][];
+      /** @description Every registered tool. */
+      tools: components['schemas']['ToolDto'][];
+    };
     /** @description Post a chat message. */
     PostMessageRequest: {
       /** @description The text. */
       body: string;
     };
+    /** @description Facts a probe learned. Never secrets and never text from the remote server. */
+    ProbeDetailsDto: {
+      /** @description The GitHub account the token belongs to. */
+      account_login?: string | null;
+      /**
+       * Format: int32
+       * @description A model's context length in tokens.
+       */
+      context_tokens?: number | null;
+      /** @description Up to 100 repositories the token can reach. */
+      repositories: string[];
+      /**
+       * Format: int32
+       * @description How many repositories the token can reach.
+       */
+      repository_total?: number | null;
+      /** @description The container runtime's name. */
+      runtime_name?: string | null;
+      /** @description The container runtime's version. */
+      runtime_version?: string | null;
+      /** @description When the GitHub token expires, if GitHub says. */
+      token_expires_at?: string | null;
+      /** @description A model's tool calling: `supported`, `unsupported` or `unknown`. */
+      tool_calling?: string | null;
+    };
+    /** @description One probe's result. */
+    ProbeResultDto: {
+      /** @description Facts learned. */
+      details: components['schemas']['ProbeDetailsDto'];
+      /** @description A fixed, safe sentence for the status. */
+      message: string;
+      /** @description The model, when `subject` is `model`. */
+      model_id?: string | null;
+      /** @description A fixed note, such as `no_results`. */
+      note?: string | null;
+      /**
+       * @description `ok`, `unreachable`, `timeout`, `unauthorised`, `unknown_model`, `bad_response`,
+       *     `refused_address` or `not_configured`.
+       */
+      status: string;
+      /** @description `provider`, `model`, `search`, `connector` or `runtime`. */
+      subject: string;
+    };
+    /** @description A provider. The key is never included. */
+    ProviderDto: {
+      /** @description A test queued or running now. */
+      active_test_id?: string | null;
+      /** @description Whether an API key is saved. */
+      api_key_saved: boolean;
+      /** @description When the key was last saved. */
+      api_key_saved_at?: string | null;
+      /** @description Base URL. */
+      base_url: string;
+      /** @description Created. */
+      created_at: string;
+      /** @description The provider's ID. */
+      id: string;
+      /** @description `openai_compatible`. */
+      kind: string;
+      last_test?: components['schemas']['TestRunDto'] | null;
+      /** @description Listed models. */
+      models: components['schemas']['ModelDto'][];
+      /** @description Display name. */
+      name: string;
+      /** @description Last changed. */
+      updated_at: string;
+    };
+    /** @description A provider as entered. */
+    ProviderRequest: {
+      /** @description A new API key. Absent or empty keeps the saved one. */
+      api_key?: string | null;
+      /** @description Base URL, including any `/v1`. */
+      base_url: string;
+      /** @description The listed models, in order. */
+      models?: components['schemas']['ModelRequest'][];
+      /** @description Display name. */
+      name: string;
+      /** @description Delete the saved key. */
+      remove_api_key?: boolean;
+    };
+    /** @description An allowed range for one limit. */
+    RangeDto: {
+      /**
+       * Format: int64
+       * @description The factory default.
+       */
+      default: number;
+      /** @description The limit's field name. */
+      field: string;
+      /**
+       * Format: int64
+       * @description Largest allowed.
+       */
+      max: number;
+      /**
+       * Format: int64
+       * @description Smallest allowed.
+       */
+      min: number;
+    };
     /** @description Recovery codes, shown once. */
     RecoveryCodesResponse: {
       /** @description The codes. */
       recovery_codes: string[];
+    };
+    /** @description What removing a provider does. */
+    RemovalImpactDto: {
+      /** @description Defaults that are or will be cleared: `orchestrator` and/or `agents`. */
+      cleared_defaults: string[];
+      /** @description How many models go with it. */
+      model_count: number;
+      /** @description The provider's name. */
+      provider_name: string;
     };
     /** @description Whose password a reset link is for. */
     ResetInfoDto: {
@@ -679,6 +1222,44 @@ export interface components {
     RoleRequest: {
       /** @description `admin` or `member`. */
       role: string;
+    };
+    /** @description One search provider's settings and test state. The key is never included. */
+    SearchKindDto: {
+      /** @description This is the active provider. */
+      active: boolean;
+      /** @description A test queued or running now. */
+      active_test_id?: string | null;
+      /** @description Whether an API key is saved. */
+      api_key_saved: boolean;
+      /** @description When the key was last saved. */
+      api_key_saved_at?: string | null;
+      /** @description SearXNG's base URL. */
+      base_url?: string | null;
+      /** @description Settings have been saved. */
+      configured: boolean;
+      /** @description `searxng`, `brave` or `tavily`. */
+      kind: string;
+      last_test?: components['schemas']['TestRunDto'] | null;
+      /** @description An API key is needed (Brave, Tavily). */
+      needs_key: boolean;
+      /** @description The admin supplies the base URL (SearXNG). */
+      needs_url: boolean;
+    };
+    /** @description All search providers. */
+    SearchOverviewDto: {
+      /** @description The active kind, if any. */
+      active?: string | null;
+      /** @description One entry per kind. */
+      kinds: components['schemas']['SearchKindDto'][];
+    };
+    /** @description Search settings as entered. */
+    SearchRequest: {
+      /** @description A new API key. Absent or empty keeps the saved one. */
+      api_key?: string | null;
+      /** @description SearXNG's base URL; empty uses the bundled service. */
+      base_url?: string | null;
+      /** @description Delete the saved key. */
+      remove_api_key?: boolean;
     };
     /** @description A second factor submitted with sign-in. */
     SecondFactorDto: {
@@ -739,10 +1320,37 @@ export interface components {
       status: string;
       user?: components['schemas']['UserDto'] | null;
     };
+    /** @description A test run: queued, running or finished, with the results so far. */
+    TestRunDto: {
+      failure?: components['schemas']['FailureDto'] | null;
+      /** @description When it finished. */
+      finished_at?: string | null;
+      /** @description The run's ID. */
+      id: string;
+      /** @description When it was started. */
+      requested_at: string;
+      /** @description Results so far, in arrival order. */
+      results: components['schemas']['ProbeResultDto'][];
+      /** @description When a worker began. */
+      started_at?: string | null;
+      /** @description `queued`, `running`, `succeeded` or `failed`. */
+      status: string;
+      /** @description What is tested: `provider:<id>`, `search:<kind>`, `connector:github` or `runtime`. */
+      target: string;
+    };
     /** @description A link token from an invitation or reset link. */
     TokenRequest: {
       /** @description The token from the link. */
       token: string;
+    };
+    /** @description A tool in the registry. */
+    ToolDto: {
+      /** @description `false` for `command_run`, which is listed but never enabled. */
+      can_be_enabled: boolean;
+      /** @description What it does. */
+      description: string;
+      /** @description The tool's identifier. */
+      id: string;
     };
     /** @description A user as the client sees them. */
     UserDto: {
@@ -760,6 +1368,21 @@ export interface components {
       role: string;
       /** @description `active` or `deactivated`. */
       status: string;
+    };
+    /** @description Something wrong with a model for a job. */
+    WarningDto: {
+      /** @description `tool_calling_unsupported`, `tool_calling_unknown`, `context_too_small` or `context_unknown`. */
+      code: string;
+      /**
+       * Format: int32
+       * @description The context a model has, for `context_too_small`.
+       */
+      have?: number | null;
+      /**
+       * Format: int32
+       * @description The context a job needs, for `context_too_small`.
+       */
+      need?: number | null;
     };
   };
   responses: never;
@@ -822,6 +1445,141 @@ export interface operations {
         };
       };
       422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope'];
+        };
+      };
+    };
+  };
+  get_connector: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          'application/json': components['schemas']['ConnectorDto'];
+        };
+      };
+      404: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope'];
+        };
+      };
+    };
+  };
+  put_connector: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody: {
+      content: {
+        'application/json': components['schemas']['ConnectorRequest'];
+      };
+    };
+    responses: {
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          'application/json': components['schemas']['ConnectorDto'];
+        };
+      };
+      404: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope'];
+        };
+      };
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope'];
+        };
+      };
+    };
+  };
+  delete_connector: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      204: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
+      404: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope'];
+        };
+      };
+    };
+  };
+  test_connector: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      202: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          'application/json': components['schemas']['TestRunDto'];
+        };
+      };
+      404: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope'];
+        };
+      };
+      /** @description A test is already running; the body carries its run_id */
+      409: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope'];
+        };
+      };
+      429: {
         headers: {
           [name: string]: unknown;
         };
@@ -917,6 +1675,582 @@ export interface operations {
       };
     };
   };
+  get_defaults: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          'application/json': components['schemas']['DefaultsDto'];
+        };
+      };
+      404: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope'];
+        };
+      };
+    };
+  };
+  put_defaults: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody: {
+      content: {
+        'application/json': components['schemas']['DefaultsRequest'];
+      };
+    };
+    responses: {
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          'application/json': components['schemas']['DefaultsDto'];
+        };
+      };
+      404: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope'];
+        };
+      };
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope'];
+        };
+      };
+    };
+  };
+  list_providers: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          'application/json': components['schemas']['ProviderDto'][];
+        };
+      };
+      404: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope'];
+        };
+      };
+    };
+  };
+  create_provider: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody: {
+      content: {
+        'application/json': components['schemas']['ProviderRequest'];
+      };
+    };
+    responses: {
+      201: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          'application/json': components['schemas']['ProviderDto'];
+        };
+      };
+      404: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope'];
+        };
+      };
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope'];
+        };
+      };
+    };
+  };
+  get_provider: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        /** @description Provider ID */
+        id: string;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          'application/json': components['schemas']['ProviderDto'];
+        };
+      };
+      404: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope'];
+        };
+      };
+    };
+  };
+  update_provider: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        /** @description Provider ID */
+        id: string;
+      };
+      cookie?: never;
+    };
+    requestBody: {
+      content: {
+        'application/json': components['schemas']['ProviderRequest'];
+      };
+    };
+    responses: {
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          'application/json': components['schemas']['ProviderDto'];
+        };
+      };
+      404: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope'];
+        };
+      };
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope'];
+        };
+      };
+    };
+  };
+  delete_provider: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        /** @description Provider ID */
+        id: string;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          'application/json': components['schemas']['RemovalImpactDto'];
+        };
+      };
+      404: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope'];
+        };
+      };
+    };
+  };
+  removal_impact: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        /** @description Provider ID */
+        id: string;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          'application/json': components['schemas']['RemovalImpactDto'];
+        };
+      };
+      404: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope'];
+        };
+      };
+    };
+  };
+  test_provider: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        /** @description Provider ID */
+        id: string;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      202: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          'application/json': components['schemas']['TestRunDto'];
+        };
+      };
+      404: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope'];
+        };
+      };
+      /** @description A test is already running; the body carries its run_id */
+      409: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope'];
+        };
+      };
+      429: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope'];
+        };
+      };
+    };
+  };
+  check_runtime: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      202: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          'application/json': components['schemas']['TestRunDto'];
+        };
+      };
+      404: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope'];
+        };
+      };
+      /** @description A check is already running; the body carries its run_id */
+      409: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope'];
+        };
+      };
+      429: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope'];
+        };
+      };
+    };
+  };
+  get_policy: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          'application/json': components['schemas']['PolicyViewDto'];
+        };
+      };
+      404: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope'];
+        };
+      };
+    };
+  };
+  put_policy: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody: {
+      content: {
+        'application/json': components['schemas']['PolicyRequest'];
+      };
+    };
+    responses: {
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          'application/json': components['schemas']['PolicyViewDto'];
+        };
+      };
+      404: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope'];
+        };
+      };
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope'];
+        };
+      };
+    };
+  };
+  get_search: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          'application/json': components['schemas']['SearchOverviewDto'];
+        };
+      };
+      404: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope'];
+        };
+      };
+    };
+  };
+  put_active_search: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody: {
+      content: {
+        'application/json': components['schemas']['ActiveSearchRequest'];
+      };
+    };
+    responses: {
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          'application/json': components['schemas']['ActivationDto'];
+        };
+      };
+      404: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope'];
+        };
+      };
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope'];
+        };
+      };
+    };
+  };
+  put_search_kind: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        /** @description searxng, brave or tavily */
+        kind: string;
+      };
+      cookie?: never;
+    };
+    requestBody: {
+      content: {
+        'application/json': components['schemas']['SearchRequest'];
+      };
+    };
+    responses: {
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          'application/json': components['schemas']['SearchOverviewDto'];
+        };
+      };
+      404: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope'];
+        };
+      };
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope'];
+        };
+      };
+    };
+  };
+  test_search: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        /** @description searxng, brave or tavily */
+        kind: string;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      202: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          'application/json': components['schemas']['TestRunDto'];
+        };
+      };
+      404: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope'];
+        };
+      };
+      /** @description A test is already running; the body carries its run_id */
+      409: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope'];
+        };
+      };
+      429: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope'];
+        };
+      };
+    };
+  };
   get_settings: {
     parameters: {
       query?: never;
@@ -966,6 +2300,36 @@ export interface operations {
         };
       };
       422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope'];
+        };
+      };
+    };
+  };
+  get_test_run: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        /** @description Run ID */
+        id: string;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          'application/json': components['schemas']['TestRunDto'];
+        };
+      };
+      404: {
         headers: {
           [name: string]: unknown;
         };

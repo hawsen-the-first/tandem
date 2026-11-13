@@ -14,6 +14,8 @@ pub enum Bucket {
     Auth,
     /// First-run setup: 10 per minute.
     Setup,
+    /// Starting a configuration test: 10 per minute.
+    Test,
 }
 
 impl Bucket {
@@ -23,6 +25,7 @@ impl Bucket {
             Self::General => "general",
             Self::Auth => "auth",
             Self::Setup => "setup",
+            Self::Test => "test",
         }
     }
 
@@ -31,6 +34,7 @@ impl Bucket {
             Self::General => 300.0,
             Self::Auth => 20.0,
             Self::Setup => 10.0,
+            Self::Test => 10.0,
         }
     }
 }

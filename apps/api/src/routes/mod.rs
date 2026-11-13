@@ -8,6 +8,7 @@ pub mod assets;
 pub mod auth;
 pub mod chat;
 pub mod health;
+pub mod integrations;
 pub mod openapi;
 pub mod ws;
 
@@ -188,6 +189,7 @@ pub fn all_routes() -> Result<(Router<AppState>, RouteInfoMap), RouteError> {
     let table = about::register(table);
     let table = auth::register(table);
     let table = admin::register(table);
+    let table = integrations::register(table);
     let table = chat::register(table);
     let table = ws::register(table);
     let table = openapi::register(table);
