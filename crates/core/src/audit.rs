@@ -57,11 +57,27 @@ pub enum AuditEventType {
     SettingsChanged,
     /// A signed-in user attempted a forbidden action.
     AuthzDenied,
+    /// A model provider was added.
+    ConfigProviderCreated,
+    /// A model provider was changed.
+    ConfigProviderUpdated,
+    /// A model provider was removed.
+    ConfigProviderDeleted,
+    /// The default models changed.
+    ConfigDefaultsUpdated,
+    /// Search settings or the active search provider changed.
+    ConfigSearchUpdated,
+    /// A connector was configured or removed.
+    ConfigConnectorUpdated,
+    /// The sandbox policy changed.
+    ConfigSandboxPolicyUpdated,
+    /// A configuration test ran.
+    ConfigTestRun,
 }
 
 impl AuditEventType {
     /// All event types, in catalogue order.
-    pub const ALL: [Self; 20] = [
+    pub const ALL: [Self; 28] = [
         Self::AuthSetup,
         Self::AuthSignInSuccess,
         Self::AuthSignInFailure,
@@ -82,6 +98,14 @@ impl AuditEventType {
         Self::UserRoleChanged,
         Self::SettingsChanged,
         Self::AuthzDenied,
+        Self::ConfigProviderCreated,
+        Self::ConfigProviderUpdated,
+        Self::ConfigProviderDeleted,
+        Self::ConfigDefaultsUpdated,
+        Self::ConfigSearchUpdated,
+        Self::ConfigConnectorUpdated,
+        Self::ConfigSandboxPolicyUpdated,
+        Self::ConfigTestRun,
     ];
 
     /// The stable dotted name stored and shown in the log.
@@ -107,6 +131,14 @@ impl AuditEventType {
             Self::UserRoleChanged => "user.role_changed",
             Self::SettingsChanged => "settings.changed",
             Self::AuthzDenied => "authz.denied",
+            Self::ConfigProviderCreated => "config.provider.created",
+            Self::ConfigProviderUpdated => "config.provider.updated",
+            Self::ConfigProviderDeleted => "config.provider.deleted",
+            Self::ConfigDefaultsUpdated => "config.defaults.updated",
+            Self::ConfigSearchUpdated => "config.search.updated",
+            Self::ConfigConnectorUpdated => "config.connector.updated",
+            Self::ConfigSandboxPolicyUpdated => "config.sandbox_policy.updated",
+            Self::ConfigTestRun => "config.test.run",
         }
     }
 
@@ -257,9 +289,9 @@ mod tests {
     use std::collections::HashSet;
 
     #[test]
-    fn br_11_5_the_catalogue_has_twenty_unique_dotted_names_that_round_trip() {
+    fn br_11_5_the_catalogue_has_twenty_eight_unique_dotted_names_that_round_trip() {
         let names: HashSet<&str> = AuditEventType::ALL.iter().map(|e| e.as_str()).collect();
-        assert_eq!(names.len(), 20);
+        assert_eq!(names.len(), 28);
         for event in AuditEventType::ALL {
             assert!(event.as_str().contains('.'));
             assert_eq!(AuditEventType::parse(event.as_str()), Some(event));

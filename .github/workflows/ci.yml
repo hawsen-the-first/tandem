@@ -40,6 +40,8 @@ jobs:
         run: cargo clippy --workspace --all-targets -- -D warnings
       - name: Tests
         run: cargo test --workspace
+      - name: Outbound lint still bites
+        run: ./dev/scripts/check-outbound-lint.sh
       - name: Advisories
         run: cargo audit
       - name: Licences, bans and sources

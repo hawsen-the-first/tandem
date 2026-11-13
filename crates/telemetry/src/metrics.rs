@@ -53,6 +53,12 @@ pub mod names {
     pub const PROCESS_RESIDENT_MEMORY_BYTES: &str = "process_resident_memory_bytes";
     /// CPU time used by the process.
     pub const PROCESS_CPU_SECONDS: &str = "process_cpu_seconds";
+    /// Outbound calls made for providers, search, GitHub and the runtime probe, by target kind and outcome.
+    pub const OUTBOUND_REQUESTS_TOTAL: &str = "outbound_requests_total";
+    /// Outbound call latency by target kind.
+    pub const OUTBOUND_REQUEST_DURATION_SECONDS: &str = "outbound_request_duration_seconds";
+    /// Configuration test probes by target kind and status.
+    pub const CONFIG_TEST_TOTAL: &str = "config_test_total";
 }
 
 const LATENCY_BUCKETS: &[f64] = &[
@@ -180,6 +186,19 @@ fn describe_all() {
         Unit::Seconds,
         "CPU time used by the process"
     );
+    describe_counter!(
+        OUTBOUND_REQUESTS_TOTAL,
+        "Outbound calls by target kind and outcome"
+    );
+    describe_histogram!(
+        OUTBOUND_REQUEST_DURATION_SECONDS,
+        Unit::Seconds,
+        "Outbound call latency by target kind"
+    );
+    describe_counter!(
+        CONFIG_TEST_TOTAL,
+        "Configuration test probes by target kind and status"
+    );
 }
 
 fn register_defaults(version: &str) {
@@ -281,4 +300,19 @@ pub fn count(name: &'static str) {
 /// Set an unlabelled gauge.
 pub fn set_gauge(name: &'static str, value: f64) {
     metrics::gauge!(name).set(value);
+}
+
+/// Record one outbound call. `target` is a kind (`provider`, `search`, `github`, `runtime`), never
+/// a host name (OB-5).
+pub fn record_outbound(target: &'static str, outcome: &'static str, seconds: f64) {
+    metrics::counter!(names::OUTBOUND_REQUESTS_TOTAL, "target" => target, "outcome" => outcome)
+        .increment(1);
+    metrics::histogram!(names::OUTBOUND_REQUEST_DURATION_SECONDS, "target" => target)
+        .record(seconds);
+}
+
+/// Count one configuration test probe by target kind and status.
+pub fn count_config_test(target: &'static str, status: &'static str) {
+    metrics::counter!(names::CONFIG_TEST_TOTAL, "target" => target, "status" => status)
+        .increment(1);
 }

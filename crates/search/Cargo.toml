@@ -1,0 +1,14 @@
+[package]
+name = "tandem-search"
+description = "Web search adapters (SearXNG, Brave Search, Tavily) behind the search port."
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+repository.workspace = true
+publish.workspace = true
+
+[lints]
+workspace = true
+
+[dependencies]

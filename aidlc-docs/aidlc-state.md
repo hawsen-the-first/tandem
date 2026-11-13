@@ -4,7 +4,7 @@
 - **Project Name**: Tandem
 - **Project Type**: Greenfield
 - **Start Date**: 2026-09-28T03:32:30Z
-- **Current Stage**: CONSTRUCTION - U2 Instance administration, Code Generation Part 1 (plan) generated, awaiting approval; next: Part 2 (execute the plan, five pull requests)
+- **Current Stage**: CONSTRUCTION - U2 Instance administration, Code Generation Part 2: PR 1 (foundations, steps 1-10) open for review; next: PR 2 (adapters, steps 11-16)
 - **AI-DLC Rules Version**: v1.0.1 (awslabs/aidlc-workflows @ e40f6a93a59d1a22be78314ff32585fdd6b60936)
 
 ## Workspace State

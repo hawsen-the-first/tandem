@@ -28,6 +28,8 @@ pub enum Action {
     ManageUsers,
     /// Edit instance security settings.
     EditSettings,
+    /// Configure providers, defaults, search, connectors and the sandbox policy, and run their tests (U2).
+    ManageIntegrations,
     /// View the audit log.
     ViewAudit,
 }
@@ -61,7 +63,8 @@ pub enum Verdict {
 pub fn evaluate(principal: Principal, action: Action, first_run_available: bool) -> Verdict {
     use Action::{
         AcceptInvitation, ChangeOwnPassword, CurrentUser, EditSettings, FirstRunSetup,
-        ManageOwnMfa, ManageUsers, SignIn, SignOut, UseChat, UseResetLink, ViewAudit,
+        ManageIntegrations, ManageOwnMfa, ManageUsers, SignIn, SignOut, UseChat, UseResetLink,
+        ViewAudit,
     };
     match (principal, action) {
         (_, FirstRunSetup) => {
@@ -81,13 +84,14 @@ pub fn evaluate(principal: Principal, action: Action, first_run_available: bool)
                 Verdict::Deny
             }
         }
-        (Principal::Authenticated { role, scope }, ManageUsers | EditSettings | ViewAudit) => {
-            match (role, scope) {
-                (Role::Member, _) => Verdict::NotFound,
-                (Role::Admin, Scope::Full) => Verdict::Allow,
-                (Role::Admin, Scope::MfaEnrolmentOnly) => Verdict::Deny,
-            }
-        }
+        (
+            Principal::Authenticated { role, scope },
+            ManageUsers | EditSettings | ViewAudit | ManageIntegrations,
+        ) => match (role, scope) {
+            (Role::Member, _) => Verdict::NotFound,
+            (Role::Admin, Scope::Full) => Verdict::Allow,
+            (Role::Admin, Scope::MfaEnrolmentOnly) => Verdict::Deny,
+        },
     }
 }
 
@@ -183,5 +187,42 @@ mod tests {
             Verdict::Allow
         );
         assert_eq!(evaluate(MEMBER, Action::UseChat, false), Verdict::Allow);
+    }
+}
+
+#[cfg(test)]
+mod integrations_tests {
+    use super::*;
+
+    #[test]
+    fn br_21_3_managing_integrations_is_for_admins_with_a_full_scope_sign_in_only() {
+        let admin = Principal::Authenticated {
+            role: Role::Admin,
+            scope: Scope::Full,
+        };
+        let member = Principal::Authenticated {
+            role: Role::Member,
+            scope: Scope::Full,
+        };
+        let enrolling = Principal::Authenticated {
+            role: Role::Admin,
+            scope: Scope::MfaEnrolmentOnly,
+        };
+        assert_eq!(
+            evaluate(admin, Action::ManageIntegrations, false),
+            Verdict::Allow
+        );
+        assert_eq!(
+            evaluate(member, Action::ManageIntegrations, false),
+            Verdict::NotFound
+        );
+        assert_eq!(
+            evaluate(enrolling, Action::ManageIntegrations, false),
+            Verdict::Deny
+        );
+        assert_eq!(
+            evaluate(Principal::Anonymous, Action::ManageIntegrations, false),
+            Verdict::Deny
+        );
     }
 }

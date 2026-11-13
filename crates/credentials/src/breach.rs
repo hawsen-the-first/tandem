@@ -218,6 +218,10 @@ impl HttpRangeFetcher {
     ///
     /// # Errors
     /// [`FetchError`] when the HTTP client cannot be built.
+    #[allow(
+        clippy::disallowed_methods,
+        reason = "fixed public host (api.pwnedpasswords.com), no administrator-supplied URL"
+    )]
     pub fn new(timeout: Duration) -> Result<Self, FetchError> {
         // reqwest is built without a bundled crypto provider; use `ring`, as the database driver
         // does. Installing twice is harmless.

@@ -1,6 +1,6 @@
 //! Background jobs and their retry policy (BR-13.3).
 
-use crate::ids::{ChatMessageId, JobId};
+use crate::ids::{ChatMessageId, JobId, TestRunId};
 use time::{Duration, OffsetDateTime};
 
 /// Total attempts: the first try plus three retries.
@@ -20,6 +20,11 @@ pub enum JobKind {
         /// The message to reply to.
         message_id: ChatMessageId,
     },
+    /// Run a configuration test (U2): probe a provider, search, connector or runtime.
+    ConfigTest {
+        /// The run to execute.
+        run_id: TestRunId,
+    },
 }
 
 impl JobKind {
@@ -27,6 +32,7 @@ impl JobKind {
     pub const fn name(&self) -> &'static str {
         match self {
             Self::MockAgentReply { .. } => "mock_agent_reply",
+            Self::ConfigTest { .. } => "config_test",
         }
     }
 }

@@ -1,2 +1,11 @@
 allow-unwrap-in-tests = true
 allow-expect-in-tests = true
+
+# Every outbound HTTP request goes through `tandem-outbound`, which enforces the URL rules
+# (BR-19). Building a client anywhere else would bypass them.
+disallowed-methods = [
+    { path = "reqwest::Client::new", reason = "build HTTP clients only in tandem-outbound (BR-19)" },
+    { path = "reqwest::Client::builder", reason = "build HTTP clients only in tandem-outbound (BR-19)" },
+    { path = "reqwest::ClientBuilder::new", reason = "build HTTP clients only in tandem-outbound (BR-19)" },
+    { path = "reqwest::get", reason = "build HTTP clients only in tandem-outbound (BR-19)" },
+]

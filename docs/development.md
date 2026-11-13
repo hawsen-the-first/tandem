@@ -13,8 +13,8 @@ How to build, run, test and extend Tandem. The README has the short version; thi
 | PostgreSQL 18 | Required TLS, two roles (`tandem_migrate`, `tandem_app`) | `dev/compose.yaml` |
 
 Crates (`crates/`): `core` (domain, no I/O), `ports` (traits), `app` (services), `store-postgres`, `vault`,
-`credentials` (Argon2id, breach filter, TOTP), `providers` (mock model), `config`, `telemetry`, `bootstrap`
-(shared start-up), `support` (clock, rng, breaker, supervisor). Tool: `tools/breach-filter`.
+`credentials` (Argon2id, breach filter, TOTP), `providers` (model adapters), `config`, `telemetry`, `bootstrap`
+(shared start-up), `outbound` (the one HTTP path for admin-directed calls), `search`, `github`, `sandbox` (runtime probe), `support` (clock, rng, breaker, supervisor). Tool: `tools/breach-filter`.
 
 Dependencies point inwards: `core` knows nothing; `app` talks to `ports`; adapters implement `ports`; the apps
 wire everything. Application tests use in-memory fakes (`tandem-app` feature `testing`), so most logic is

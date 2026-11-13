@@ -1,0 +1,27 @@
+[package]
+name = "tandem-outbound"
+description = "The single outbound HTTP path for calls made on an admin's behalf: URL rules, resolver, redirects and limits."
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+repository.workspace = true
+publish.workspace = true
+
+[lints]
+workspace = true
+
+[dependencies]
+reqwest = { version = "0.13.5", default-features = false, features = ["rustls-no-provider"] }
+rustls = { version = "0.23.46", default-features = false, features = ["ring", "std", "tls12"] }
+tandem-core = { version = "0.1.0", path = "../core" }
+tandem-telemetry = { version = "0.1.0", path = "../telemetry" }
+thiserror = "2.0.21"
+tokio = { version = "1.54.1", features = ["net", "time", "rt"] }
+tracing = "0.1.44"
+url = "2.5.8"
+
+[dev-dependencies]
+axum = "0.8.9"
+futures-util = { version = "0.3.34", default-features = false, features = ["std"] }
+tokio = { version = "1.54.1", features = ["net", "time", "rt-multi-thread", "macros"] }

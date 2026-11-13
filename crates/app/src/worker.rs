@@ -153,6 +153,10 @@ impl App {
     async fn run_job(&self, job: &Job) -> Result<(), AppError> {
         match &job.kind {
             JobKind::MockAgentReply { message_id } => self.mock_agent_reply(*message_id).await,
+            // Replaced by the test runner (U2 step 22); nothing enqueues this kind before then.
+            JobKind::ConfigTest { .. } => Err(AppError::Internal(
+                "configuration tests are not handled by this worker build".to_owned(),
+            )),
         }
     }
 

@@ -276,3 +276,34 @@ fn the_source_url_defaults_to_upstream_and_must_be_a_safe_url() {
     fixture.set("TANDEM_SOURCE_URL", "http://localhost:3000/x");
     assert!(fixture.load().is_ok());
 }
+
+#[test]
+fn the_container_socket_is_off_by_default_and_must_be_an_absolute_path() {
+    let mut fixture = Fixture::new();
+    assert!(
+        fixture.load().unwrap().container_socket.is_none(),
+        "opt-in (SE-23)"
+    );
+    fixture.set("TANDEM_CONTAINER_SOCKET", "/var/run/docker.sock");
+    assert_eq!(
+        fixture.load().unwrap().container_socket.as_deref(),
+        Some(std::path::Path::new("/var/run/docker.sock"))
+    );
+    for bad in ["docker.sock", "./docker.sock", "relative/path.sock"] {
+        fixture.set("TANDEM_CONTAINER_SOCKET", bad);
+        assert_eq!(fixture.problems().len(), 1, "{bad}");
+    }
+    fixture.set("TANDEM_CONTAINER_SOCKET", &format!("/{}", "a".repeat(120)));
+    assert_eq!(fixture.problems().len(), 1, "too long for a socket address");
+}
+
+#[test]
+fn the_container_socket_can_come_from_the_toml_file_because_it_is_not_a_secret() {
+    let mut fixture = Fixture::new();
+    let file = fixture.write(
+        "tandem.toml",
+        "container_socket = \"/run/user/1000/podman/podman.sock\"\n",
+    );
+    fixture.set("TANDEM_CONFIG", &file);
+    assert!(fixture.load().unwrap().container_socket.is_some());
+}

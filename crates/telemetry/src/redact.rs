@@ -17,10 +17,18 @@ const SENSITIVE_SUBSTRINGS: &[&str] = &[
 ];
 
 /// Segments that are sensitive only as a whole word (`code` would otherwise catch `decode`).
-const SENSITIVE_WORDS: &[&str] = &["code", "email", "csrf", "otp", "totp", "pwd"];
+const SENSITIVE_WORDS: &[&str] = &["code", "email", "csrf", "otp", "totp", "pwd", "key"];
 
-/// Whole names that look sensitive but are not.
-const SAFE_NAMES: &[&str] = &["status_code", "exit_code", "error_code", "reason_code"];
+/// Whole names that look sensitive but are not (`key` alone catches `api_key` and `private_key`; the
+/// key identifiers and the "a key is stored" timestamp that provider settings log are safe).
+const SAFE_NAMES: &[&str] = &[
+    "status_code",
+    "exit_code",
+    "error_code",
+    "reason_code",
+    "key_id",
+    "key_saved_at",
+];
 
 /// Whether a field called `name` must have its value replaced.
 pub fn is_sensitive(name: &str) -> bool {

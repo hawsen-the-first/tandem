@@ -2580,6 +2580,7 @@ dependencies = [
  "tandem-support",
  "thiserror",
  "time",
+ "url",
  "uuid",
 ]
 
@@ -2605,6 +2606,26 @@ dependencies = [
 ]
 
 [[package]]
+name = "tandem-github"
+version = "0.1.0"
+
+[[package]]
+name = "tandem-outbound"
+version = "0.1.0"
+dependencies = [
+ "axum",
+ "futures-util",
+ "reqwest",
+ "rustls",
+ "tandem-core",
+ "tandem-telemetry",
+ "thiserror",
+ "tokio",
+ "tracing",
+ "url",
+]
+
+[[package]]
 name = "tandem-ports"
 version = "0.1.0"
 dependencies = [
@@ -2623,6 +2644,14 @@ dependencies = [
  "tandem-ports",
  "tokio",
 ]
+
+[[package]]
+name = "tandem-sandbox"
+version = "0.1.0"
+
+[[package]]
+name = "tandem-search"
+version = "0.1.0"
 
 [[package]]
 name = "tandem-store-postgres"
