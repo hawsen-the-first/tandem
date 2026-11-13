@@ -4,6 +4,7 @@
 pub mod credentials;
 pub mod error;
 pub mod model;
+pub mod probe;
 pub mod repos;
 pub mod store;
 
@@ -12,6 +13,10 @@ pub use credentials::{
 };
 pub use error::StoreError;
 pub use model::{ModelProvider, ModelRequest, ModelResponse, ProviderError};
+pub use probe::{
+    ConnectorConnection, ConnectorProbe, ModelToProbe, ProviderConnection, ProviderProbe,
+    ResultSink, RuntimeProbe, SearchConnection, SearchProbe,
+};
 pub use repos::{
     AuditCursor, AuditFilter, AuditPage, AuditRepo, ChatRepo, GuardRepo, InvitationRepo, JobQueue,
     MfaRepo, OutboxRepo, PasswordResetRepo, SessionRepo, SettingsRepo, UserRepo,

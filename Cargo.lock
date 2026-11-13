@@ -2565,6 +2565,7 @@ dependencies = [
 name = "tandem-config"
 version = "0.1.0"
 dependencies = [
+ "tandem-support",
  "tempfile",
  "thiserror",
  "toml",
@@ -2608,6 +2609,17 @@ dependencies = [
 [[package]]
 name = "tandem-github"
 version = "0.1.0"
+dependencies = [
+ "async-trait",
+ "axum",
+ "serde_json",
+ "tandem-core",
+ "tandem-outbound",
+ "tandem-ports",
+ "tandem-support",
+ "time",
+ "tokio",
+]
 
 [[package]]
 name = "tandem-outbound"
@@ -2641,17 +2653,41 @@ name = "tandem-providers"
 version = "0.1.0"
 dependencies = [
  "async-trait",
+ "axum",
+ "futures-util",
+ "serde_json",
+ "tandem-core",
+ "tandem-outbound",
  "tandem-ports",
+ "tandem-support",
  "tokio",
 ]
 
 [[package]]
 name = "tandem-sandbox"
 version = "0.1.0"
+dependencies = [
+ "async-trait",
+ "serde_json",
+ "tandem-core",
+ "tandem-ports",
+ "tempfile",
+ "tokio",
+]
 
 [[package]]
 name = "tandem-search"
 version = "0.1.0"
+dependencies = [
+ "async-trait",
+ "axum",
+ "serde_json",
+ "tandem-core",
+ "tandem-outbound",
+ "tandem-ports",
+ "tandem-support",
+ "tokio",
+]
 
 [[package]]
 name = "tandem-store-postgres"

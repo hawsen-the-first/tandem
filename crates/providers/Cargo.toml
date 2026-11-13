@@ -1,6 +1,6 @@
 [package]
 name = "tandem-providers"
-description = "Model provider adapters; U1 contains the scripted mock provider only."
+description = "Model provider adapters: the scripted mock and the OpenAI-compatible probe."
 version.workspace = true
 edition.workspace = true
 rust-version.workspace = true
@@ -13,7 +13,14 @@ workspace = true
 
 [dependencies]
 async-trait = "0.1.92"
+futures-util = { version = "0.3.34", default-features = false, features = ["std"] }
+serde_json = "1.0.154"
+tandem-core = { version = "0.1.0", path = "../core" }
+tandem-outbound = { version = "0.1.0", path = "../outbound" }
 tandem-ports = { version = "0.1.0", path = "../ports" }
+tokio = { version = "1.54.1", features = ["time"] }
 
 [dev-dependencies]
-tokio = { version = "1.54.1", features = ["rt", "macros"] }
+axum = "0.8.9"
+tandem-support = { version = "0.1.0", path = "../support" }
+tokio = { version = "1.54.1", features = ["rt-multi-thread", "macros", "net", "time"] }

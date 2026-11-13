@@ -1,9 +1,11 @@
-//! Model provider adapters. U1 contains only the scripted mock provider; the OpenAI-compatible,
+//! Model provider adapters: the scripted mock provider and the OpenAI-compatible probe. The
 //! Anthropic and Agent SDK adapters arrive in later units.
 
 mod mock;
+mod openai;
 
 pub use mock::MockProvider;
+pub use openai::OpenAiCompatibleProbe;
 
 /// Name of this crate, used by smoke tests and diagnostics.
 pub const CRATE_NAME: &str = "tandem-providers";

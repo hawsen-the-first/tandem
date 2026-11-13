@@ -1,6 +1,6 @@
 [package]
 name = "tandem-search"
-description = "Web search adapters (SearXNG, Brave Search, Tavily) behind the search port."
+description = "Web search adapters (SearXNG, Brave Search, Tavily) behind the search probe port."
 version.workspace = true
 edition.workspace = true
 rust-version.workspace = true
@@ -12,3 +12,13 @@ publish.workspace = true
 workspace = true
 
 [dependencies]
+async-trait = "0.1.92"
+serde_json = "1.0.154"
+tandem-core = { version = "0.1.0", path = "../core" }
+tandem-outbound = { version = "0.1.0", path = "../outbound" }
+tandem-ports = { version = "0.1.0", path = "../ports" }
+
+[dev-dependencies]
+axum = "0.8.9"
+tandem-support = { version = "0.1.0", path = "../support" }
+tokio = { version = "1.54.1", features = ["rt-multi-thread", "macros", "net", "time"] }
