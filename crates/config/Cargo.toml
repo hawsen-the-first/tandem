@@ -12,6 +12,7 @@ publish.workspace = true
 workspace = true
 
 [dependencies]
+tandem-support = { version = "0.1.0", path = "../support" }
 thiserror = "2.0.21"
 toml = "1.2.1"
 url = "2.5.8"

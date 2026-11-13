@@ -1,6 +1,6 @@
 [package]
 name = "tandem-github"
-description = "The connector port and its GitHub adapter (plain REST over the outbound client)."
+description = "The GitHub connector: the token test over the outbound client, plain REST."
 version.workspace = true
 edition.workspace = true
 rust-version.workspace = true
@@ -12,3 +12,14 @@ publish.workspace = true
 workspace = true
 
 [dependencies]
+async-trait = "0.1.92"
+serde_json = "1.0.154"
+tandem-core = { version = "0.1.0", path = "../core" }
+tandem-outbound = { version = "0.1.0", path = "../outbound" }
+tandem-ports = { version = "0.1.0", path = "../ports" }
+time = { version = "0.3.55", features = ["parsing", "macros"] }
+
+[dev-dependencies]
+axum = "0.8.9"
+tandem-support = { version = "0.1.0", path = "../support" }
+tokio = { version = "1.54.1", features = ["rt-multi-thread", "macros", "net", "time"] }

@@ -611,3 +611,11 @@
 **AI Response**: "Executed steps 1 to 10 on branch unit-u2/foundations: new crates outbound, search, github and sandbox; core types for outbound URLs, provider, search and connector configuration, test runs and sandbox policy; eight audit events, the config_test job kind and the ManageIntegrations action; the outbound client with DNS-rebinding, redirect, size and timeout protections; TANDEM_CONTAINER_SOCKET; key redaction in logs; and a clippy disallowed-methods lint with a CI check proving it fails. All gates pass. Summary in construction/u2-instance-administration/code/pr1-foundations-summary.md."
 **Status**: PR 1 opened for review
 **Context**: CONSTRUCTION - U2 Code Generation, Part 2
+
+---
+## U2 Code Generation - Part 2, PR 2 (adapters)
+**Timestamp**: 2026-11-13T05:00:00Z
+**User Input**: "Merged continue" (PR 1 merged)
+**AI Response**: "Executed steps 11 to 16 on branch unit-u2/adapters: probe ports and connection types in ports; Secret moved to support; the OpenAI-compatible provider probe (listing, chat, forced-echo tool call, context length, 60 s budget, four at a time); SearXNG, Brave and Tavily tests; the GitHub token test with exact repository total; the Docker runtime probe over a Unix socket. All adapters map outcomes to fixed statuses and are tested against loopback doubles, including that remote text and keys appear in no result. All gates pass. Summary in construction/u2-instance-administration/code/pr2-adapters-summary.md."
+**Status**: PR 2 opened for review
+**Context**: CONSTRUCTION - U2 Code Generation, Part 2

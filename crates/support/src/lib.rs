@@ -7,12 +7,14 @@ pub mod backoff;
 pub mod breaker;
 pub mod clock;
 pub mod rng;
+pub mod secret;
 pub mod supervise;
 
 pub use backoff::Backoff;
 pub use breaker::{BreakerConfig, BreakerState, CallError, CircuitBreaker};
 pub use clock::{Clock, FakeClock, SystemClock};
 pub use rng::{FakeRng, Rng, RngError, SystemRng, random_array};
+pub use secret::Secret;
 pub use supervise::supervise;
 
 /// Name of this crate, used by smoke tests and diagnostics.

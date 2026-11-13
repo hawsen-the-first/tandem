@@ -12,3 +12,12 @@ publish.workspace = true
 workspace = true
 
 [dependencies]
+async-trait = "0.1.92"
+serde_json = "1.0.154"
+tandem-core = { version = "0.1.0", path = "../core" }
+tandem-ports = { version = "0.1.0", path = "../ports" }
+tokio = { version = "1.54.1", features = ["net", "io-util", "time"] }
+
+[dev-dependencies]
+tempfile = "3.27.0"
+tokio = { version = "1.54.1", features = ["rt-multi-thread", "macros", "net", "io-util", "time"] }

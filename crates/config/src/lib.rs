@@ -5,7 +5,6 @@
 //! file is an error. Every problem is reported, one message each, and no message carries a secret.
 
 mod proxies;
-mod secret;
 
 use std::collections::BTreeMap;
 use std::net::{IpAddr, SocketAddr};
@@ -13,7 +12,7 @@ use std::path::PathBuf;
 use url::Url;
 
 pub use proxies::{Cidr, CidrError, TrustedProxies};
-pub use secret::Secret;
+pub use tandem_support::Secret;
 
 /// Name of this crate, used by smoke tests and diagnostics.
 pub const CRATE_NAME: &str = "tandem-config";
