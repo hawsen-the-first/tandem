@@ -13,6 +13,10 @@ pub const TOKEN_AND_JOB_RETENTION: Duration = Duration::days(30);
 pub const OUTBOX_RETENTION: Duration = Duration::hours(24);
 /// How long unknown-email guards are kept.
 pub const UNKNOWN_GUARD_RETENTION: Duration = Duration::hours(1);
+/// Configuration test runs kept per target besides the latest one (D3).
+pub const TEST_RUNS_KEPT_PER_TARGET: u32 = 10;
+/// How long those recent runs are kept (D3).
+pub const TEST_RUN_RETENTION: Duration = Duration::days(30);
 
 /// How many rows each cleanup removed.
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Default)]
@@ -29,6 +33,8 @@ pub struct CleanupReport {
     pub outbox_events: u64,
     /// Stale unknown-email guards.
     pub unknown_guards: u64,
+    /// Old configuration test runs.
+    pub test_runs: u64,
 }
 
 impl PgStore {
@@ -89,6 +95,22 @@ impl PgStore {
         .await
         .map_err(map_sqlx)?
         .rows_affected();
+        let test_runs = sqlx::query!(
+            "WITH ranked AS (
+                 SELECT id,
+                        row_number() OVER (PARTITION BY target ORDER BY requested_at DESC, id DESC) AS position
+                 FROM config_test_runs
+                 WHERE status IN ('succeeded', 'failed'))
+             DELETE FROM config_test_runs run USING ranked
+             WHERE run.id = ranked.id AND ranked.position > 1
+               AND (ranked.position > $1 OR run.requested_at < $2)",
+            i64::from(TEST_RUNS_KEPT_PER_TARGET),
+            now - TEST_RUN_RETENTION,
+        )
+        .execute(pool)
+        .await
+        .map_err(map_sqlx)?
+        .rows_affected();
         Ok(CleanupReport {
             sessions,
             resets,
@@ -96,6 +118,7 @@ impl PgStore {
             jobs,
             outbox_events,
             unknown_guards,
+            test_runs,
         })
     }
 }

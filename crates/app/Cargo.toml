@@ -19,7 +19,8 @@ tandem-ports = { version = "0.1.0", path = "../ports" }
 tandem-support = { version = "0.1.0", path = "../support" }
 thiserror = "2.0.21"
 time = "0.3.55"
-tokio = { version = "1.54.1", features = ["sync"], optional = true }
+tandem-telemetry = { version = "0.1.0", path = "../telemetry" }
+tokio = { version = "1.54.1", features = ["sync", "time"] }
 tracing = "0.1.44"
 
 [dev-dependencies]
@@ -27,4 +28,4 @@ tandem-providers = { version = "0.1.0", path = "../providers" }
 tokio = { version = "1.54.1", features = ["rt", "macros", "sync", "test-util"] }
 
 [features]
-testing = ["dep:tokio", "dep:tandem-providers"]
+testing = ["dep:tandem-providers"]

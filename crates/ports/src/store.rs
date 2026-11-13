@@ -1,6 +1,9 @@
 //! The transaction boundary. Application services open a transaction, work through the
 //! repositories it exposes, and commit. Dropping a transaction without committing rolls it back.
 
+use crate::config_repos::{
+    ConnectorRepo, DefaultsRepo, PolicyRepo, ProviderRepo, SearchRepo, TestRunRepo,
+};
 use crate::error::StoreError;
 use crate::repos::{
     AuditRepo, ChatRepo, GuardRepo, InvitationRepo, JobQueue, MfaRepo, OutboxRepo,
@@ -43,6 +46,18 @@ pub trait Tx: Send {
     fn outbox(&mut self) -> &mut dyn OutboxRepo;
     /// The job queue.
     fn jobs(&mut self) -> &mut dyn JobQueue;
+    /// Model providers and their models.
+    fn providers(&mut self) -> &mut dyn ProviderRepo;
+    /// Default models.
+    fn defaults(&mut self) -> &mut dyn DefaultsRepo;
+    /// Search settings.
+    fn search(&mut self) -> &mut dyn SearchRepo;
+    /// Connectors.
+    fn connectors(&mut self) -> &mut dyn ConnectorRepo;
+    /// Sandbox policies.
+    fn policies(&mut self) -> &mut dyn PolicyRepo;
+    /// Configuration test runs.
+    fn test_runs(&mut self) -> &mut dyn TestRunRepo;
 
     /// Serialise first-run setup so two requests cannot both create the first admin (BR-1.1).
     async fn lock_setup(&mut self) -> Result<(), StoreError>;

@@ -4,6 +4,7 @@
 mod audit;
 mod chat;
 mod cleanup;
+mod config_store;
 mod convert;
 mod error;
 mod guards;
@@ -13,10 +14,12 @@ mod jobs;
 mod migrate;
 mod outbox;
 mod pool;
+mod providers;
 mod relay;
 mod settings;
 mod stats;
 mod store;
+mod test_runs;
 
 pub use cleanup::CleanupReport;
 pub use error::map_sqlx;
@@ -29,6 +32,7 @@ pub use pool::{PoolConfig, PoolError, connect_pool};
 pub use relay::RelayLease;
 pub use stats::{JobStats, OutboxStats};
 pub use store::{PgStore, PgTx};
+pub use test_runs::PgLocks;
 
 /// Name of this crate, used by smoke tests and diagnostics.
 pub const CRATE_NAME: &str = "tandem-store-postgres";

@@ -84,6 +84,12 @@ pub enum RekeyError {
 pub struct RekeyReport {
     /// Number of MFA credentials re-sealed (a count; no secret value).
     pub mfa_credentials_resealed: u64,
+    /// Number of provider API keys re-sealed.
+    pub provider_keys_resealed: u64,
+    /// Number of search API keys re-sealed.
+    pub search_keys_resealed: u64,
+    /// Number of connector tokens re-sealed.
+    pub connector_secrets_resealed: u64,
     /// Whether the vault canary was re-sealed.
     pub canary: bool,
     /// Values already sealed under the current key.
@@ -91,7 +97,7 @@ pub struct RekeyReport {
 }
 
 impl PgStore {
-    /// Re-seal every sealed value (MFA secrets and the vault canary) with `rekey`, all in one
+    /// Re-seal every sealed value (MFA secrets, provider and search keys, connector tokens and the vault canary) with `rekey`, all in one
     /// transaction. `rekey(purpose, row_id, sealed)` returns the new sealed value, or `None` when
     /// it is already current. Any error (a value that cannot be opened, for example) rolls back
     /// everything, so a partial re-key never happens.
@@ -121,6 +127,74 @@ impl PgStore {
                     .await
                     .map_err(map_sqlx)?;
                     report.mfa_credentials_resealed += 1;
+                }
+                None => report.already_current += 1,
+            }
+        }
+        let providers = sqlx::query!(
+            "SELECT id, api_key_sealed AS \"sealed!\" FROM providers WHERE api_key_sealed IS NOT NULL FOR UPDATE"
+        )
+        .fetch_all(&mut *tx)
+        .await
+        .map_err(map_sqlx)?;
+        for row in providers {
+            match rekey("provider_api_key", &row.id.to_string(), &row.sealed)
+                .map_err(RekeyError::Value)?
+            {
+                Some(sealed) => {
+                    sqlx::query!(
+                        "UPDATE providers SET api_key_sealed = $2 WHERE id = $1",
+                        row.id,
+                        sealed
+                    )
+                    .execute(&mut *tx)
+                    .await
+                    .map_err(map_sqlx)?;
+                    report.provider_keys_resealed += 1;
+                }
+                None => report.already_current += 1,
+            }
+        }
+        let searches = sqlx::query!(
+            "SELECT kind, api_key_sealed AS \"sealed!\" FROM search_configs WHERE api_key_sealed IS NOT NULL FOR UPDATE"
+        )
+        .fetch_all(&mut *tx)
+        .await
+        .map_err(map_sqlx)?;
+        for row in searches {
+            match rekey("search_api_key", &row.kind, &row.sealed).map_err(RekeyError::Value)? {
+                Some(sealed) => {
+                    sqlx::query!(
+                        "UPDATE search_configs SET api_key_sealed = $2 WHERE kind = $1",
+                        row.kind,
+                        sealed
+                    )
+                    .execute(&mut *tx)
+                    .await
+                    .map_err(map_sqlx)?;
+                    report.search_keys_resealed += 1;
+                }
+                None => report.already_current += 1,
+            }
+        }
+        let connectors = sqlx::query!("SELECT kind, secret_sealed FROM connectors FOR UPDATE")
+            .fetch_all(&mut *tx)
+            .await
+            .map_err(map_sqlx)?;
+        for row in connectors {
+            match rekey("connector_secret", &row.kind, &row.secret_sealed)
+                .map_err(RekeyError::Value)?
+            {
+                Some(sealed) => {
+                    sqlx::query!(
+                        "UPDATE connectors SET secret_sealed = $2 WHERE kind = $1",
+                        row.kind,
+                        sealed
+                    )
+                    .execute(&mut *tx)
+                    .await
+                    .map_err(map_sqlx)?;
+                    report.connector_secrets_resealed += 1;
                 }
                 None => report.already_current += 1,
             }

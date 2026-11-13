@@ -1,0 +1,110 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "SELECT model.id, model.provider_id, model.model_name, model.label,\n                    model.detected_tool_calling, model.declared_tool_calling,\n                    model.detected_context_tokens, model.declared_context_tokens\n             FROM provider_models model\n             JOIN providers provider ON provider.id = model.provider_id\n             ORDER BY lower(provider.name), provider.id, model.position, model.id",
+  "describe": {
+    "columns": [
+      {
+        "ordinal": 0,
+        "name": "id",
+        "type_info": "Uuid",
+        "origin": {
+          "Table": {
+            "table": "provider_models",
+            "name": "id"
+          }
+        }
+      },
+      {
+        "ordinal": 1,
+        "name": "provider_id",
+        "type_info": "Uuid",
+        "origin": {
+          "Table": {
+            "table": "provider_models",
+            "name": "provider_id"
+          }
+        }
+      },
+      {
+        "ordinal": 2,
+        "name": "model_name",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "provider_models",
+            "name": "model_name"
+          }
+        }
+      },
+      {
+        "ordinal": 3,
+        "name": "label",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "provider_models",
+            "name": "label"
+          }
+        }
+      },
+      {
+        "ordinal": 4,
+        "name": "detected_tool_calling",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "provider_models",
+            "name": "detected_tool_calling"
+          }
+        }
+      },
+      {
+        "ordinal": 5,
+        "name": "declared_tool_calling",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "provider_models",
+            "name": "declared_tool_calling"
+          }
+        }
+      },
+      {
+        "ordinal": 6,
+        "name": "detected_context_tokens",
+        "type_info": "Int4",
+        "origin": {
+          "Table": {
+            "table": "provider_models",
+            "name": "detected_context_tokens"
+          }
+        }
+      },
+      {
+        "ordinal": 7,
+        "name": "declared_context_tokens",
+        "type_info": "Int4",
+        "origin": {
+          "Table": {
+            "table": "provider_models",
+            "name": "declared_context_tokens"
+          }
+        }
+      }
+    ],
+    "parameters": {
+      "Left": []
+    },
+    "nullable": [
+      false,
+      false,
+      false,
+      true,
+      false,
+      true,
+      true,
+      true
+    ]
+  },
+  "hash": "179cad86f0050ce37f93ce50729ff5ab77c910290a92bd1e71516d6e8d629b49"
+}

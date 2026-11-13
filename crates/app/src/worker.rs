@@ -136,6 +136,18 @@ impl App {
         let mut tx = self.store.begin().await?;
         tx.jobs().save(&job).await?;
         tx.commit().await?;
+        if let JobKind::ConfigTest { run_id } = job.kind {
+            let will_retry = match outcome {
+                JobOutcome::Retrying { .. } => Some(true),
+                JobOutcome::Failed { .. } => Some(false),
+                _ => None,
+            };
+            if let Some(will_retry) = will_retry
+                && let Err(error) = self.config_test_job_failed(run_id, will_retry).await
+            {
+                tracing::error!(%error, %run_id, "could not update a configuration test after its job failed");
+            }
+        }
         Ok(outcome)
     }
 
@@ -153,10 +165,7 @@ impl App {
     async fn run_job(&self, job: &Job) -> Result<(), AppError> {
         match &job.kind {
             JobKind::MockAgentReply { message_id } => self.mock_agent_reply(*message_id).await,
-            // Replaced by the test runner (U2 step 22); nothing enqueues this kind before then.
-            JobKind::ConfigTest { .. } => Err(AppError::Internal(
-                "configuration tests are not handled by this worker build".to_owned(),
-            )),
+            JobKind::ConfigTest { run_id } => self.run_config_test(*run_id).await,
         }
     }
 

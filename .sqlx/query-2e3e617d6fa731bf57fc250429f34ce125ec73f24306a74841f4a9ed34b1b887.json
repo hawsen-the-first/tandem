@@ -1,0 +1,16 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "UPDATE connectors SET account_login = $2, token_expires_at = $3 WHERE kind = $1",
+  "describe": {
+    "columns": [],
+    "parameters": {
+      "Left": [
+        "Text",
+        "Text",
+        "Timestamptz"
+      ]
+    },
+    "nullable": []
+  },
+  "hash": "2e3e617d6fa731bf57fc250429f34ce125ec73f24306a74841f4a9ed34b1b887"
+}

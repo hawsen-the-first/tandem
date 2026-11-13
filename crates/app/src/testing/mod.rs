@@ -1,8 +1,15 @@
 //! In-memory fakes for tests: a transactional store, a deterministic password hasher, breach list,
 //! TOTP and vault, and a ready-made [`TestApp`]. Enabled by the `testing` feature.
 
+mod config;
+
+pub use config::{
+    ConfigState, MemoryLockGuard, MemoryLocks, ProbeCalls, ScriptedProbes, StoredProvider,
+    StoredSearch,
+};
+
 use crate::context::RequestContext;
-use crate::deps::{App, Dependencies};
+use crate::deps::{App, Dependencies, Integrations};
 use async_trait::async_trait;
 use std::collections::{BTreeMap, HashMap, HashSet};
 use std::sync::atomic::{AtomicBool, AtomicUsize, Ordering};
@@ -23,9 +30,11 @@ use tandem_core::throttle::GuardState;
 use tandem_core::token::TokenHash;
 use tandem_core::user::User;
 use tandem_ports::{
-    AuditCursor, AuditFilter, AuditPage, AuditRepo, BreachChecker, ChatRepo, GuardRepo, HashError,
-    InvitationRepo, JobQueue, MfaRepo, OutboxRepo, PasswordHasher, PasswordResetRepo, SessionRepo,
-    SettingsRepo, Store, StoreError, TotpService, Tx, UserRepo, Vault, VaultError, Verification,
+    AuditCursor, AuditFilter, AuditPage, AuditRepo, BreachChecker, ChatRepo, ConnectorRepo,
+    DefaultsRepo, GuardRepo, HashError, InvitationRepo, JobQueue, MfaRepo, OutboxRepo,
+    PasswordHasher, PasswordResetRepo, PolicyRepo, ProviderRepo, SearchRepo, SessionRepo,
+    SettingsRepo, Store, StoreError, TestRunRepo, TotpService, Tx, UserRepo, Vault, VaultError,
+    Verification,
 };
 use tandem_providers::MockProvider;
 use tandem_support::{Clock, FakeClock, FakeRng, Rng, RngError, random_array};
@@ -62,6 +71,8 @@ pub struct State {
     pub outbox: Vec<OutboxEvent>,
     /// Jobs.
     pub jobs: Vec<Job>,
+    /// Instance configuration (U2).
+    pub config: ConfigState,
     /// When true, every audit append fails (to test fail-safe behaviour, BR-11.1).
     pub fail_audit: bool,
     next_outbox_id: i64,
@@ -162,6 +173,24 @@ impl Tx for MemoryTx {
         &mut self.work
     }
     fn jobs(&mut self) -> &mut dyn JobQueue {
+        &mut self.work
+    }
+    fn providers(&mut self) -> &mut dyn ProviderRepo {
+        &mut self.work
+    }
+    fn defaults(&mut self) -> &mut dyn DefaultsRepo {
+        &mut self.work
+    }
+    fn search(&mut self) -> &mut dyn SearchRepo {
+        &mut self.work
+    }
+    fn connectors(&mut self) -> &mut dyn ConnectorRepo {
+        &mut self.work
+    }
+    fn policies(&mut self) -> &mut dyn PolicyRepo {
+        &mut self.work
+    }
+    fn test_runs(&mut self) -> &mut dyn TestRunRepo {
         &mut self.work
     }
 
@@ -880,6 +909,10 @@ pub struct TestApp {
     pub breach: Arc<FakeBreachChecker>,
     /// The TOTP fake.
     pub totp: Arc<FakeTotp>,
+    /// The per-target lock shared by every worker in the test.
+    pub locks: MemoryLocks,
+    /// The scripted probes; set what they answer and read what they were given.
+    pub probes: ScriptedProbes,
 }
 
 /// A password that satisfies the policy.
@@ -899,6 +932,8 @@ impl TestApp {
         let hasher = Arc::new(FakeHasher::default());
         let breach = Arc::new(FakeBreachChecker::default());
         let totp = Arc::new(FakeTotp::new(Arc::clone(&rng)));
+        let locks = MemoryLocks::default();
+        let probes = ScriptedProbes::default();
         let app = App::new(Dependencies {
             store: Arc::new(store.clone()),
             clock: Arc::new(clock.clone()),
@@ -909,6 +944,13 @@ impl TestApp {
             vault: Arc::new(FakeVault),
             provider: Arc::new(provider),
             issuer: "Tandem".to_owned(),
+            integrations: Integrations {
+                locks: Arc::new(locks.clone()),
+                provider_probe: Arc::new(probes.clone()),
+                search_probe: Arc::new(probes.clone()),
+                connector_probe: Arc::new(probes.clone()),
+                runtime_probe: Arc::new(probes.clone()),
+            },
         });
         Self {
             app,
@@ -917,6 +959,8 @@ impl TestApp {
             hasher,
             breach,
             totp,
+            locks,
+            probes,
         }
     }
 

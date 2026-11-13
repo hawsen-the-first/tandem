@@ -102,6 +102,10 @@ pub async fn job_task(
             if recovered > 0 {
                 tracing::warn!(recovered, "re-queued jobs whose worker stopped");
             }
+            let stuck = app.fail_stuck_test_runs().await?;
+            if stuck > 0 {
+                tracing::warn!(stuck, "failed configuration tests that no worker picked up");
+            }
             last_recovery = Some(tokio::time::Instant::now());
         }
         let work = Arc::clone(&in_flight).read_owned().await;
@@ -153,6 +157,7 @@ pub async fn cleanup_task(
             jobs = report.jobs,
             outbox_events = report.outbox_events,
             unknown_guards = report.unknown_guards,
+            test_runs = report.test_runs,
             "retention cleanup finished"
         );
         pause(&mut shutdown, interval).await;

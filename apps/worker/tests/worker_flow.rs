@@ -314,3 +314,106 @@ async fn stopping_waits_for_the_loops_and_releases_the_relay_lock() {
         .unwrap();
     assert!(lease.is_some(), "the lock was released on shutdown");
 }
+
+async fn admin_context(services: &Services) -> RequestContext {
+    let clock = FakeClock::at_unix(1_800_000_000);
+    let rng = FakeRng::new(5);
+    let user = User {
+        id: UserId::generate(&clock, &rng).unwrap(),
+        email: Email::parse("ada@example.test").unwrap(),
+        display_name: DisplayName::parse("Ada Admin").unwrap(),
+        role: Role::Admin,
+        status: UserStatus::Active,
+        password_hash: "$argon2id$stub".to_owned(),
+        password_changed_at: clock.now(),
+        created_at: clock.now(),
+        created_via: CreatedVia::Invitation,
+        deactivated_at: None,
+        deactivated_by: None,
+        last_sign_in_at: None,
+    };
+    let mut tx = tandem_ports::Store::begin(&services.store).await.unwrap();
+    tx.users().insert(&user).await.unwrap();
+    tx.commit().await.unwrap();
+    RequestContext::authenticated(
+        Actor {
+            user_id: user.id,
+            display_name: "Ada Admin".to_owned(),
+            role: Role::Admin,
+            scope: Scope::Full,
+            session_id: AuthSessionId::generate(&clock, &rng).unwrap(),
+        },
+        Some("req-worker-config".to_owned()),
+        None,
+    )
+}
+
+#[tokio::test]
+async fn a_started_configuration_test_completes_through_the_real_loops() {
+    let db = TestDb::new().await;
+    let dir = tempfile::tempdir().unwrap();
+    let services = services(&db, dir.path()).await;
+    let ctx = admin_context(&services).await;
+    let run = services
+        .app
+        .start_test(&ctx, tandem_core::config::TestTarget::Runtime)
+        .await
+        .unwrap();
+
+    let handle = start(&services, None).await;
+    let mut finished = None;
+    for _ in 0..200 {
+        let current = services.app.get_test_run(&ctx, run.id).await.unwrap();
+        if !current.is_active() {
+            finished = Some(current);
+            break;
+        }
+        tokio::time::sleep(Duration::from_millis(100)).await;
+    }
+    let finished = finished.expect("the run never finished");
+    assert_eq!(finished.status, tandem_core::config::RunStatus::Succeeded);
+    assert_eq!(
+        finished.results[0].status,
+        tandem_core::config::TestStatus::NotConfigured,
+        "no container socket is configured in the test environment"
+    );
+    handle.stop().await;
+}
+
+#[tokio::test]
+async fn the_recovery_sweep_fails_a_run_nobody_picked_up() {
+    let db = TestDb::new().await;
+    let dir = tempfile::tempdir().unwrap();
+    let services = services(&db, dir.path()).await;
+    let ctx = admin_context(&services).await;
+    let actor = ctx.actor().unwrap().user_id;
+    let run_id = "00000000-0000-0000-0000-0000000000b1";
+    sqlx::query(
+        "INSERT INTO tandem.config_test_runs (id, target, status, requested_by, requested_at)
+         VALUES ($1::uuid, 'runtime', 'queued', $2::uuid, now() - interval '5 minutes')",
+    )
+    .bind(run_id)
+    .bind(actor.to_string())
+    .execute(&db.superuser)
+    .await
+    .unwrap();
+
+    let handle = start(&services, None).await;
+    let id: tandem_core::ids::TestRunId = run_id.parse().unwrap();
+    let mut failed = None;
+    for _ in 0..100 {
+        let current = services.app.get_test_run(&ctx, id).await.unwrap();
+        if !current.is_active() {
+            failed = Some(current);
+            break;
+        }
+        tokio::time::sleep(Duration::from_millis(100)).await;
+    }
+    let failed = failed.expect("the sweep never ran");
+    assert_eq!(failed.status, tandem_core::config::RunStatus::Failed);
+    assert_eq!(
+        failed.failure,
+        Some(tandem_core::config::FailureReason::NoWorkerAvailable)
+    );
+    handle.stop().await;
+}

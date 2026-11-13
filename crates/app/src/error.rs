@@ -44,6 +44,12 @@ pub enum AppError {
     /// An unknown, expired, revoked or used link (BR-5.4, BR-6.2).
     #[error("this link is not valid")]
     InvalidLink,
+    /// A test is already queued or running for this target; the screen attaches to it.
+    #[error("a test is already running")]
+    AlreadyRunning {
+        /// The run in progress.
+        run_id: tandem_core::ids::TestRunId,
+    },
     /// Anything unexpected. The message is for logs only.
     #[error("internal error")]
     Internal(String),

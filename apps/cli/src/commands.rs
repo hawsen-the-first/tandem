@@ -137,9 +137,12 @@ async fn rekey_command(
             RekeyError::Store(error) => database_error(error),
         })?;
     out.line(&format!(
-        "re-sealed {} MFA secret(s){}; {} value(s) were already under the current key (current key: {})",
+        "re-sealed {} MFA secret(s){}; also {} provider key(s), {} search key(s) and {} connector token(s); {} value(s) were already under the current key (current key: {})",
         report.mfa_credentials_resealed,
         if report.canary { " and the vault canary" } else { "" },
+        report.provider_keys_resealed,
+        report.search_keys_resealed,
+        report.connector_secrets_resealed,
         report.already_current,
         vault.current_key_id()
     ));

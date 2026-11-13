@@ -1,0 +1,160 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "SELECT scope, runner_tier, tool_allow_list, network_mode, network_hosts,\n                    wall_clock_seconds, max_output_bytes, max_file_bytes, max_files_written,\n                    memory_mebibytes, cpu_millicores, version\n             FROM sandbox_policies WHERE scope = $1",
+  "describe": {
+    "columns": [
+      {
+        "ordinal": 0,
+        "name": "scope",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "sandbox_policies",
+            "name": "scope"
+          }
+        }
+      },
+      {
+        "ordinal": 1,
+        "name": "runner_tier",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "sandbox_policies",
+            "name": "runner_tier"
+          }
+        }
+      },
+      {
+        "ordinal": 2,
+        "name": "tool_allow_list",
+        "type_info": "TextArray",
+        "origin": {
+          "Table": {
+            "table": "sandbox_policies",
+            "name": "tool_allow_list"
+          }
+        }
+      },
+      {
+        "ordinal": 3,
+        "name": "network_mode",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "sandbox_policies",
+            "name": "network_mode"
+          }
+        }
+      },
+      {
+        "ordinal": 4,
+        "name": "network_hosts",
+        "type_info": "TextArray",
+        "origin": {
+          "Table": {
+            "table": "sandbox_policies",
+            "name": "network_hosts"
+          }
+        }
+      },
+      {
+        "ordinal": 5,
+        "name": "wall_clock_seconds",
+        "type_info": "Int8",
+        "origin": {
+          "Table": {
+            "table": "sandbox_policies",
+            "name": "wall_clock_seconds"
+          }
+        }
+      },
+      {
+        "ordinal": 6,
+        "name": "max_output_bytes",
+        "type_info": "Int8",
+        "origin": {
+          "Table": {
+            "table": "sandbox_policies",
+            "name": "max_output_bytes"
+          }
+        }
+      },
+      {
+        "ordinal": 7,
+        "name": "max_file_bytes",
+        "type_info": "Int8",
+        "origin": {
+          "Table": {
+            "table": "sandbox_policies",
+            "name": "max_file_bytes"
+          }
+        }
+      },
+      {
+        "ordinal": 8,
+        "name": "max_files_written",
+        "type_info": "Int8",
+        "origin": {
+          "Table": {
+            "table": "sandbox_policies",
+            "name": "max_files_written"
+          }
+        }
+      },
+      {
+        "ordinal": 9,
+        "name": "memory_mebibytes",
+        "type_info": "Int8",
+        "origin": {
+          "Table": {
+            "table": "sandbox_policies",
+            "name": "memory_mebibytes"
+          }
+        }
+      },
+      {
+        "ordinal": 10,
+        "name": "cpu_millicores",
+        "type_info": "Int8",
+        "origin": {
+          "Table": {
+            "table": "sandbox_policies",
+            "name": "cpu_millicores"
+          }
+        }
+      },
+      {
+        "ordinal": 11,
+        "name": "version",
+        "type_info": "Int4",
+        "origin": {
+          "Table": {
+            "table": "sandbox_policies",
+            "name": "version"
+          }
+        }
+      }
+    ],
+    "parameters": {
+      "Left": [
+        "Text"
+      ]
+    },
+    "nullable": [
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false
+    ]
+  },
+  "hash": "1cb472732cde9fdada749a351d602297c6a08722824365d5ef2c3a1f2dfa335c"
+}

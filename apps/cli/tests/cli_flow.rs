@@ -103,7 +103,7 @@ async fn migrate_up_and_down_apply_and_revert_the_schema() {
 
     let (result, output) = invoke(&["migrate", "up"], &environment).await;
     result.unwrap();
-    assert!(output[0].contains("schema is at version 4"), "{output:?}");
+    assert!(output[0].contains("schema is at version 5"), "{output:?}");
     let tables: i64 = sqlx::query_scalar(
         "SELECT count(*) FROM information_schema.tables WHERE table_schema = 'tandem'",
     )
@@ -116,11 +116,11 @@ async fn migrate_up_and_down_apply_and_revert_the_schema() {
     assert!(matches!(refused, Err(CliError::NotConfirmed(_))));
     let (result, output) = invoke(&["migrate", "down", "--yes"], &environment).await;
     result.unwrap();
-    assert!(output[0].contains("reverted migration 4"), "{output:?}");
+    assert!(output[0].contains("reverted migration 5"), "{output:?}");
 
     let (result, output) = invoke(&["migrate", "up"], &environment).await;
     result.unwrap();
-    assert!(output[0].contains("version 4"), "{output:?}");
+    assert!(output[0].contains("version 5"), "{output:?}");
 
     let (missing, _) = invoke(&["migrate", "up"], &BTreeMap::new()).await;
     assert!(matches!(
@@ -155,6 +155,39 @@ async fn vault_rekey_moves_every_sealed_value_to_the_current_key_atomically() {
         .execute(&db.superuser)
         .await
         .unwrap();
+
+    let provider_id = "00000000-0000-0000-0000-0000000000a1";
+    let provider_key = b"sk-provider-key".to_vec();
+    sqlx::query(
+        "INSERT INTO tandem.providers (id, kind, name, base_url, api_key_sealed, key_saved_at, created_at, created_by, updated_at, updated_by)
+         VALUES ($1::uuid, 'openai_compatible', 'Local', 'http://localhost:11434/v1', $2, now(), now(), $3::uuid, now(), $3::uuid)",
+    )
+    .bind(provider_id)
+    .bind(old.seal("provider_api_key", provider_id, &provider_key).unwrap())
+    .bind(user.id.to_string())
+    .execute(&db.superuser)
+    .await
+    .unwrap();
+    let search_key = b"brave-key".to_vec();
+    sqlx::query(
+        "INSERT INTO tandem.search_configs (kind, api_key_sealed, key_saved_at, updated_at, updated_by)
+         VALUES ('brave', $1, now(), now(), $2::uuid)",
+    )
+    .bind(old.seal("search_api_key", "brave", &search_key).unwrap())
+    .bind(user.id.to_string())
+    .execute(&db.superuser)
+    .await
+    .unwrap();
+    let connector_token = b"github_pat_token".to_vec();
+    sqlx::query(
+        "INSERT INTO tandem.connectors (kind, auth_kind, secret_sealed, secret_saved_at, updated_at, updated_by)
+         VALUES ('github', 'token', $1, now(), now(), $2::uuid)",
+    )
+    .bind(old.seal("connector_secret", "github", &connector_token).unwrap())
+    .bind(user.id.to_string())
+    .execute(&db.superuser)
+    .await
+    .unwrap();
 
     let mut environment = db.environment(dir.path());
     // A key file that lacks the old key cannot open the stored values: nothing changes.
@@ -194,6 +227,10 @@ async fn vault_rekey_moves_every_sealed_value_to_the_current_key_atomically() {
         output[0].contains("re-sealed 1 MFA secret(s) and the vault canary"),
         "{output:?}"
     );
+    assert!(
+        output[0].contains("also 1 provider key(s), 1 search key(s) and 1 connector token(s)"),
+        "{output:?}"
+    );
 
     let resealed: Vec<u8> = sqlx::query_scalar("SELECT secret_sealed FROM tandem.mfa_credentials")
         .fetch_one(&db.superuser)
@@ -204,6 +241,39 @@ async fn vault_rekey_moves_every_sealed_value_to_the_current_key_atomically() {
             .open("mfa_secret", &user.id.to_string(), &resealed)
             .unwrap(),
         secret
+    );
+    let sealed_provider: Vec<u8> =
+        sqlx::query_scalar("SELECT api_key_sealed FROM tandem.providers")
+            .fetch_one(&db.superuser)
+            .await
+            .unwrap();
+    assert_eq!(
+        new_only
+            .open("provider_api_key", provider_id, &sealed_provider)
+            .unwrap(),
+        provider_key
+    );
+    let sealed_search: Vec<u8> =
+        sqlx::query_scalar("SELECT api_key_sealed FROM tandem.search_configs")
+            .fetch_one(&db.superuser)
+            .await
+            .unwrap();
+    assert_eq!(
+        new_only
+            .open("search_api_key", "brave", &sealed_search)
+            .unwrap(),
+        search_key
+    );
+    let sealed_connector: Vec<u8> =
+        sqlx::query_scalar("SELECT secret_sealed FROM tandem.connectors")
+            .fetch_one(&db.superuser)
+            .await
+            .unwrap();
+    assert_eq!(
+        new_only
+            .open("connector_secret", "github", &sealed_connector)
+            .unwrap(),
+        connector_token
     );
     let canary: String = sqlx::query_scalar(
         "SELECT value FROM tandem.instance_settings WHERE key = 'internal.vault_canary'",
@@ -217,6 +287,10 @@ async fn vault_rekey_moves_every_sealed_value_to_the_current_key_atomically() {
     result.unwrap();
     assert!(
         output[0].contains("re-sealed 0 MFA secret(s)"),
+        "{output:?}"
+    );
+    assert!(
+        output[0].contains("also 0 provider key(s), 0 search key(s) and 0 connector token(s)"),
         "{output:?}"
     );
 }

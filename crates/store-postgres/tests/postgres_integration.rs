@@ -265,19 +265,19 @@ async fn av_4_migrations_apply_revert_one_by_one_and_apply_again() {
     );
     assert_eq!(
         table_names(&db).await.len(),
-        15,
-        "14 tables plus the migration ledger"
+        23,
+        "22 tables plus the migration ledger"
     );
 
     let mut reverted = Vec::new();
     while let Some(version) = migrate_down_one(&db.migrate).await.unwrap() {
         reverted.push(version);
     }
-    assert_eq!(reverted, vec![4, 3, 2, 1]);
+    assert_eq!(reverted, vec![5, 4, 3, 2, 1]);
     assert_eq!(table_names(&db).await, vec!["_sqlx_migrations".to_owned()]);
 
     migrate_up(&db.migrate).await.unwrap();
-    assert_eq!(table_names(&db).await.len(), 15);
+    assert_eq!(table_names(&db).await.len(), 23);
 }
 
 #[tokio::test]
@@ -301,8 +301,8 @@ async fn av_3_the_schema_guard_refuses_an_older_or_a_newer_schema() {
         matches!(
             older,
             SchemaError::Mismatch {
-                expected: 4,
-                actual: 3
+                expected: 5,
+                actual: 4
             }
         ),
         "{older}"
@@ -317,7 +317,7 @@ async fn av_3_the_schema_guard_refuses_an_older_or_a_newer_schema() {
         matches!(
             newer,
             SchemaError::Mismatch {
-                expected: 4,
+                expected: 5,
                 actual: 99
             }
         ),

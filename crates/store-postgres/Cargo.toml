@@ -22,7 +22,7 @@ tandem-core = { version = "0.1.0", path = "../core" }
 tandem-ports = { version = "0.1.0", path = "../ports" }
 tandem-support = { version = "0.1.0", path = "../support" }
 thiserror = "2.0.21"
-time = "0.3.55"
+time = { version = "0.3.55", features = ["formatting", "parsing", "macros"] }
 tokio = { version = "1.54.1", features = ["rt", "time", "sync", "macros"] }
 url = "2.5.8"
 uuid = "1.29.2"

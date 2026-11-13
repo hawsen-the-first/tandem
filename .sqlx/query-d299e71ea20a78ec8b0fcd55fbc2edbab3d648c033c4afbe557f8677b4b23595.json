@@ -1,0 +1,28 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "SELECT api_key_sealed FROM search_configs WHERE kind = $1",
+  "describe": {
+    "columns": [
+      {
+        "ordinal": 0,
+        "name": "api_key_sealed",
+        "type_info": "Bytea",
+        "origin": {
+          "Table": {
+            "table": "search_configs",
+            "name": "api_key_sealed"
+          }
+        }
+      }
+    ],
+    "parameters": {
+      "Left": [
+        "Text"
+      ]
+    },
+    "nullable": [
+      true
+    ]
+  },
+  "hash": "d299e71ea20a78ec8b0fcd55fbc2edbab3d648c033c4afbe557f8677b4b23595"
+}

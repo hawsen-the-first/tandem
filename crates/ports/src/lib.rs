@@ -1,6 +1,7 @@
 //! Traits for everything outside the domain: storage, credentials, vault and model providers.
 //! Application services depend on these; adapter crates implement them.
 
+pub mod config_repos;
 pub mod credentials;
 pub mod error;
 pub mod model;
@@ -8,6 +9,10 @@ pub mod probe;
 pub mod repos;
 pub mod store;
 
+pub use config_repos::{
+    ConnectorRepo, DefaultsRepo, LockGuard, Locks, PolicyRepo, ProviderRepo, SearchRepo,
+    SecretChange, TestRunRepo, capabilities_from,
+};
 pub use credentials::{
     BreachChecker, HashError, PasswordHasher, TotpService, Vault, VaultError, Verification,
 };

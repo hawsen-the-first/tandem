@@ -1,8 +1,28 @@
 //! The application object: all services hang off [`App`].
 
+use crate::integrations::ConfigCache;
 use std::sync::Arc;
-use tandem_ports::{BreachChecker, ModelProvider, PasswordHasher, Store, TotpService, Vault};
+use tandem_ports::{
+    BreachChecker, ConnectorProbe, Locks, ModelProvider, PasswordHasher, ProviderProbe,
+    RuntimeProbe, SearchProbe, Store, TotpService, Vault,
+};
 use tandem_support::{Clock, Rng};
+
+/// What the configuration tests need from the outside world: a lock per target and one probe for
+/// each kind of thing an admin can test (U2).
+#[derive(Clone)]
+pub struct Integrations {
+    /// Session locks, one per test target.
+    pub locks: Arc<dyn Locks>,
+    /// Tests a model provider and its models.
+    pub provider_probe: Arc<dyn ProviderProbe>,
+    /// Tests the search provider.
+    pub search_probe: Arc<dyn SearchProbe>,
+    /// Tests the GitHub connector.
+    pub connector_probe: Arc<dyn ConnectorProbe>,
+    /// Checks the container runtime.
+    pub runtime_probe: Arc<dyn RuntimeProbe>,
+}
 
 /// Everything the application needs from the outside world.
 pub struct Dependencies {
@@ -24,6 +44,8 @@ pub struct Dependencies {
     pub provider: Arc<dyn ModelProvider>,
     /// Issuer name shown in authenticator apps.
     pub issuer: String,
+    /// The configuration test machinery.
+    pub integrations: Integrations,
 }
 
 /// The application services.
@@ -38,6 +60,8 @@ pub struct App {
     pub(crate) vault: Arc<dyn Vault>,
     pub(crate) provider: Arc<dyn ModelProvider>,
     pub(crate) issuer: String,
+    pub(crate) integrations: Integrations,
+    pub(crate) config_cache: ConfigCache,
 }
 
 impl App {
@@ -53,6 +77,8 @@ impl App {
             vault: dependencies.vault,
             provider: dependencies.provider,
             issuer: dependencies.issuer,
+            integrations: dependencies.integrations,
+            config_cache: ConfigCache::default(),
         }
     }
 }
@@ -66,5 +92,11 @@ impl std::fmt::Debug for App {
 impl std::fmt::Debug for Dependencies {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         f.debug_struct("Dependencies").finish_non_exhaustive()
+    }
+}
+
+impl std::fmt::Debug for Integrations {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        f.debug_struct("Integrations").finish_non_exhaustive()
     }
 }
