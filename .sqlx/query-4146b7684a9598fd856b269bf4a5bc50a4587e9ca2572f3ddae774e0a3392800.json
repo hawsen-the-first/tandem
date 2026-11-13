@@ -1,0 +1,27 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "INSERT INTO sandbox_policies\n                (scope, runner_tier, tool_allow_list, network_mode, network_hosts,\n                 wall_clock_seconds, max_output_bytes, max_file_bytes, max_files_written,\n                 memory_mebibytes, cpu_millicores, version, updated_at, updated_by)\n             VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14)\n             ON CONFLICT (scope) DO NOTHING",
+  "describe": {
+    "columns": [],
+    "parameters": {
+      "Left": [
+        "Text",
+        "Text",
+        "TextArray",
+        "Text",
+        "TextArray",
+        "Int8",
+        "Int8",
+        "Int8",
+        "Int8",
+        "Int8",
+        "Int8",
+        "Int4",
+        "Timestamptz",
+        "Uuid"
+      ]
+    },
+    "nullable": []
+  },
+  "hash": "4146b7684a9598fd856b269bf4a5bc50a4587e9ca2572f3ddae774e0a3392800"
+}

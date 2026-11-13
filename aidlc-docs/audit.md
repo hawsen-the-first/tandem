@@ -619,3 +619,11 @@
 **AI Response**: "Executed steps 11 to 16 on branch unit-u2/adapters: probe ports and connection types in ports; Secret moved to support; the OpenAI-compatible provider probe (listing, chat, forced-echo tool call, context length, 60 s budget, four at a time); SearXNG, Brave and Tavily tests; the GitHub token test with exact repository total; the Docker runtime probe over a Unix socket. All adapters map outcomes to fixed statuses and are tested against loopback doubles, including that remote text and keys appear in no result. All gates pass. Summary in construction/u2-instance-administration/code/pr2-adapters-summary.md."
 **Status**: PR 2 opened for review
 **Context**: CONSTRUCTION - U2 Code Generation, Part 2
+
+---
+## U2 Code Generation - Part 2, PR 3 (persistence, application, worker, CLI)
+**Timestamp**: 2026-11-13T09:00:00Z
+**User Input**: "merged, continue" (PR 2 merged)
+**AI Response**: "Executed steps 17 to 27 on branch unit-u2/persistence-app: migration 0005 with a partial unique index for one active run per target; configuration repositories and PgLocks (advisory lock on a held connection); the administration service, test start and read, the test runner (job handler with lock contention, retry, crash and recovery paths), the config read port with a 5 second cache; worker recovery sweep and run pruning; vault rekey over the new sealed columns; Docker-backed integration tests including two workers and one run. All gates pass. Summary in construction/u2-instance-administration/code/pr3-persistence-application-summary.md."
+**Status**: PR 3 opened for review
+**Context**: CONSTRUCTION - U2 Code Generation, Part 2

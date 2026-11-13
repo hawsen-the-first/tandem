@@ -1,0 +1,17 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "INSERT INTO model_defaults (singleton, orchestrator_model_id, agent_model_id, updated_at, updated_by)\n             VALUES (true, $1, $2, $3, $4)\n             ON CONFLICT (singleton) DO UPDATE\n             SET orchestrator_model_id = EXCLUDED.orchestrator_model_id,\n                 agent_model_id = EXCLUDED.agent_model_id,\n                 updated_at = EXCLUDED.updated_at, updated_by = EXCLUDED.updated_by",
+  "describe": {
+    "columns": [],
+    "parameters": {
+      "Left": [
+        "Uuid",
+        "Uuid",
+        "Timestamptz",
+        "Uuid"
+      ]
+    },
+    "nullable": []
+  },
+  "hash": "68da774f36b6f199568aae5e976dff872117ba171b02e50d328fbad7760a085b"
+}

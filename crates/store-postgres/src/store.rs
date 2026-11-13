@@ -4,8 +4,9 @@ use crate::error::map_sqlx;
 use async_trait::async_trait;
 use sqlx::{PgPool, Postgres, Transaction};
 use tandem_ports::{
-    AuditRepo, ChatRepo, GuardRepo, InvitationRepo, JobQueue, MfaRepo, OutboxRepo,
-    PasswordResetRepo, SessionRepo, SettingsRepo, Store, StoreError, Tx, UserRepo,
+    AuditRepo, ChatRepo, ConnectorRepo, DefaultsRepo, GuardRepo, InvitationRepo, JobQueue, MfaRepo,
+    OutboxRepo, PasswordResetRepo, PolicyRepo, ProviderRepo, SearchRepo, SessionRepo, SettingsRepo,
+    Store, StoreError, TestRunRepo, Tx, UserRepo,
 };
 
 /// Advisory-lock key serialising first-run setup.
@@ -78,6 +79,24 @@ impl Tx for PgTx {
         self
     }
     fn jobs(&mut self) -> &mut dyn JobQueue {
+        self
+    }
+    fn providers(&mut self) -> &mut dyn ProviderRepo {
+        self
+    }
+    fn defaults(&mut self) -> &mut dyn DefaultsRepo {
+        self
+    }
+    fn search(&mut self) -> &mut dyn SearchRepo {
+        self
+    }
+    fn connectors(&mut self) -> &mut dyn ConnectorRepo {
+        self
+    }
+    fn policies(&mut self) -> &mut dyn PolicyRepo {
+        self
+    }
+    fn test_runs(&mut self) -> &mut dyn TestRunRepo {
         self
     }
 

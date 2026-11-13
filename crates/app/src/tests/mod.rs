@@ -2,6 +2,9 @@
 
 mod admin_tests;
 mod chat_worker_tests;
+mod config_read_tests;
+mod config_test_tests;
+mod integrations_tests;
 mod mfa_tests;
 mod password_tests;
 mod recovery_tests;

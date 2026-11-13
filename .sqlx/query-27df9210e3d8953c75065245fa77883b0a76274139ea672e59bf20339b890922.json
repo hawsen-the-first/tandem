@@ -1,0 +1,38 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "SELECT kind, api_key_sealed AS \"sealed!\" FROM search_configs WHERE api_key_sealed IS NOT NULL FOR UPDATE",
+  "describe": {
+    "columns": [
+      {
+        "ordinal": 0,
+        "name": "kind",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "search_configs",
+            "name": "kind"
+          }
+        }
+      },
+      {
+        "ordinal": 1,
+        "name": "sealed!",
+        "type_info": "Bytea",
+        "origin": {
+          "Table": {
+            "table": "search_configs",
+            "name": "api_key_sealed"
+          }
+        }
+      }
+    ],
+    "parameters": {
+      "Left": []
+    },
+    "nullable": [
+      false,
+      true
+    ]
+  },
+  "hash": "27df9210e3d8953c75065245fa77883b0a76274139ea672e59bf20339b890922"
+}

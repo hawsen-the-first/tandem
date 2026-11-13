@@ -1,0 +1,19 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "UPDATE config_test_runs\n             SET status = $2, started_at = $3, finished_at = $4, results = $5, failure = $6\n             WHERE id = $1",
+  "describe": {
+    "columns": [],
+    "parameters": {
+      "Left": [
+        "Uuid",
+        "Text",
+        "Timestamptz",
+        "Timestamptz",
+        "Jsonb",
+        "Text"
+      ]
+    },
+    "nullable": []
+  },
+  "hash": "2ea3398393b67d3ba0c07bc63f93b02135a22937e8427b286b5691f6eb7887ce"
+}

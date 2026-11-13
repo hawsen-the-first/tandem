@@ -1,0 +1,28 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "SELECT secret_sealed FROM connectors WHERE kind = $1",
+  "describe": {
+    "columns": [
+      {
+        "ordinal": 0,
+        "name": "secret_sealed",
+        "type_info": "Bytea",
+        "origin": {
+          "Table": {
+            "table": "connectors",
+            "name": "secret_sealed"
+          }
+        }
+      }
+    ],
+    "parameters": {
+      "Left": [
+        "Text"
+      ]
+    },
+    "nullable": [
+      false
+    ]
+  },
+  "hash": "69d5db66bfddb9373e73bad7ee8ca91389bc9a1bbf035ebcfde6edd0bac0fdc9"
+}

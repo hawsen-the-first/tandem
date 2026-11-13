@@ -1,0 +1,20 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "INSERT INTO search_configs (kind, base_url, api_key_sealed, key_saved_at, updated_at, updated_by)\n             VALUES ($1, $2, $3, $4, $5, $6)\n             ON CONFLICT (kind) DO UPDATE\n             SET base_url = EXCLUDED.base_url, key_saved_at = EXCLUDED.key_saved_at,\n                 updated_at = EXCLUDED.updated_at, updated_by = EXCLUDED.updated_by,\n                 api_key_sealed = CASE $7::text\n                     WHEN 'set' THEN EXCLUDED.api_key_sealed\n                     WHEN 'clear' THEN NULL\n                     ELSE search_configs.api_key_sealed END",
+  "describe": {
+    "columns": [],
+    "parameters": {
+      "Left": [
+        "Text",
+        "Text",
+        "Bytea",
+        "Timestamptz",
+        "Timestamptz",
+        "Uuid",
+        "Text"
+      ]
+    },
+    "nullable": []
+  },
+  "hash": "019609e4c49fe0283d908e3fe91354f2a3cffe5524ea6ee9b1ffe9e0dfab033e"
+}

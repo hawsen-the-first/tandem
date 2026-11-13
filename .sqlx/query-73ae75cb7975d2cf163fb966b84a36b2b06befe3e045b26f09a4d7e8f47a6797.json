@@ -1,0 +1,38 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "SELECT kind, secret_sealed FROM connectors FOR UPDATE",
+  "describe": {
+    "columns": [
+      {
+        "ordinal": 0,
+        "name": "kind",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "connectors",
+            "name": "kind"
+          }
+        }
+      },
+      {
+        "ordinal": 1,
+        "name": "secret_sealed",
+        "type_info": "Bytea",
+        "origin": {
+          "Table": {
+            "table": "connectors",
+            "name": "secret_sealed"
+          }
+        }
+      }
+    ],
+    "parameters": {
+      "Left": []
+    },
+    "nullable": [
+      false,
+      false
+    ]
+  },
+  "hash": "73ae75cb7975d2cf163fb966b84a36b2b06befe3e045b26f09a4d7e8f47a6797"
+}

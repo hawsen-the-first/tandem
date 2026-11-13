@@ -1,0 +1,22 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "INSERT INTO provider_models\n                    (id, provider_id, model_name, label, position,\n                     detected_tool_calling, declared_tool_calling,\n                     detected_context_tokens, declared_context_tokens)\n                 VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)\n                 ON CONFLICT (id) DO UPDATE\n                 SET model_name = EXCLUDED.model_name, label = EXCLUDED.label,\n                     position = EXCLUDED.position,\n                     declared_tool_calling = EXCLUDED.declared_tool_calling,\n                     declared_context_tokens = EXCLUDED.declared_context_tokens\n                 WHERE provider_models.provider_id = EXCLUDED.provider_id",
+  "describe": {
+    "columns": [],
+    "parameters": {
+      "Left": [
+        "Uuid",
+        "Uuid",
+        "Text",
+        "Text",
+        "Int4",
+        "Text",
+        "Text",
+        "Int4",
+        "Int4"
+      ]
+    },
+    "nullable": []
+  },
+  "hash": "31f0ea6d999f5e43ce7b68aac33415af37137940335c9642184d69007d673c73"
+}

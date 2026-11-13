@@ -12,6 +12,7 @@ mod chat;
 mod context;
 mod deps;
 mod error;
+mod integrations;
 mod mfa;
 mod password;
 mod recovery;
@@ -28,8 +29,13 @@ pub use admin::{InvitationInfo, InvitationView, InviteCreated, UserView};
 pub use auth::{Me, SecondFactor, SignInInput, SignInOutcome};
 
 pub use context::{Actor, RequestContext};
-pub use deps::{App, Dependencies};
+pub use deps::{App, Dependencies, Integrations};
 pub use error::{AppError, FieldIssue};
+pub use integrations::{
+    ConnectorView, DefaultChoice, DefaultsInput, DefaultsView, ListedModel, ModelInput, ModelView,
+    ProviderInput, ProviderView, RemovalImpact, ResolvedModel, SearchActivation, SearchInput,
+    SearchOverview, SearchView, SecretInput,
+};
 pub use mfa::{Enrolment, MfaStatus};
 pub use password::{ResetInfo, ResetLink};
 pub use sessions::{Authenticated, NewSession};

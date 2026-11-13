@@ -165,6 +165,11 @@ impl From<AppError> for ApiError {
                 "invalid_link",
                 "This link is not valid.",
             ),
+            AppError::AlreadyRunning { .. } => Self::new(
+                StatusCode::CONFLICT,
+                "already_running",
+                "A test is already running.",
+            ),
             AppError::Internal(detail) => {
                 tracing::error!(detail = %detail, "request failed with an internal error");
                 Self::internal()

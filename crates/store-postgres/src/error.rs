@@ -15,6 +15,9 @@ pub fn map_sqlx(error: sqlx::Error) -> StoreError {
                 Some("password_resets_token_hash_key") => "password_resets.token_hash",
                 Some("auth_sessions_token_hash_key") => "auth_sessions.token_hash",
                 Some("recovery_codes_user_code_key") => "recovery_codes.user_code",
+                Some("providers_name_key") => "providers.name",
+                Some("provider_models_name_key") => "provider_models.name",
+                Some("config_test_runs_one_active") => "config_test_runs.active",
                 _ => "unique_violation",
             })
         }

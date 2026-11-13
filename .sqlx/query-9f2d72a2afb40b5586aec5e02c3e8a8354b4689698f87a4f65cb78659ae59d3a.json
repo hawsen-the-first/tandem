@@ -1,0 +1,28 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "SELECT api_key_sealed FROM providers WHERE id = $1",
+  "describe": {
+    "columns": [
+      {
+        "ordinal": 0,
+        "name": "api_key_sealed",
+        "type_info": "Bytea",
+        "origin": {
+          "Table": {
+            "table": "providers",
+            "name": "api_key_sealed"
+          }
+        }
+      }
+    ],
+    "parameters": {
+      "Left": [
+        "Uuid"
+      ]
+    },
+    "nullable": [
+      true
+    ]
+  },
+  "hash": "9f2d72a2afb40b5586aec5e02c3e8a8354b4689698f87a4f65cb78659ae59d3a"
+}

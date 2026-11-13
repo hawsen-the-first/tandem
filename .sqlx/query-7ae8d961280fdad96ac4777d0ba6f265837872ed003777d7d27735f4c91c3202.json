@@ -1,0 +1,15 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "UPDATE search_configs SET api_key_sealed = $2 WHERE kind = $1",
+  "describe": {
+    "columns": [],
+    "parameters": {
+      "Left": [
+        "Text",
+        "Bytea"
+      ]
+    },
+    "nullable": []
+  },
+  "hash": "7ae8d961280fdad96ac4777d0ba6f265837872ed003777d7d27735f4c91c3202"
+}

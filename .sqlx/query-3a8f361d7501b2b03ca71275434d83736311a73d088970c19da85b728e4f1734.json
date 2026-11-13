@@ -1,0 +1,16 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "INSERT INTO search_active (singleton, kind, updated_at, updated_by) VALUES (true, $1, $2, $3)\n             ON CONFLICT (singleton) DO UPDATE\n             SET kind = EXCLUDED.kind, updated_at = EXCLUDED.updated_at, updated_by = EXCLUDED.updated_by",
+  "describe": {
+    "columns": [],
+    "parameters": {
+      "Left": [
+        "Text",
+        "Timestamptz",
+        "Uuid"
+      ]
+    },
+    "nullable": []
+  },
+  "hash": "3a8f361d7501b2b03ca71275434d83736311a73d088970c19da85b728e4f1734"
+}

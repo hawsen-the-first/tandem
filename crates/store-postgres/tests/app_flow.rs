@@ -8,16 +8,17 @@ mod common;
 use common::TestDb;
 use std::sync::Arc;
 use std::time::Duration;
-use tandem_app::testing::FakeBreachChecker;
+use tandem_app::testing::{FakeBreachChecker, ScriptedProbes};
 use tandem_app::{
-    App, Dependencies, JobOutcome, RequestContext, SecondFactor, SetupInput, SignInInput,
-    SignInOutcome,
+    App, Dependencies, Integrations, JobOutcome, RequestContext, SecondFactor, SetupInput,
+    SignInInput, SignInOutcome,
 };
 use tandem_core::chat::Author;
 use tandem_core::role::Role;
 use tandem_credentials::{ArgonHasher, HashProfile, HmacTotp};
 use tandem_ports::{TotpService, Vault};
 use tandem_providers::MockProvider;
+use tandem_store_postgres::PgLocks;
 use tandem_support::{Clock, FakeClock, Rng, SystemRng};
 use tandem_vault::EnvelopeVault;
 
@@ -65,6 +66,13 @@ async fn a_team_signs_up_chats_and_the_agent_replies_over_postgres() {
         vault: vault.clone(),
         provider: Arc::new(MockProvider::new()),
         issuer: "Tandem".to_owned(),
+        integrations: Integrations {
+            locks: Arc::new(PgLocks::new(db.store.pool().clone())),
+            provider_probe: Arc::new(ScriptedProbes::default()),
+            search_probe: Arc::new(ScriptedProbes::default()),
+            connector_probe: Arc::new(ScriptedProbes::default()),
+            runtime_probe: Arc::new(ScriptedProbes::default()),
+        },
     });
     let anonymous = RequestContext::anonymous(Some("req-flow".to_owned()), None);
 

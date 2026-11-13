@@ -1,0 +1,16 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "UPDATE provider_models\n             SET detected_tool_calling = $2,\n                 detected_context_tokens = COALESCE($3, detected_context_tokens)\n             WHERE id = $1",
+  "describe": {
+    "columns": [],
+    "parameters": {
+      "Left": [
+        "Uuid",
+        "Text",
+        "Int4"
+      ]
+    },
+    "nullable": []
+  },
+  "hash": "54a714559cb59803cb390c78afc5faabbc7d5ec759444b3698f7902f5c49120f"
+}

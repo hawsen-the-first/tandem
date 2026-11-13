@@ -1,0 +1,15 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "WITH ranked AS (\n                 SELECT id,\n                        row_number() OVER (PARTITION BY target ORDER BY requested_at DESC, id DESC) AS position\n                 FROM config_test_runs\n                 WHERE status IN ('succeeded', 'failed'))\n             DELETE FROM config_test_runs run USING ranked\n             WHERE run.id = ranked.id AND ranked.position > 1\n               AND (ranked.position > $1 OR run.requested_at < $2)",
+  "describe": {
+    "columns": [],
+    "parameters": {
+      "Left": [
+        "Int8",
+        "Timestamptz"
+      ]
+    },
+    "nullable": []
+  },
+  "hash": "c739b5cbc3522e664c08e8c0c3bcb5f7afd6c8ba52cce66d7fb829f38309ae31"
+}

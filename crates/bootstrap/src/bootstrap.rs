@@ -3,15 +3,19 @@
 
 use std::sync::Arc;
 use std::time::Duration;
-use tandem_app::{App, Dependencies};
+use tandem_app::{App, Dependencies, Integrations};
 use tandem_config::{Config, ConfigError, MasterKeySource};
 use tandem_credentials::{
     ArgonHasher, BloomFilter, BreachCheckerImpl, HashProfile, HmacTotp, HttpRangeFetcher,
     OnlineBreachCheck, benchmark_profile, concurrency_limit,
 };
-use tandem_providers::MockProvider;
+use tandem_github::GithubConnector;
+use tandem_outbound::OutboundClient;
+use tandem_providers::{MockProvider, OpenAiCompatibleProbe};
+use tandem_sandbox::DockerRuntimeProbe;
+use tandem_search::SearchTester;
 use tandem_store_postgres::{
-    PgStore, PoolConfig, PoolError, SchemaError, check_schema, connect_pool,
+    PgLocks, PgStore, PoolConfig, PoolError, SchemaError, check_schema, connect_pool,
 };
 use tandem_support::{BreakerConfig, CircuitBreaker, Clock, Rng, SystemClock, SystemRng};
 use tandem_telemetry::{InitError, MetricsHandle, MetricsRegistry};
@@ -215,6 +219,15 @@ impl Services {
             }
         };
 
+        let outbound =
+            OutboundClient::new().map_err(|error| StartupError::Internal(error.to_string()))?;
+        let integrations = Integrations {
+            locks: Arc::new(PgLocks::new(store.pool().clone())),
+            provider_probe: Arc::new(OpenAiCompatibleProbe::new(outbound.clone())),
+            search_probe: Arc::new(SearchTester::new(outbound.clone())),
+            connector_probe: Arc::new(GithubConnector::new(outbound)),
+            runtime_probe: Arc::new(DockerRuntimeProbe::new(config.container_socket.clone())),
+        };
         let app = App::new(Dependencies {
             store: Arc::new(store.clone()),
             clock,
@@ -225,6 +238,7 @@ impl Services {
             vault: vault.clone(),
             provider: Arc::new(MockProvider::new()),
             issuer: "Tandem".to_owned(),
+            integrations,
         });
         Ok(Self {
             app,
