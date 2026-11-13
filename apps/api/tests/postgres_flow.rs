@@ -508,3 +508,202 @@ async fn start_up_refuses_a_wrong_vault_key_and_a_stale_schema() {
         .to_string();
     assert!(error.to_lowercase().contains("schema"), "{error}");
 }
+
+// ---- U2 instance administration ------------------------------------------------------------
+
+#[derive(Clone, Default)]
+struct LogCapture(Arc<std::sync::Mutex<Vec<u8>>>);
+
+impl std::io::Write for LogCapture {
+    fn write(&mut self, bytes: &[u8]) -> std::io::Result<usize> {
+        self.0.lock().unwrap().extend_from_slice(bytes);
+        Ok(bytes.len())
+    }
+    fn flush(&mut self) -> std::io::Result<()> {
+        Ok(())
+    }
+}
+
+impl LogCapture {
+    fn text(&self) -> String {
+        String::from_utf8_lossy(&self.0.lock().unwrap()).into_owned()
+    }
+}
+
+/// An OpenAI-compatible server on loopback that remembers the Authorization headers it saw.
+async fn mock_openai() -> (std::net::SocketAddr, Arc<std::sync::Mutex<Vec<String>>>) {
+    use axum::extract::State;
+    use axum::http::HeaderMap;
+    use axum::routing::{get as route_get, post as route_post};
+    let seen: Arc<std::sync::Mutex<Vec<String>>> = Arc::default();
+    async fn models(
+        State(seen): State<Arc<std::sync::Mutex<Vec<String>>>>,
+        headers: HeaderMap,
+    ) -> String {
+        if let Some(value) = headers.get("authorization") {
+            seen.lock()
+                .unwrap()
+                .push(value.to_str().unwrap().to_owned());
+        }
+        r#"{"data":[{"id":"llama3","context_length":32768}]}"#.to_owned()
+    }
+    async fn chat(body: String) -> String {
+        if body.contains("\"tools\"") {
+            r#"{"choices":[{"message":{"tool_calls":[{"function":{"name":"echo","arguments":"{}"}}]}}]}"#
+        } else {
+            r#"{"choices":[{"message":{"content":"ok"}}]}"#
+        }
+        .to_owned()
+    }
+    let router = Router::new()
+        .route("/v1/models", route_get(models))
+        .route("/v1/chat/completions", route_post(chat))
+        .with_state(Arc::clone(&seen));
+    let listener = TcpListener::bind("127.0.0.1:0").await.unwrap();
+    let address = listener.local_addr().unwrap();
+    tokio::spawn(async move { axum::serve(listener, router).await.unwrap() });
+    (address, seen)
+}
+
+#[tokio::test]
+async fn a_provider_test_runs_end_to_end_over_postgres_with_the_real_adapter_and_leaks_nothing() {
+    const KEY: &str = "sk-e2e-must-never-be-stored-or-logged";
+    let logs = LogCapture::default();
+    let subscriber = tracing_subscriber::fmt()
+        .with_max_level(tracing::Level::TRACE)
+        .with_ansi(false)
+        .with_writer({
+            let logs = logs.clone();
+            move || logs.clone()
+        })
+        .finish();
+    let _guard = tracing::subscriber::set_default(subscriber);
+
+    let stack = Stack::start().await;
+    let setup = stack
+        .send(post("/api/setup").origin_of(&stack.origin).json(&json!({
+            "display_name": "Ada Admin", "email": "ada@example.test", "password": PASSWORD
+        })))
+        .await;
+    assert_eq!(setup.status, StatusCode::OK, "{}", setup.text);
+    let admin = stack.identify(&setup.session_cookie().unwrap()).await;
+    let enrol = stack
+        .send(stack.signed_in(post("/api/auth/mfa/enrol"), &admin))
+        .await;
+    let secret = enrol.json()["secret_base32"].as_str().unwrap().to_owned();
+    let now = time::OffsetDateTime::now_utc().unix_timestamp();
+    let confirm = stack
+        .send(
+            stack
+                .signed_in(post("/api/auth/mfa/confirm"), &admin)
+                .json(&json!({"code": totp(&secret, now)})),
+        )
+        .await;
+    assert_eq!(confirm.status, StatusCode::OK, "{}", confirm.text);
+
+    let (address, seen) = mock_openai().await;
+    let created = stack
+        .send(
+            stack
+                .signed_in(post("/api/admin/providers"), &admin)
+                .json(&json!({
+                    "name": "Mock", "base_url": format!("http://{address}/v1"), "api_key": KEY,
+                    "models": [{"name": "llama3"}]
+                })),
+        )
+        .await;
+    assert_eq!(created.status, StatusCode::CREATED, "{}", created.text);
+    let id = created.json()["id"].as_str().unwrap().to_owned();
+    assert!(!created.text.contains(KEY));
+
+    // The key is sealed at rest: the stored bytes are not the text.
+    let stored: Vec<u8> = sqlx::query_scalar("SELECT api_key_sealed FROM tandem.providers")
+        .fetch_one(&stack._db.superuser)
+        .await
+        .unwrap();
+    assert!(
+        !stored
+            .windows(KEY.len())
+            .any(|window| window == KEY.as_bytes())
+    );
+
+    let started = stack
+        .send(stack.signed_in(post(&format!("/api/admin/providers/{id}/test")), &admin))
+        .await;
+    assert_eq!(started.status, StatusCode::ACCEPTED, "{}", started.text);
+    let run_id = started.json()["id"].as_str().unwrap().to_owned();
+    let duplicate = stack
+        .send(stack.signed_in(post(&format!("/api/admin/providers/{id}/test")), &admin))
+        .await;
+    assert_eq!(duplicate.status, StatusCode::CONFLICT);
+    assert_eq!(duplicate.json()["error"]["run_id"], run_id);
+
+    let outcome = stack
+        .services
+        .app
+        .process_next_job(time::Duration::seconds(60))
+        .await
+        .unwrap();
+    assert!(
+        matches!(
+            outcome,
+            tandem_app::JobOutcome::Completed {
+                kind: "config_test"
+            }
+        ),
+        "{outcome:?}"
+    );
+
+    let run = stack
+        .send(stack.signed_in(get(&format!("/api/admin/test-runs/{run_id}")), &admin))
+        .await
+        .json();
+    assert_eq!(run["status"], "succeeded", "{run}");
+    let statuses: Vec<&str> = run["results"]
+        .as_array()
+        .unwrap()
+        .iter()
+        .map(|result| result["status"].as_str().unwrap())
+        .collect();
+    assert_eq!(statuses, ["ok", "ok"], "the provider and its model");
+    let provider = stack
+        .send(stack.signed_in(get(&format!("/api/admin/providers/{id}")), &admin))
+        .await
+        .json();
+    assert_eq!(provider["models"][0]["detected_tool_calling"], "supported");
+    assert_eq!(provider["models"][0]["detected_context_tokens"], 32768);
+    assert!(
+        provider["models"][0]["warnings"]
+            .as_array()
+            .unwrap()
+            .is_empty()
+    );
+    assert_eq!(
+        seen.lock().unwrap().as_slice(),
+        [format!("Bearer {KEY}")],
+        "the key reached the provider"
+    );
+
+    let audit = stack
+        .send(stack.signed_in(get("/api/admin/audit?limit=100"), &admin))
+        .await;
+    let audit_json = audit.json();
+    let types: Vec<&str> = audit_json["entries"]
+        .as_array()
+        .unwrap()
+        .iter()
+        .map(|entry| entry["event_type"].as_str().unwrap())
+        .collect();
+    assert!(
+        types.contains(&"config.provider.created") && types.contains(&"config.test.run"),
+        "{types:?}"
+    );
+    assert!(!audit.text.contains(KEY));
+
+    let captured = logs.text();
+    assert!(
+        captured.contains("outbound call"),
+        "the call was made and logged: {captured}"
+    );
+    assert!(!captured.contains(KEY), "BR-20.4: a key reached a log line");
+}
