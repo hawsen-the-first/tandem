@@ -131,7 +131,7 @@ with a message, and an upload that is never attached is discarded (BR-26.4).
 | `size` | Up to 25 MiB (Q9 A) |
 | `sha256` | Content hash (US-5.5, A12) |
 | `declared_type`, `sniffed_type` | What the browser said and what the content looks like. The sniffed type decides how the file is served (BR-28.4) |
-| `state` | `pending` (uploaded, not yet sent), `attached` or `discarded` |
+| `state` | `pending` (uploaded, not yet sent), `attached`, `discarded` or `expired` (deleted after the retention period, BR-26.7) |
 
 ### Reference
 A link from a message to another item, stored when the message is saved and resolved each time it is shown (A13).
