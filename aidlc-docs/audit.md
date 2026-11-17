@@ -663,3 +663,72 @@
 **Timestamp**: 2026-11-17T02:13:55Z
 **AI Prompt**: "U2 code generation complete. Request Changes, or Continue to Next Stage (U3)?"
 **Context**: CONSTRUCTION - U2 Code Generation; awaiting user response
+
+---
+## U2 Code Generation - Completion approval
+**Timestamp**: 2026-11-17T02:18:04Z
+**User Input**: "Merged continue"
+**AI Response**: "PR 5 merged (#22); U2 complete. Proceeding to U3 Collaboration core."
+**Context**: CONSTRUCTION - U2 approved (Continue to Next Stage)
+
+---
+## U3 Functional Design - Plan and questions
+**Timestamp**: 2026-11-17T02:18:04Z
+**User Input**: (continuation of "Merged continue")
+**AI Response**: "Created construction/plans/u3-collaboration-core-functional-design-plan.md: 21 stories in scope, 13 working assumptions (A1 to A13) and 15 questions with [Answer]: tags covering admin visibility, membership management, ownership transfer, manual threads before U4, outcome summaries without a model, revoke rights, message edit and delete, reply depth, message and upload limits, uploads versus workspace, mentions, approval notifications, presence, archive lifecycle and the Markdown subset. Awaiting answers."
+**Context**: CONSTRUCTION - U3 Functional Design, step 2
+
+---
+## U3 Functional Design - Request for the plan file (remote)
+**Timestamp**: 2026-11-17T20:45:00Z
+**User Input**: "Can you provide the .md file here so I can complete this remotely"
+**AI Response**: "Sent construction/plans/u3-collaboration-core-functional-design-plan.md to the user as an attachment."
+**Context**: CONSTRUCTION - U3 Functional Design, step 2
+
+---
+## U3 Functional Design - Answers received
+**Timestamp**: 2026-11-17T20:47:02Z
+**User Input**: The complete plan file pasted back, unchanged from the version sent except for the [Answer]: tags, which read verbatim:
+- Q1: "X similar to how slack treats conversations. Read only for all members, admins can add themselves, regular members can request to join (that can be added to a later slice). Eventually we also may want to add the ability to set visibility per session, so that some are public and some are private with RBAC."
+- Q2: "C"
+- Q3: "A"
+- Q4: "A"
+- Q5: "B, and we should ensure that the resulting prompt in the build phase knows to default to the summary over any contradicting info in the attached thread."
+- Q6: "A"
+- Q7: "A"
+- Q8: "A"
+- Q9: "A sounds fine. We should have a facility for longer context to be pasted in at some point, but this isn't required for mvp (like snippets in Slack)"
+- Q10: "A"
+- Q11: "" (left blank)
+- Q12: "C, configurable by the session/platform admin"
+- Q13: "A, maybe with an 'Actively viewing this thread/session' indicator like Zendesk has but again, not required for MVP."
+- Q14: "When a session ends, a summary should be generated. This can then be the basis of a 'create a follow up session' flow, so new information and context is added with some memory of the previous convo but not a rehash of the same info."
+- Q15: "A"
+**AI Response**: "Recorded the answers in the plan. Q1, Q11, Q12 and Q14 need follow-up (Q1 reverses FR-2.3 and US-3.5; Q11 unanswered; Q12 needs a default and who sets it; Q14 needs a model that arrives in U4). Wrote u3-collaboration-core-functional-design-clarification-questions.md."
+**Context**: CONSTRUCTION - U3 Functional Design, steps 2 and 3
+
+---
+## U3 Functional Design - Clarification answers
+**Timestamp**: 2026-11-17T21:00:46Z
+**User Input**: The complete clarification file pasted back, unchanged from the version sent except for the [Answer]: tags, which read verbatim:
+- C1: "B"
+- C2: "A"
+- C3: "B"
+- C4: "C"
+- C5: "Three levels. Global default should be one business day with no activity, then admins can define a default for their instance and then session owners/admins can edit the notifications for a specific session."
+- C6: "B"
+**AI Response**: "Recorded the answers. Amended requirements.md (FR-2.2, FR-2.3, FR-2.5; new FR-2.8, FR-6.4, FR-14.2, FR-15.4; out-of-scope additions), stories.md (US-3.4, US-3.5, US-7.1, US-11.4, US-11.6, US-12.1, US-12.2 amended; new US-3.8, US-11.7, US-11.8, US-12.4; 95 stories), unit-of-work-story-map.md (U3 23 stories, U4 17) and unit-of-work-dependency.md. Wrote functional-design/domain-entities.md, business-rules.md (BR-22 to BR-34), business-logic-model.md and frontend-components.md. Added assumptions A14 (business day = 24 hours on Monday to Friday in a new instance time zone, default UTC), A15 (admins see private session metadata only) and A16 (events carry ids, not bodies; NFR Design to decide)."
+**Context**: CONSTRUCTION - U3 Functional Design, steps 3 to 8
+
+---
+## U3 Functional Design - Approval prompt
+**Timestamp**: 2026-11-17T21:30:00Z
+**AI Prompt**: "Functional Design Complete - u3-collaboration-core. Request Changes, or Continue to Next Stage (NFR Requirements)?"
+**Context**: CONSTRUCTION - U3 Functional Design, step 9; awaiting user response
+
+---
+## U3 Functional Design - Approval
+**Timestamp**: 2026-11-17T21:31:50Z
+**User Input**: "Looks good, continue"
+**AI Response**: "Functional design approved, including assumptions A14 to A16. Marked complete; committed on branch aidlc/u3-functional-design and opened its pull request. Starting NFR Requirements."
+**Context**: CONSTRUCTION - U3 Functional Design approved (Continue to Next Stage)

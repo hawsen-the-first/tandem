@@ -220,14 +220,15 @@
 ### US-3.4 Add members to a session
 **As a** Session Owner, **I want** to add members from the instance's users, **so that** the right people take part.
 **Personas**: OWN · **Reqs**: FR-2.2 · **Priority**: Must
-- [ ] I can add and remove members from the list of active instance users
+- [ ] Any member can add members from the list of active instance users; only the owner (or an admin) can remove them
 - [ ] A new member immediately sees the session and its existing threads
 - [ ] Removing a member does not delete their past messages or approvals
 
-### US-3.5 Members-only access and workspace isolation
-**As a** Session Owner, **I want** only members to see a session and its files, **so that** confidential work stays confidential.
+### US-3.5 Session visibility and workspace isolation
+**As a** Session Owner, **I want** to choose whether my session is open to the team or private, **so that** most work is visible while confidential work stays confidential.
 **Personas**: OWN, NTM, DEV · **Reqs**: FR-2.3, FR-11.7, SECURITY-08 · **Priority**: Must
-- [ ] A non-member cannot view, list, or fetch anything from the session, including via direct links; the response does not confirm that the session exists
+- [ ] Sessions are open by default: every active user can find and read them, but only members can post, reply, upload, approve or call agents
+- [ ] I can make a session private when creating it; a non-member cannot view, list, or fetch anything from a private session, including via direct links, and the response does not confirm that it exists
 - [ ] One session can never read another session's workspace files
 - [ ] Authorisation is checked on the server for every request and WebSocket message
 
@@ -244,6 +245,13 @@
 - [ ] The overview shows the prompt, question rounds, thread statuses, plan status, tasks and artifacts
 - [ ] Each item links to its thread, plan step or artifact
 - [ ] Threads awaiting approval are called out
+
+### US-3.8 Transfer ownership and admin session management
+**As a** Session Owner or admin, **I want** ownership to move when people change, and admins to be able to step in, **so that** no session is left without someone in charge.
+**Personas**: OWN, ADM · **Reqs**: FR-2.2, FR-15.4 · **Priority**: Should
+- [ ] The owner can transfer ownership to another member, and cannot leave without doing so
+- [ ] An admin can add themselves or others to any session, including a private one, remove members, transfer ownership (including from a deactivated owner), change visibility, end, archive and unarchive
+- [ ] Every admin action on a session is recorded in the audit log
 
 ---
 
@@ -417,10 +425,10 @@
 
 ### US-7.1 Approve a thread
 **As a** member, **I want** to approve a thread, **so that** the team has an explicit agreement before moving on.
-**Personas**: OWN, NTM, DEV · **Reqs**: FR-6.1, FR-3.5 · **Priority**: Must
+**Personas**: OWN, NTM, DEV · **Reqs**: FR-6.1, FR-6.4, FR-3.5 · **Priority**: Must
 - [ ] Any session member can approve; a single approval closes the thread
 - [ ] Only humans can approve; agents and the orchestrator cannot
-- [ ] The approve action shows the outcome summary that will be recorded
+- [ ] The approve action shows the outcome summary that will be recorded; a summary is required (FR-6.4)
 
 ### US-7.2 See who approved and when
 **As a** member, **I want** to see who approved a thread and when, **so that** decisions are accountable.
@@ -620,7 +628,7 @@
 **Personas**: OWN · **Reqs**: FR-2.6, FR-2.5 · **Priority**: Must
 - [ ] If uncommitted changes exist, I must confirm and am told they will be lost
 - [ ] With no uncommitted changes, ending needs only a simple confirmation
-- [ ] Only the owner can end the session
+- [ ] Only the owner (or an admin) can end the session
 
 ### US-11.5 Workspace is cleaned up when a session ends
 **As a** Session Owner, **I want** the workspace clones deleted when the session ends, **so that** no copy of the repo lingers on the server.
@@ -632,7 +640,21 @@
 **As a** member, **I want** an ended session to remain readable, **so that** I can look back at decisions.
 **Personas**: OWN, NTM, DEV · **Reqs**: FR-2.5 · **Priority**: Must
 - [ ] Threads, plan, artifacts and approvals are viewable but cannot be changed
-- [ ] The owner can archive an ended session to remove it from the active list
+- [ ] The owner (or an admin) can archive an ended session to remove it from the active list, and unarchive it
+- [ ] An ended session is never reopened
+
+### US-11.7 Closing summary
+**As a** Session Owner, **I want** a summary of what the session decided when I end it, **so that** the outcome is easy to find later.
+**Personas**: OWN, NTM, DEV · **Reqs**: FR-2.8 · **Priority**: Should
+- [ ] Ending a session offers a summary drafted by the orchestrator from the approved thread outcomes
+- [ ] I can edit it before confirming, and it is shown at the top of the ended session
+
+### US-11.8 Start a follow-up session
+**As a** Session Owner, **I want** to start a new session from an ended one, **so that** the team continues with what was decided without rehashing it.
+**Personas**: OWN, NTM, DEV · **Reqs**: FR-2.8 · **Priority**: Should
+- [ ] The new session links back to the ended one
+- [ ] It starts with the closing summary and approved outcomes as context, not the full transcript
+- [ ] The previous members are offered as members
 
 ---
 
@@ -642,13 +664,14 @@
 **As a** member, **I want** an in-app notification when I am mentioned, **so that** I notice requests directed at me.
 **Personas**: OWN, NTM, DEV · **Reqs**: FR-14.1 · **Priority**: Should
 - [ ] A mention creates a notification linking to the message
+- [ ] In an open session, mentioning a non-member notifies them and offers to add them as a member; in a private session only members can be mentioned
 - [ ] Notifications can be marked read
 - [ ] Email notifications are not part of the MVP
 
 ### US-12.2 Be notified when something needs me
 **As a** member, **I want** notifications for threads awaiting approval, a plan ready for review, and task output ready for review, **so that** the session keeps moving.
 **Personas**: OWN, NTM, DEV · **Reqs**: FR-14.1 · **Priority**: Should
-- [ ] Each of the three events produces a notification to session members
+- [ ] Each of the three events produces a notification to session members; a thread awaiting approval notifies once it has been quiet for the reminder period (US-12.4)
 - [ ] Clicking it opens the item to review
 
 ### US-12.3 See presence and unread
@@ -657,6 +680,13 @@
 - [ ] A member list shows who is online
 - [ ] Threads and chat show an unread indicator that clears when read
 - [ ] Live co-editing cursors are not shown (out of scope)
+
+### US-12.4 Configure quiet-thread reminders
+**As an** admin or Session Owner, **I want** to set how long a thread may sit quiet before members are reminded, **so that** reminders suit how the team works.
+**Personas**: ADM, OWN · **Reqs**: FR-14.2 · **Priority**: Should
+- [ ] The built-in default is one business day without activity
+- [ ] An admin can set an instance default, or turn reminders off
+- [ ] The owner or an admin can set a different period for one session, or turn them off
 
 ---
 
@@ -734,12 +764,13 @@ Every functional requirement (FR) in `requirements.md` maps to at least one stor
 | FR-1.9 | US-1.9 |
 | FR-1.10 | US-13.3 |
 | FR-2.1 | US-3.1 |
-| FR-2.2 | US-3.1, US-3.4 |
+| FR-2.2 | US-3.1, US-3.4, US-3.8 |
 | FR-2.3 | US-3.5 |
 | FR-2.4 | US-3.6 |
 | FR-2.5 | US-11.4, US-11.6 |
 | FR-2.6 | US-11.4 |
 | FR-2.7 | US-3.7 |
+| FR-2.8 | US-11.7, US-11.8 |
 | FR-3.1 | US-4.1 |
 | FR-3.2 | US-4.2 |
 | FR-3.3 | US-4.3 |
@@ -761,6 +792,7 @@ Every functional requirement (FR) in `requirements.md` maps to at least one stor
 | FR-6.1 | US-5.8, US-7.1, US-8.6 |
 | FR-6.2 | US-7.2, US-7.3 |
 | FR-6.3 | US-9.7 |
+| FR-6.4 | US-7.1 |
 | FR-7.1 | US-8.1 |
 | FR-7.2 | US-8.2 |
 | FR-7.3 | US-8.3 |
@@ -799,9 +831,11 @@ Every functional requirement (FR) in `requirements.md` maps to at least one stor
 | FR-13.4 | US-10.2 |
 | FR-13.5 | US-10.5 |
 | FR-14.1 | US-12.1, US-12.2 |
+| FR-14.2 | US-12.4 |
 | FR-15.1 | US-1.9, US-2.1 |
 | FR-15.2 | US-2.7 |
 | FR-15.3 | US-2.12 |
+| FR-15.4 | US-3.8 |
 | FR-16.1 | US-2.9, US-2.11, US-9.3 |
 | FR-16.2 | US-2.11, US-6.8, US-9.2 |
 | FR-16.3 | US-2.11, US-6.8, US-9.3 |
@@ -817,10 +851,10 @@ Every functional requirement (FR) in `requirements.md` maps to at least one stor
 
 | Persona | Stories (primary or beneficiary) | Count |
 |---|---|---|
-| ADM | US-1.1, US-1.2, US-1.3, US-1.4, US-1.5, US-1.7, US-1.8, US-1.9, US-2.1, US-2.2, US-2.3, US-2.4, US-2.5, US-2.6, US-2.7, US-2.8, US-2.9, US-2.10, US-2.11, US-2.12, US-2.13, US-9.3, US-11.5, US-13.3, US-13.4, US-13.5,  | 24 |
-| OWN | US-1.2, US-1.5, US-1.6, US-2.8, US-2.11, US-3.1, US-3.2, US-3.3, US-3.4, US-3.5, US-3.6, US-3.7, US-4.1, US-4.2, US-4.3, US-4.4, US-4.5, US-5.1, US-5.2, US-5.3, US-5.4, US-5.5, US-5.6, US-5.7, US-5.8, US-6.1, US-6.2, US-6.3, US-6.4, US-6.5, US-6.6, US-6.7, US-6.8, US-6.9, US-7.1, US-7.2, US-7.3, US-8.1, US-8.2, US-8.3, US-8.4, US-8.5, US-8.6, US-8.7, US-9.1, US-9.2, US-9.3, US-9.4, US-9.5, US-9.6, US-9.7, US-9.8, US-9.9, US-10.1, US-10.2, US-10.3, US-10.4, US-10.5, US-11.1, US-11.2, US-11.3, US-11.4, US-11.5, US-11.6, US-12.1, US-12.2, US-12.3, US-13.1, US-13.2, US-13.3, US-13.5, US-13.6, US-13.7,  | 73 |
-| NTM | US-1.2, US-1.5, US-1.6, US-3.3, US-3.5, US-3.7, US-4.1, US-4.2, US-4.3, US-4.4, US-4.5, US-5.1, US-5.2, US-5.3, US-5.4, US-5.5, US-5.6, US-5.7, US-5.8, US-6.1, US-6.2, US-6.4, US-6.5, US-6.6, US-6.7, US-7.1, US-7.2, US-7.3, US-8.1, US-8.2, US-8.3, US-8.4, US-8.5, US-8.6, US-9.2, US-9.4, US-9.6, US-9.7, US-9.8, US-10.1, US-10.2, US-10.3, US-10.4, US-11.6, US-12.1, US-12.2, US-12.3, US-13.1, US-13.2, US-13.3, US-13.6, US-13.7,  | 52 |
-| DEV | US-1.2, US-1.5, US-1.6, US-3.2, US-3.5, US-3.7, US-4.1, US-4.2, US-4.3, US-4.4, US-4.5, US-5.1, US-5.2, US-5.3, US-5.4, US-5.5, US-5.6, US-5.7, US-5.8, US-6.1, US-6.2, US-6.3, US-6.4, US-6.6, US-6.7, US-6.8, US-6.9, US-7.1, US-7.2, US-7.3, US-8.1, US-8.2, US-8.3, US-8.4, US-8.5, US-8.6, US-9.1, US-9.2, US-9.4, US-9.5, US-9.7, US-9.8, US-9.9, US-10.1, US-10.2, US-10.3, US-10.4, US-10.5, US-11.1, US-11.2, US-11.3, US-11.6, US-12.1, US-12.2, US-12.3, US-13.1, US-13.2, US-13.3, US-13.6, US-13.7,  | 60 |
+| ADM | US-1.1, US-1.2, US-1.3, US-1.4, US-1.5, US-1.7, US-1.8, US-1.9, US-2.1, US-2.2, US-2.3, US-2.4, US-2.5, US-2.6, US-2.7, US-2.8, US-2.9, US-2.10, US-2.11, US-2.12, US-2.13, US-9.3, US-11.5, US-13.3, US-13.4, US-13.5, US-3.8, US-12.4 | 26 |
+| OWN | US-1.2, US-1.5, US-1.6, US-2.8, US-2.11, US-3.1, US-3.2, US-3.3, US-3.4, US-3.5, US-3.6, US-3.7, US-4.1, US-4.2, US-4.3, US-4.4, US-4.5, US-5.1, US-5.2, US-5.3, US-5.4, US-5.5, US-5.6, US-5.7, US-5.8, US-6.1, US-6.2, US-6.3, US-6.4, US-6.5, US-6.6, US-6.7, US-6.8, US-6.9, US-7.1, US-7.2, US-7.3, US-8.1, US-8.2, US-8.3, US-8.4, US-8.5, US-8.6, US-8.7, US-9.1, US-9.2, US-9.3, US-9.4, US-9.5, US-9.6, US-9.7, US-9.8, US-9.9, US-10.1, US-10.2, US-10.3, US-10.4, US-10.5, US-11.1, US-11.2, US-11.3, US-11.4, US-11.5, US-11.6, US-12.1, US-12.2, US-12.3, US-13.1, US-13.2, US-13.3, US-13.5, US-13.6, US-13.7, US-3.8, US-11.7, US-11.8, US-12.4 | 77 |
+| NTM | US-1.2, US-1.5, US-1.6, US-3.3, US-3.5, US-3.7, US-4.1, US-4.2, US-4.3, US-4.4, US-4.5, US-5.1, US-5.2, US-5.3, US-5.4, US-5.5, US-5.6, US-5.7, US-5.8, US-6.1, US-6.2, US-6.4, US-6.5, US-6.6, US-6.7, US-7.1, US-7.2, US-7.3, US-8.1, US-8.2, US-8.3, US-8.4, US-8.5, US-8.6, US-9.2, US-9.4, US-9.6, US-9.7, US-9.8, US-10.1, US-10.2, US-10.3, US-10.4, US-11.6, US-12.1, US-12.2, US-12.3, US-13.1, US-13.2, US-13.3, US-13.6, US-13.7, US-11.7, US-11.8 | 54 |
+| DEV | US-1.2, US-1.5, US-1.6, US-3.2, US-3.5, US-3.7, US-4.1, US-4.2, US-4.3, US-4.4, US-4.5, US-5.1, US-5.2, US-5.3, US-5.4, US-5.5, US-5.6, US-5.7, US-5.8, US-6.1, US-6.2, US-6.3, US-6.4, US-6.6, US-6.7, US-6.8, US-6.9, US-7.1, US-7.2, US-7.3, US-8.1, US-8.2, US-8.3, US-8.4, US-8.5, US-8.6, US-9.1, US-9.2, US-9.4, US-9.5, US-9.7, US-9.8, US-9.9, US-10.1, US-10.2, US-10.3, US-10.4, US-10.5, US-11.1, US-11.2, US-11.3, US-11.6, US-12.1, US-12.2, US-12.3, US-13.1, US-13.2, US-13.3, US-13.6, US-13.7, US-11.7, US-11.8 | 62 |
 
 ---
 
@@ -829,7 +863,7 @@ Every functional requirement (FR) in `requirements.md` maps to at least one stor
 | Priority (first listed) | Stories |
 |---|---|
 | Must | 53 |
-| Should | 34 |
+| Should | 38 |
 | Could | 4 |
 
 ---

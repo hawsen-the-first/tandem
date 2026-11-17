@@ -1,6 +1,6 @@
 # Tandem: Unit of Work to Story Map
 
-Every one of the 91 stories in `stories.md` is assigned to **exactly one** unit: the unit in which the story is first fully demonstrable and its acceptance checklist can be passed. Priority is the story's first-listed MoSCoW priority.
+Every one of the 95 stories in `stories.md` is assigned to **exactly one** unit: the unit in which the story is first fully demonstrable and its acceptance checklist can be passed. Priority is the story's first-listed MoSCoW priority.
 
 ## Summary
 
@@ -8,14 +8,14 @@ Every one of the 91 stories in `stories.md` is assigned to **exactly one** unit:
 |---|---|---|---|---|---|
 | U1 | Foundation and walking skeleton | 12 | 6 | 6 | 0 |
 | U2 | Instance administration | 6 | 5 | 1 | 0 |
-| U3 | Collaboration core | 21 | 12 | 9 | 0 |
-| U4 | Agent runtime and question rounds | 15 | 9 | 6 | 0 |
+| U3 | Collaboration core | 23 | 12 | 11 | 0 |
+| U4 | Agent runtime and question rounds | 17 | 9 | 8 | 0 |
 | U5 | Workspaces and GitHub | 8 | 5 | 3 | 0 |
 | U6 | Plan, tasks and artifacts | 20 | 16 | 4 | 0 |
 | U7 | Container sandbox runner | 1 | 0 | 1 | 0 |
 | U8 | Hardening and delivery | 4 | 0 | 4 | 0 |
 | U9 | Backlog (Could-have) | 4 | 0 | 0 | 4 |
-| **Total** | | **91** | **53** | **34** | **4** |
+| **Total** | | **95** | **53** | **38** | **4** |
 
 ## Assignments
 
@@ -54,8 +54,9 @@ Every one of the 91 stories in `stories.md` is assigned to **exactly one** unit:
 | US-3.1 | Create a session | OWN | Must |
 | US-3.3 | Use a managed folder as the workspace | OWN, NTM | Must |
 | US-3.4 | Add members to a session | OWN | Must |
-| US-3.5 | Members-only access and workspace isolation | OWN, NTM, DEV | Must |
+| US-3.5 | Session visibility and workspace isolation | OWN, NTM, DEV | Must |
 | US-3.7 | Session overview | OWN, NTM, DEV | Must |
+| US-3.8 | Transfer ownership and admin session management | OWN, ADM | Should |
 | US-5.1 | Post and read messages in a thread | OWN, NTM, DEV | Must |
 | US-5.2 | Session chat channel | OWN, NTM, DEV | Should |
 | US-5.3 | Reply to and comment on a message | OWN, NTM, DEV | Should |
@@ -70,6 +71,7 @@ Every one of the 91 stories in `stories.md` is assigned to **exactly one** unit:
 | US-12.1 | Be notified when mentioned | OWN, NTM, DEV | Should |
 | US-12.2 | Be notified when something needs me | OWN, NTM, DEV | Should |
 | US-12.3 | See presence and unread | OWN, NTM, DEV | Should |
+| US-12.4 | Configure quiet-thread reminders | ADM, OWN | Should |
 | US-13.1 | Clear limits on messages and uploads | NTM, DEV, OWN | Should |
 | US-13.2 | Safe display of untrusted content | NTM, OWN, DEV | Must |
 
@@ -92,6 +94,8 @@ Every one of the 91 stories in `stories.md` is assigned to **exactly one** unit:
 | US-6.6 | Watch agent output and cancel it | NTM, OWN, DEV | Must |
 | US-6.7 | See what an agent did | DEV, OWN, NTM | Should |
 | US-6.8 | Agents answer but do not change the workspace | OWN, DEV | Must |
+| US-11.7 | Closing summary | OWN, NTM, DEV | Should |
+| US-11.8 | Start a follow-up session | OWN, NTM, DEV | Should |
 
 ### U5 Workspaces and GitHub
 

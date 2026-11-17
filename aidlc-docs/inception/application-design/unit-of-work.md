@@ -10,8 +10,8 @@
 |---|---|---|---|
 | U1 | Foundation and walking skeleton | 12 | Admin sets up an instance, invites a user, both sign in (MFA for admin); a user creates a managed-folder session and posts a message that travels web, API, database, worker and back over the WebSocket; minimal CI is green |
 | U2 | Instance administration | 6 | Admin configures an OpenAI-compatible provider, defaults, search, the GitHub connector and the sandbox policy, and tests each connection |
-| U3 | Collaboration core | 21 | Members work in a session: threads, messages, replies, uploads, chat, approvals, live updates, notifications, presence; sessions can be ended and archived |
-| U4 | Agent runtime and question rounds | 15 | The orchestrator proposes question rounds from a prompt; members call `@ask`, `@search`, `@draft`; outcome summaries; all through the policy-checked tool layer and the in-process runner |
+| U3 | Collaboration core | 23 | Members work in a session: open or private sessions, threads, messages, replies, uploads, chat, approvals, live updates, notifications and reminders, presence; admin session management; sessions can be ended and archived |
+| U4 | Agent runtime and question rounds | 17 | The orchestrator proposes question rounds from a prompt; members call `@ask`, `@search`, `@draft`; outcome summaries; closing summary and follow-up sessions; all through the policy-checked tool layer and the in-process runner |
 | U5 | Workspaces and GitHub | 7 | Repo sessions: clone, `@code`, extra read-only repos, commit and push to a session branch, pull request, cleanup |
 | U6 | Plan, tasks and artifacts | 20 | Plan draft, rework and approval; tasks run in dependency order; diff and artifact review; artifacts with versions, diff, edit and download. **The full core loop works end to end** |
 | U7 | Container sandbox runner | 1 | The container runner enforces the sandbox policy at OS level; fail-closed behaviour proven |
