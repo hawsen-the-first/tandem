@@ -1,6 +1,6 @@
 # Tandem: Requirements (MVP)
 
-**Status**: Approved. Amended after Application Design approval (RD1 to RD6) and after U1 Functional Design (FR-1.3, FR-1.5, new FR-1.7 to FR-1.10)
+**Status**: Approved. Amended after Application Design approval (RD1 to RD6) and after U1 Functional Design (FR-1.3, FR-1.5, new FR-1.7 to FR-1.10), and after U3 Functional Design (FR-2.2, FR-2.3, FR-2.5, new FR-2.8, FR-6.4, FR-14.2, FR-15.4)
 **Depth**: Comprehensive
 **Sources**: `requirement-verification-questions.md` (round 1), `requirements-clarification-questions.md` (round 2),
 `requirements-clarification-questions-round3.md` (round 3), `audit.md`
@@ -126,12 +126,13 @@ flowchart TD
 
 ### FR-2 Sessions
 - **FR-2.1** Any member can create a session with a title, an initial prompt, and a workspace (FR-7).
-- **FR-2.2** The creator is the **session owner** and adds members from the instance's users.
-- **FR-2.3** Only session members can see a session and its contents.
+- **FR-2.2** The creator is the **session owner**. Any member can add members from the instance's active users; only the owner (or an admin, FR-15.4) can remove them. The owner can transfer ownership to another member and cannot leave without doing so.
+- **FR-2.3** Sessions are **open** by default: every active instance user can find and read an open session, but only members can post, reply, upload, approve, revoke or call agents. The owner can make a session **private** when creating it; a private session is visible to members only, and anyone else gets "not found". Only the owner (or an admin) can change visibility later. Fuller RBAC is post-MVP.
 - **FR-2.4** Session owner picks the models for the orchestrator and thread agents, defaulting to admin-set defaults (FR-9.3).
-- **FR-2.5** Sessions have states: `active`, `ended` (read-only, workspace removed), `archived`.
+- **FR-2.5** Sessions have states: `active`, `ended` (read-only, workspace removed), `archived`. The owner (or an admin) can archive an ended session and unarchive it back to `ended`. An ended session is never reopened. Deleting a session is post-MVP.
 - **FR-2.6** Ending a session with uncommitted workspace changes requires explicit confirmation and warns that the changes will be lost.
 - **FR-2.7** A session overview shows the prompt, question rounds, thread status, plan status, tasks and artifacts.
+- **FR-2.8** (Should) When a session ends, a closing summary is drafted by the orchestrator from the approved outcomes and edited by the owner before ending. A **follow-up session** can be started from an ended one: it links back, and starts with the closing summary and approved outcomes as context rather than the full transcript.
 
 ### FR-3 Orchestrator and question rounds
 - **FR-3.1** On session start, the orchestrator reads the prompt (and workspace, if a repo) and proposes a round of clarifying questions.
@@ -165,6 +166,7 @@ flowchart TD
 - **FR-6.1** MVP rule: **any session member can approve a thread**, with a single approval closing it. More complex rules (N approvals, majority, per-thread rules) are post-MVP; the data model must allow them.
 - **FR-6.2** Approval records who approved and when, and can be revoked (reopening the thread) until later steps depend on it.
 - **FR-6.3** The plan and task outputs are approved the same way (FR-7.7, FR-8.5).
+- **FR-6.4** Approving a thread requires an outcome summary (written by the approver in U3, drafted by the orchestrator from U4). When an approved thread is given to a model as context, the summary is the agreed decision and takes precedence over anything in the thread's messages that contradicts it.
 
 ### FR-7 Plan
 - **FR-7.1** After the question rounds, the orchestrator drafts a plan: numbered steps, what each step builds, expected outputs (artifacts and/or code changes), and dependencies.
@@ -224,11 +226,13 @@ flowchart TD
 
 ### FR-14 Notifications (minimal)
 - **FR-14.1** In-app notifications for: mentions, threads awaiting approval, plan ready for review, task output ready for review. Email notifications are post-MVP.
+- **FR-14.2** A thread awaiting approval with no activity for a quiet period notifies the session members. The period resolves in three levels: a built-in default of one business day, an instance default set by an admin, and a per-session value set by the owner or an admin. "Off" is allowed at the instance and session levels.
 
 ### FR-15 Administration
 - **FR-15.1** Admin settings: users, model providers and defaults, search providers, connectors, instance settings.
 - **FR-15.2** Admin can view an audit log of security-relevant events (FR-SEC). The log is append-only: the running application cannot update or delete entries, there is no automatic pruning, and operators prune only with a documented command using a privileged credential.
 - **FR-15.3** (Could) Admin allow and block lists for the hosts and networks Tandem calls for providers, search and connectors, layered over the built-in outbound URL rules.
+- **FR-15.4** Admins can manage any session, including private ones: add themselves or others, remove members, transfer ownership (including from a deactivated owner), change visibility, end, archive and unarchive. Every such action is audited.
 
 ### FR-16 Sandbox policy
 - **FR-16.1** The admin sets one **instance-wide sandbox policy**: default runner tier (`in-process` or `container`), tool allow-list, network rule (default deny) and resource limits.
@@ -321,6 +325,9 @@ Per round 3, the extension applies to **the product**, and deployment decisions 
 - Rich-text (WYSIWYG) editing; HTML artifact previews; live co-editing
 - Native mobile/desktop apps
 - Billing and usage-based limits
+- Requests to join a session; per-session visibility beyond open and private (RBAC)
+- Snippet attachments for long pasted text
+- "Actively viewing this thread" indicators
 
 ---
 
