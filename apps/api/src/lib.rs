@@ -3,6 +3,7 @@
 
 pub mod cookie;
 pub mod dto;
+pub mod dto_integrations;
 pub mod error;
 pub mod pipeline;
 pub mod routes;

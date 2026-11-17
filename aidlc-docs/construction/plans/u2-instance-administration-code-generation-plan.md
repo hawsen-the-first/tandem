@@ -102,11 +102,11 @@ web/src/components/   SecretField, StatusBadge, TestResultView, UrlField, HostLi
 - [x] **Step 27 - Pull request 3 verification and summary.** Gates; `code/pr3-persistence-application-summary.md`. Open pull request 3.
 
 ### Pull request 4: API
-- [ ] **Step 28 - API: providers and defaults.** DTOs and routes for providers (list, create, update, delete, impact) and model defaults; admin-only through the route table; secrets never returned (`saved`, `saved_at`); validation errors with field names. *US-2.1, 2.4.*
-- [ ] **Step 29 - API: search, connector, policy, tests.** Routes for search kinds and activation, the GitHub token (save, remove, status), the sandbox policy (read, save, check runtime), test starts (202 with the run, 409 when active) and `GET /api/admin/test-runs/{id}`. *US-2.3, 2.5, 2.6, 2.9.*
-- [ ] **Step 30 - Pipeline and OpenAPI.** New rate-limit bucket `Test` (10 per minute per source); register all routes with `AdminUser`; annotate for OpenAPI; update the pinned route lists; regenerate `apps/api/openapi.json` and the web types. *SE-24, MT-12.*
-- [ ] **Step 31 - API tests.** Non-admin and anonymous access, CSRF, secrets never in any response or log line, URL refusals with reasons, test-run lifecycle against the real worker loops with mock servers (Docker Postgres), audit entries with before and after values, rate limit on test starts, concurrency (second start answers 409).
-- [ ] **Step 32 - Pull request 4 verification and summary.** Gates plus a smoke run of the existing e2e suite; `code/pr4-api-summary.md`. Open pull request 4.
+- [x] **Step 28 - API: providers and defaults.** DTOs and routes for providers (list, create, update, delete, impact) and model defaults; admin-only through the route table; secrets never returned (`saved`, `saved_at`); validation errors with field names. *US-2.1, 2.4.*
+- [x] **Step 29 - API: search, connector, policy, tests.** Routes for search kinds and activation, the GitHub token (save, remove, status), the sandbox policy (read, save, check runtime), test starts (202 with the run, 409 when active) and `GET /api/admin/test-runs/{id}`. *US-2.3, 2.5, 2.6, 2.9.*
+- [x] **Step 30 - Pipeline and OpenAPI.** New rate-limit bucket `Test` (10 per minute per source); register all routes with `AdminUser`; annotate for OpenAPI; update the pinned route lists; regenerate `apps/api/openapi.json` and the web types. *SE-24, MT-12.*
+- [x] **Step 31 - API tests.** Non-admin and anonymous access, CSRF, secrets never in any response or log line, URL refusals with reasons, test-run lifecycle against the real worker loops with mock servers (Docker Postgres), audit entries with before and after values, rate limit on test starts, concurrency (second start answers 409).
+- [x] **Step 32 - Pull request 4 verification and summary.** Gates plus a smoke run of the existing e2e suite; `code/pr4-api-summary.md`. Open pull request 4.
 
 ### Pull request 5: web, end-to-end, documentation
 - [ ] **Step 33 - Web foundations.** `Integrations` nav entry and `AdminIntegrationsLayout` (sub-navigation as links), the integrations message catalogue, shared components `SecretField`, `StatusBadge`, `TestResultView`, `UrlField`, `HostListEditor`, `CapabilityWarning`, a test-run polling hook (1 s, 90 s limit); component tests with axe. *US-5, BR-20.*

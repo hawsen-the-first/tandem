@@ -2,7 +2,7 @@
 //! `/api/openapi.json`. A copy is committed as `openapi.json` and a test keeps it current.
 
 use crate::pipeline::rate_limit::Bucket;
-use crate::routes::{RouteTable, about, admin, auth, chat};
+use crate::routes::{RouteTable, about, admin, auth, chat, integrations};
 use axum::Json;
 use axum::http::Method;
 use utoipa::OpenApi;
@@ -12,7 +12,7 @@ use utoipa::OpenApi;
 #[openapi(
     info(
         title = "Tandem API",
-        description = "Authentication, administration and the chat skeleton. Cookie-authenticated; \
+        description = "Authentication, administration, instance integrations and the chat skeleton. Cookie-authenticated; \
             state-changing calls need the X-CSRF-Token header returned by GET /api/auth/me.",
         license(name = "AGPL-3.0-only")
     ),
@@ -43,6 +43,27 @@ use utoipa::OpenApi;
         admin::get_settings,
         admin::put_settings,
         admin::audit,
+        integrations::list_providers,
+        integrations::create_provider,
+        integrations::get_provider,
+        integrations::update_provider,
+        integrations::delete_provider,
+        integrations::removal_impact,
+        integrations::test_provider,
+        integrations::get_defaults,
+        integrations::put_defaults,
+        integrations::get_search,
+        integrations::put_search_kind,
+        integrations::test_search,
+        integrations::put_active_search,
+        integrations::get_connector,
+        integrations::put_connector,
+        integrations::delete_connector,
+        integrations::test_connector,
+        integrations::get_policy,
+        integrations::put_policy,
+        integrations::check_runtime,
+        integrations::get_test_run,
         chat::list_sessions,
         chat::create_session,
         chat::list_messages,

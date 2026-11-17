@@ -2,7 +2,7 @@
   "openapi": "3.1.0",
   "info": {
     "title": "Tandem API",
-    "description": "Authentication, administration and the chat skeleton. Cookie-authenticated; state-changing calls need the X-CSRF-Token header returned by GET /api/auth/me.",
+    "description": "Authentication, administration, instance integrations and the chat skeleton. Cookie-authenticated; state-changing calls need the X-CSRF-Token header returned by GET /api/auth/me.",
     "license": {
       "name": "AGPL-3.0-only"
     },
@@ -124,6 +124,148 @@
         }
       }
     },
+    "/api/admin/connectors/github": {
+      "get": {
+        "tags": [
+          "integrations"
+        ],
+        "summary": "The GitHub connector's status.",
+        "operationId": "get_connector",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ConnectorDto"
+                }
+              }
+            }
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "integrations"
+        ],
+        "summary": "Save or replace the GitHub token. The token is never returned.",
+        "operationId": "put_connector",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ConnectorRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ConnectorDto"
+                }
+              }
+            }
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            }
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "integrations"
+        ],
+        "summary": "Remove the GitHub token; the connector is then off.",
+        "operationId": "delete_connector",
+        "responses": {
+          "204": {},
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/admin/connectors/github/test": {
+      "post": {
+        "tags": [
+          "integrations"
+        ],
+        "summary": "Test the GitHub token: the account, its expiry and the repositories it reaches.",
+        "operationId": "test_connector",
+        "responses": {
+          "202": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TestRunDto"
+                }
+              }
+            }
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "A test is already running; the body carries its run_id",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            }
+          },
+          "429": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/admin/invitations": {
       "get": {
         "tags": [
@@ -225,6 +367,711 @@
         }
       }
     },
+    "/api/admin/model-defaults": {
+      "get": {
+        "tags": [
+          "integrations"
+        ],
+        "summary": "The default models, with where each comes from and any warnings.",
+        "operationId": "get_defaults",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DefaultsDto"
+                }
+              }
+            }
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "integrations"
+        ],
+        "summary": "Choose the default models. A model with warnings is allowed; the warnings come back.",
+        "operationId": "put_defaults",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/DefaultsRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DefaultsDto"
+                }
+              }
+            }
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            }
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/admin/providers": {
+      "get": {
+        "tags": [
+          "integrations"
+        ],
+        "summary": "List model providers with their models and last test.",
+        "operationId": "list_providers",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ProviderDto"
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "integrations"
+        ],
+        "summary": "Add a provider.",
+        "operationId": "create_provider",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ProviderRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProviderDto"
+                }
+              }
+            }
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            }
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/admin/providers/{id}": {
+      "get": {
+        "tags": [
+          "integrations"
+        ],
+        "summary": "One provider.",
+        "operationId": "get_provider",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Provider ID",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProviderDto"
+                }
+              }
+            }
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "integrations"
+        ],
+        "summary": "Change a provider. An empty `api_key` keeps the saved key; `remove_api_key` deletes it.",
+        "operationId": "update_provider",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Provider ID",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ProviderRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProviderDto"
+                }
+              }
+            }
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            }
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "integrations"
+        ],
+        "summary": "Remove a provider, its models and key, clearing the defaults that used them.",
+        "operationId": "delete_provider",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Provider ID",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RemovalImpactDto"
+                }
+              }
+            }
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/admin/providers/{id}/removal-impact": {
+      "get": {
+        "tags": [
+          "integrations"
+        ],
+        "summary": "What removing a provider would do, for the confirmation.",
+        "operationId": "removal_impact",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Provider ID",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RemovalImpactDto"
+                }
+              }
+            }
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/admin/providers/{id}/test": {
+      "post": {
+        "tags": [
+          "integrations"
+        ],
+        "summary": "Test a provider and each of its models. Runs in the background: poll the run.",
+        "operationId": "test_provider",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Provider ID",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "202": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TestRunDto"
+                }
+              }
+            }
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "A test is already running; the body carries its run_id",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            }
+          },
+          "429": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/admin/runtime/check": {
+      "post": {
+        "tags": [
+          "integrations"
+        ],
+        "summary": "Check whether the container runtime answers, without starting anything.",
+        "operationId": "check_runtime",
+        "responses": {
+          "202": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TestRunDto"
+                }
+              }
+            }
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "A check is already running; the body carries its run_id",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            }
+          },
+          "429": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/admin/sandbox-policy": {
+      "get": {
+        "tags": [
+          "integrations"
+        ],
+        "summary": "The sandbox policy with the factory values, allowed ranges and the tool registry.",
+        "operationId": "get_policy",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PolicyViewDto"
+                }
+              }
+            }
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "integrations"
+        ],
+        "summary": "Save the sandbox policy. Choosing the container tier needs a runtime that answers right now.",
+        "operationId": "put_policy",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PolicyRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PolicyViewDto"
+                }
+              }
+            }
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            }
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/admin/search": {
+      "get": {
+        "tags": [
+          "integrations"
+        ],
+        "summary": "All search providers and which one is active.",
+        "operationId": "get_search",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SearchOverviewDto"
+                }
+              }
+            }
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/admin/search/active": {
+      "put": {
+        "tags": [
+          "integrations"
+        ],
+        "summary": "Turn one search provider on (the others go off), or search off with no `kind`.",
+        "operationId": "put_active_search",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ActiveSearchRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ActivationDto"
+                }
+              }
+            }
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            }
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/admin/search/kinds/{kind}": {
+      "put": {
+        "tags": [
+          "integrations"
+        ],
+        "summary": "Save one search provider's settings; the overview comes back.",
+        "operationId": "put_search_kind",
+        "parameters": [
+          {
+            "name": "kind",
+            "in": "path",
+            "description": "searxng, brave or tavily",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SearchRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SearchOverviewDto"
+                }
+              }
+            }
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            }
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/admin/search/kinds/{kind}/test": {
+      "post": {
+        "tags": [
+          "integrations"
+        ],
+        "summary": "Test one search provider with a small query.",
+        "operationId": "test_search",
+        "parameters": [
+          {
+            "name": "kind",
+            "in": "path",
+            "description": "searxng, brave or tavily",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "202": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TestRunDto"
+                }
+              }
+            }
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "A test is already running; the body carries its run_id",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            }
+          },
+          "429": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/admin/settings": {
       "get": {
         "tags": [
@@ -280,6 +1127,46 @@
             }
           },
           "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/admin/test-runs/{id}": {
+      "get": {
+        "tags": [
+          "integrations"
+        ],
+        "summary": "A test run, for the screen that polls it.",
+        "operationId": "get_test_run",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Run ID",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TestRunDto"
+                }
+              }
+            }
+          },
+          "404": {
             "content": {
               "application/json": {
                 "schema": {
@@ -1243,6 +2130,39 @@
         },
         "additionalProperties": false
       },
+      "ActivationDto": {
+        "type": "object",
+        "description": "The result of turning search on or off.",
+        "required": [
+          "untested"
+        ],
+        "properties": {
+          "active": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "The active kind afterwards."
+          },
+          "untested": {
+            "type": "boolean",
+            "description": "The provider has never passed a test."
+          }
+        }
+      },
+      "ActiveSearchRequest": {
+        "type": "object",
+        "description": "Which search provider to turn on; leave out to turn search off.",
+        "properties": {
+          "kind": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "`searxng`, `brave` or `tavily`."
+          }
+        }
+      },
       "AdminUserDto": {
         "allOf": [
           {
@@ -1493,6 +2413,71 @@
         },
         "additionalProperties": false
       },
+      "ConnectorDto": {
+        "type": "object",
+        "description": "The GitHub connector. The token is never included.",
+        "required": [
+          "configured"
+        ],
+        "properties": {
+          "account_login": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "The account the token belongs to, after a successful test."
+          },
+          "active_test_id": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "A test queued or running now."
+          },
+          "configured": {
+            "type": "boolean",
+            "description": "A token is saved."
+          },
+          "last_test": {
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/TestRunDto",
+                "description": "The newest finished test."
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "saved_at": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "When the token was saved."
+          },
+          "token_expires_at": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "When the token expires, when GitHub says."
+          }
+        }
+      },
+      "ConnectorRequest": {
+        "type": "object",
+        "description": "The token as entered.",
+        "required": [
+          "token"
+        ],
+        "properties": {
+          "token": {
+            "type": "string",
+            "description": "A fine-grained personal access token."
+          }
+        }
+      },
       "CreateChatSessionRequest": {
         "type": "object",
         "description": "Create a chat session.",
@@ -1506,6 +2491,72 @@
           }
         },
         "additionalProperties": false
+      },
+      "DefaultChoiceDto": {
+        "type": "object",
+        "description": "One default model and where it comes from.",
+        "required": [
+          "provider_name",
+          "model"
+        ],
+        "properties": {
+          "model": {
+            "$ref": "#/components/schemas/ModelDto",
+            "description": "The model."
+          },
+          "provider_name": {
+            "type": "string",
+            "description": "The provider's name."
+          }
+        }
+      },
+      "DefaultsDto": {
+        "type": "object",
+        "description": "The two default models. A default with `warnings` is allowed but flagged.",
+        "properties": {
+          "agents": {
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/DefaultChoiceDto",
+                "description": "The model for thread and task agents."
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "orchestrator": {
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/DefaultChoiceDto",
+                "description": "The orchestrator's model."
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        }
+      },
+      "DefaultsRequest": {
+        "type": "object",
+        "description": "The picks, by model ID; leave one out to unset it.",
+        "properties": {
+          "agents_model_id": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "The model for thread and task agents."
+          },
+          "orchestrator_model_id": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "The orchestrator's model."
+          }
+        }
       },
       "DisableMfaRequest": {
         "type": "object",
@@ -1566,6 +2617,13 @@
           "message": {
             "type": "string",
             "description": "A plain-words message safe to show to the user."
+          },
+          "run_id": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "The run already in progress, for `already_running`."
           }
         }
       },
@@ -1579,6 +2637,24 @@
           "error": {
             "$ref": "#/components/schemas/ErrorBody",
             "description": "The error."
+          }
+        }
+      },
+      "FailureDto": {
+        "type": "object",
+        "description": "Why a run failed as a whole.",
+        "required": [
+          "code",
+          "message"
+        ],
+        "properties": {
+          "code": {
+            "type": "string",
+            "description": "`could_not_complete` or `no_worker_available`."
+          },
+          "message": {
+            "type": "string",
+            "description": "A fixed sentence."
           }
         }
       },
@@ -1693,6 +2769,56 @@
         },
         "additionalProperties": false
       },
+      "LimitsDto": {
+        "type": "object",
+        "description": "Resource limits.",
+        "required": [
+          "wall_clock_seconds",
+          "max_output_bytes",
+          "max_file_bytes",
+          "max_files_written",
+          "memory_mebibytes",
+          "cpu_millicores"
+        ],
+        "properties": {
+          "cpu_millicores": {
+            "type": "integer",
+            "format": "int64",
+            "description": "CPU in millicores (enforced by the container runner only).",
+            "minimum": 0
+          },
+          "max_file_bytes": {
+            "type": "integer",
+            "format": "int64",
+            "description": "Largest single file a run may write.",
+            "minimum": 0
+          },
+          "max_files_written": {
+            "type": "integer",
+            "format": "int64",
+            "description": "Files a run may create or change.",
+            "minimum": 0
+          },
+          "max_output_bytes": {
+            "type": "integer",
+            "format": "int64",
+            "description": "Output bytes per run.",
+            "minimum": 0
+          },
+          "memory_mebibytes": {
+            "type": "integer",
+            "format": "int64",
+            "description": "Memory in MiB (enforced by the container runner only).",
+            "minimum": 0
+          },
+          "wall_clock_seconds": {
+            "type": "integer",
+            "format": "int64",
+            "description": "Wall-clock seconds per run.",
+            "minimum": 0
+          }
+        }
+      },
       "MeResponse": {
         "type": "object",
         "description": "The signed-in user, their scope and the CSRF token for state-changing calls.",
@@ -1745,6 +2871,256 @@
           }
         }
       },
+      "ModelDto": {
+        "type": "object",
+        "description": "A model with what a test found and what an admin declared.",
+        "required": [
+          "id",
+          "provider_id",
+          "name",
+          "tool_calling",
+          "detected_tool_calling",
+          "warnings",
+          "disagrees_with_detection"
+        ],
+        "properties": {
+          "context_tokens": {
+            "type": [
+              "integer",
+              "null"
+            ],
+            "format": "int32",
+            "description": "Context length as used.",
+            "minimum": 0
+          },
+          "declared_context_tokens": {
+            "type": [
+              "integer",
+              "null"
+            ],
+            "format": "int32",
+            "description": "What an admin declared.",
+            "minimum": 0
+          },
+          "declared_tool_calling": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "What an admin declared."
+          },
+          "detected_context_tokens": {
+            "type": [
+              "integer",
+              "null"
+            ],
+            "format": "int32",
+            "description": "What a test found.",
+            "minimum": 0
+          },
+          "detected_tool_calling": {
+            "type": "string",
+            "description": "What a test found."
+          },
+          "disagrees_with_detection": {
+            "type": "boolean",
+            "description": "A declared value disagrees with what a test found."
+          },
+          "id": {
+            "type": "string",
+            "description": "The model's ID."
+          },
+          "label": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "An optional friendly label."
+          },
+          "name": {
+            "type": "string",
+            "description": "The name the provider's API expects."
+          },
+          "provider_id": {
+            "type": "string",
+            "description": "The provider it belongs to."
+          },
+          "tool_calling": {
+            "type": "string",
+            "description": "Tool calling as used: declared if declared, otherwise detected."
+          },
+          "warnings": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/WarningDto"
+            },
+            "description": "Why this model may not suit a job; empty when it does."
+          }
+        }
+      },
+      "ModelRequest": {
+        "type": "object",
+        "description": "A model as entered.",
+        "required": [
+          "name"
+        ],
+        "properties": {
+          "declared_context_tokens": {
+            "type": [
+              "integer",
+              "null"
+            ],
+            "format": "int32",
+            "description": "Declare the context length in tokens.",
+            "minimum": 0
+          },
+          "declared_tool_calling": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "Declare tool calling: `supported`, `unsupported` or `unknown`."
+          },
+          "id": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "The existing model this edits; leave out for a new one."
+          },
+          "label": {
+            "type": "string",
+            "description": "An optional friendly label."
+          },
+          "name": {
+            "type": "string",
+            "description": "The name the provider's API expects."
+          }
+        }
+      },
+      "NetworkDto": {
+        "type": "object",
+        "description": "The network rule.",
+        "required": [
+          "mode"
+        ],
+        "properties": {
+          "hosts": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "The allowed host names (only for `allow_hosts`)."
+          },
+          "mode": {
+            "type": "string",
+            "description": "`none` or `allow_hosts`."
+          }
+        }
+      },
+      "PolicyDto": {
+        "type": "object",
+        "description": "The sandbox policy.",
+        "required": [
+          "runner_tier",
+          "tool_allow_list",
+          "network",
+          "limits",
+          "version"
+        ],
+        "properties": {
+          "limits": {
+            "$ref": "#/components/schemas/LimitsDto",
+            "description": "Limits."
+          },
+          "network": {
+            "$ref": "#/components/schemas/NetworkDto",
+            "description": "The network rule."
+          },
+          "runner_tier": {
+            "type": "string",
+            "description": "`in_process` or `container`."
+          },
+          "tool_allow_list": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "Allowed tools."
+          },
+          "version": {
+            "type": "integer",
+            "format": "int32",
+            "description": "Rises with every saved change.",
+            "minimum": 0
+          }
+        }
+      },
+      "PolicyRequest": {
+        "type": "object",
+        "description": "The policy as entered. The version and scope are not accepted.",
+        "required": [
+          "runner_tier",
+          "tool_allow_list",
+          "network",
+          "limits"
+        ],
+        "properties": {
+          "limits": {
+            "$ref": "#/components/schemas/LimitsDto",
+            "description": "Limits."
+          },
+          "network": {
+            "$ref": "#/components/schemas/NetworkDto",
+            "description": "The network rule."
+          },
+          "runner_tier": {
+            "type": "string",
+            "description": "`in_process` or `container`."
+          },
+          "tool_allow_list": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "Allowed tools."
+          }
+        }
+      },
+      "PolicyViewDto": {
+        "type": "object",
+        "description": "The policy with what the editor needs: factory values, ranges and the tool registry.",
+        "required": [
+          "policy",
+          "factory",
+          "ranges",
+          "tools"
+        ],
+        "properties": {
+          "factory": {
+            "$ref": "#/components/schemas/PolicyDto",
+            "description": "The factory default, for \"Reset to default\"."
+          },
+          "policy": {
+            "$ref": "#/components/schemas/PolicyDto",
+            "description": "The policy in force."
+          },
+          "ranges": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/RangeDto"
+            },
+            "description": "Allowed ranges."
+          },
+          "tools": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ToolDto"
+            },
+            "description": "Every registered tool."
+          }
+        }
+      },
       "PostMessageRequest": {
         "type": "object",
         "description": "Post a chat message.",
@@ -1759,6 +3135,263 @@
         },
         "additionalProperties": false
       },
+      "ProbeDetailsDto": {
+        "type": "object",
+        "description": "Facts a probe learned. Never secrets and never text from the remote server.",
+        "required": [
+          "repositories"
+        ],
+        "properties": {
+          "account_login": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "The GitHub account the token belongs to."
+          },
+          "context_tokens": {
+            "type": [
+              "integer",
+              "null"
+            ],
+            "format": "int32",
+            "description": "A model's context length in tokens.",
+            "minimum": 0
+          },
+          "repositories": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "Up to 100 repositories the token can reach."
+          },
+          "repository_total": {
+            "type": [
+              "integer",
+              "null"
+            ],
+            "format": "int32",
+            "description": "How many repositories the token can reach.",
+            "minimum": 0
+          },
+          "runtime_name": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "The container runtime's name."
+          },
+          "runtime_version": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "The container runtime's version."
+          },
+          "token_expires_at": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "When the GitHub token expires, if GitHub says."
+          },
+          "tool_calling": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "A model's tool calling: `supported`, `unsupported` or `unknown`."
+          }
+        }
+      },
+      "ProbeResultDto": {
+        "type": "object",
+        "description": "One probe's result.",
+        "required": [
+          "subject",
+          "status",
+          "message",
+          "details"
+        ],
+        "properties": {
+          "details": {
+            "$ref": "#/components/schemas/ProbeDetailsDto",
+            "description": "Facts learned."
+          },
+          "message": {
+            "type": "string",
+            "description": "A fixed, safe sentence for the status."
+          },
+          "model_id": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "The model, when `subject` is `model`."
+          },
+          "note": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "A fixed note, such as `no_results`."
+          },
+          "status": {
+            "type": "string",
+            "description": "`ok`, `unreachable`, `timeout`, `unauthorised`, `unknown_model`, `bad_response`,\n`refused_address` or `not_configured`."
+          },
+          "subject": {
+            "type": "string",
+            "description": "`provider`, `model`, `search`, `connector` or `runtime`."
+          }
+        }
+      },
+      "ProviderDto": {
+        "type": "object",
+        "description": "A provider. The key is never included.",
+        "required": [
+          "id",
+          "kind",
+          "name",
+          "base_url",
+          "api_key_saved",
+          "created_at",
+          "updated_at",
+          "models"
+        ],
+        "properties": {
+          "active_test_id": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "A test queued or running now."
+          },
+          "api_key_saved": {
+            "type": "boolean",
+            "description": "Whether an API key is saved."
+          },
+          "api_key_saved_at": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "When the key was last saved."
+          },
+          "base_url": {
+            "type": "string",
+            "description": "Base URL."
+          },
+          "created_at": {
+            "type": "string",
+            "description": "Created."
+          },
+          "id": {
+            "type": "string",
+            "description": "The provider's ID."
+          },
+          "kind": {
+            "type": "string",
+            "description": "`openai_compatible`."
+          },
+          "last_test": {
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/TestRunDto",
+                "description": "The newest finished test."
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "models": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ModelDto"
+            },
+            "description": "Listed models."
+          },
+          "name": {
+            "type": "string",
+            "description": "Display name."
+          },
+          "updated_at": {
+            "type": "string",
+            "description": "Last changed."
+          }
+        }
+      },
+      "ProviderRequest": {
+        "type": "object",
+        "description": "A provider as entered.",
+        "required": [
+          "name",
+          "base_url"
+        ],
+        "properties": {
+          "api_key": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "A new API key. Absent or empty keeps the saved one."
+          },
+          "base_url": {
+            "type": "string",
+            "description": "Base URL, including any `/v1`."
+          },
+          "models": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ModelRequest"
+            },
+            "description": "The listed models, in order."
+          },
+          "name": {
+            "type": "string",
+            "description": "Display name."
+          },
+          "remove_api_key": {
+            "type": "boolean",
+            "description": "Delete the saved key."
+          }
+        }
+      },
+      "RangeDto": {
+        "type": "object",
+        "description": "An allowed range for one limit.",
+        "required": [
+          "field",
+          "min",
+          "max",
+          "default"
+        ],
+        "properties": {
+          "default": {
+            "type": "integer",
+            "format": "int64",
+            "description": "The factory default.",
+            "minimum": 0
+          },
+          "field": {
+            "type": "string",
+            "description": "The limit's field name."
+          },
+          "max": {
+            "type": "integer",
+            "format": "int64",
+            "description": "Largest allowed.",
+            "minimum": 0
+          },
+          "min": {
+            "type": "integer",
+            "format": "int64",
+            "description": "Smallest allowed.",
+            "minimum": 0
+          }
+        }
+      },
       "RecoveryCodesResponse": {
         "type": "object",
         "description": "Recovery codes, shown once.",
@@ -1772,6 +3405,33 @@
               "type": "string"
             },
             "description": "The codes."
+          }
+        }
+      },
+      "RemovalImpactDto": {
+        "type": "object",
+        "description": "What removing a provider does.",
+        "required": [
+          "provider_name",
+          "model_count",
+          "cleared_defaults"
+        ],
+        "properties": {
+          "cleared_defaults": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "Defaults that are or will be cleared: `orchestrator` and/or `agents`."
+          },
+          "model_count": {
+            "type": "integer",
+            "description": "How many models go with it.",
+            "minimum": 0
+          },
+          "provider_name": {
+            "type": "string",
+            "description": "The provider's name."
           }
         }
       },
@@ -1835,6 +3495,123 @@
           }
         },
         "additionalProperties": false
+      },
+      "SearchKindDto": {
+        "type": "object",
+        "description": "One search provider's settings and test state. The key is never included.",
+        "required": [
+          "kind",
+          "configured",
+          "active",
+          "needs_url",
+          "needs_key",
+          "api_key_saved"
+        ],
+        "properties": {
+          "active": {
+            "type": "boolean",
+            "description": "This is the active provider."
+          },
+          "active_test_id": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "A test queued or running now."
+          },
+          "api_key_saved": {
+            "type": "boolean",
+            "description": "Whether an API key is saved."
+          },
+          "api_key_saved_at": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "When the key was last saved."
+          },
+          "base_url": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "SearXNG's base URL."
+          },
+          "configured": {
+            "type": "boolean",
+            "description": "Settings have been saved."
+          },
+          "kind": {
+            "type": "string",
+            "description": "`searxng`, `brave` or `tavily`."
+          },
+          "last_test": {
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/TestRunDto",
+                "description": "The newest finished test."
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "needs_key": {
+            "type": "boolean",
+            "description": "An API key is needed (Brave, Tavily)."
+          },
+          "needs_url": {
+            "type": "boolean",
+            "description": "The admin supplies the base URL (SearXNG)."
+          }
+        }
+      },
+      "SearchOverviewDto": {
+        "type": "object",
+        "description": "All search providers.",
+        "required": [
+          "kinds"
+        ],
+        "properties": {
+          "active": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "The active kind, if any."
+          },
+          "kinds": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/SearchKindDto"
+            },
+            "description": "One entry per kind."
+          }
+        }
+      },
+      "SearchRequest": {
+        "type": "object",
+        "description": "Search settings as entered.",
+        "properties": {
+          "api_key": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "A new API key. Absent or empty keeps the saved one."
+          },
+          "base_url": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "SearXNG's base URL; empty uses the bundled service."
+          },
+          "remove_api_key": {
+            "type": "boolean",
+            "description": "Delete the saved key."
+          }
+        }
       },
       "SecondFactorDto": {
         "type": "object",
@@ -1997,6 +3774,67 @@
           }
         }
       },
+      "TestRunDto": {
+        "type": "object",
+        "description": "A test run: queued, running or finished, with the results so far.",
+        "required": [
+          "id",
+          "target",
+          "status",
+          "requested_at",
+          "results"
+        ],
+        "properties": {
+          "failure": {
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/FailureDto",
+                "description": "Set when the run itself could not complete."
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "finished_at": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "When it finished."
+          },
+          "id": {
+            "type": "string",
+            "description": "The run's ID."
+          },
+          "requested_at": {
+            "type": "string",
+            "description": "When it was started."
+          },
+          "results": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ProbeResultDto"
+            },
+            "description": "Results so far, in arrival order."
+          },
+          "started_at": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "When a worker began."
+          },
+          "status": {
+            "type": "string",
+            "description": "`queued`, `running`, `succeeded` or `failed`."
+          },
+          "target": {
+            "type": "string",
+            "description": "What is tested: `provider:<id>`, `search:<kind>`, `connector:github` or `runtime`."
+          }
+        }
+      },
       "TokenRequest": {
         "type": "object",
         "description": "A link token from an invitation or reset link.",
@@ -2010,6 +3848,29 @@
           }
         },
         "additionalProperties": false
+      },
+      "ToolDto": {
+        "type": "object",
+        "description": "A tool in the registry.",
+        "required": [
+          "id",
+          "description",
+          "can_be_enabled"
+        ],
+        "properties": {
+          "can_be_enabled": {
+            "type": "boolean",
+            "description": "`false` for `command_run`, which is listed but never enabled."
+          },
+          "description": {
+            "type": "string",
+            "description": "What it does."
+          },
+          "id": {
+            "type": "string",
+            "description": "The tool's identifier."
+          }
+        }
       },
       "UserDto": {
         "type": "object",
@@ -2053,6 +3914,37 @@
           "status": {
             "type": "string",
             "description": "`active` or `deactivated`."
+          }
+        }
+      },
+      "WarningDto": {
+        "type": "object",
+        "description": "Something wrong with a model for a job.",
+        "required": [
+          "code"
+        ],
+        "properties": {
+          "code": {
+            "type": "string",
+            "description": "`tool_calling_unsupported`, `tool_calling_unknown`, `context_too_small` or `context_unknown`."
+          },
+          "have": {
+            "type": [
+              "integer",
+              "null"
+            ],
+            "format": "int32",
+            "description": "The context a model has, for `context_too_small`.",
+            "minimum": 0
+          },
+          "need": {
+            "type": [
+              "integer",
+              "null"
+            ],
+            "format": "int32",
+            "description": "The context a job needs, for `context_too_small`.",
+            "minimum": 0
           }
         }
       }

@@ -27,6 +27,9 @@ pub struct ErrorBody {
     /// Field problems, for validation errors.
     #[serde(skip_serializing_if = "Vec::is_empty")]
     pub fields: Vec<FieldProblem>,
+    /// The run already in progress, for `already_running`.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub run_id: Option<String>,
 }
 
 /// The error envelope: `{"error": {...}}`.
@@ -53,6 +56,7 @@ impl ApiError {
                 code: code.to_owned(),
                 message: message.to_owned(),
                 fields: Vec::new(),
+                run_id: None,
             },
             retry_after_seconds: None,
         }
@@ -165,11 +169,15 @@ impl From<AppError> for ApiError {
                 "invalid_link",
                 "This link is not valid.",
             ),
-            AppError::AlreadyRunning { .. } => Self::new(
-                StatusCode::CONFLICT,
-                "already_running",
-                "A test is already running.",
-            ),
+            AppError::AlreadyRunning { run_id } => {
+                let mut api = Self::new(
+                    StatusCode::CONFLICT,
+                    "already_running",
+                    "A test is already running.",
+                );
+                api.body.run_id = Some(run_id.to_string());
+                api
+            }
             AppError::Internal(detail) => {
                 tracing::error!(detail = %detail, "request failed with an internal error");
                 Self::internal()
