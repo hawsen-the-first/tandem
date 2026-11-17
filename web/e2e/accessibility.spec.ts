@@ -30,11 +30,18 @@ const SIGNED_IN_PAGES = [
   '/admin/users',
   '/admin/settings',
   '/admin/audit',
+  '/admin/integrations/providers',
+  '/admin/integrations/search',
+  '/admin/integrations/github',
+  '/admin/integrations/sandbox-policy',
 ];
 
 for (const theme of ['light', 'dark'] as const) {
   test.describe(`${theme} theme`, () => {
     test.beforeEach(async ({ page }) => {
+      // Each page load fetches the client's assets and data through the per-source rate limit;
+      // a fresh client address per test keeps this file's many loads within the allowance.
+      await page.setExtraHTTPHeaders(clientHeaders(randomClientIp()));
       await page.addInitScript((value) => {
         window.localStorage.setItem('tandem.theme', value);
       }, theme);
@@ -81,7 +88,7 @@ test('every signed-in page fits a 360 px screen without sideways scrolling', asy
 }, testInfo) => {
   const context = await browser.newContext({
     baseURL: String(testInfo.project.use.baseURL),
-    extraHTTPHeaders: clientHeaders(ip),
+    extraHTTPHeaders: clientHeaders(randomClientIp()),
     storageState: 'e2e/.auth/admin.json',
     viewport: { width: 360, height: 740 },
   });

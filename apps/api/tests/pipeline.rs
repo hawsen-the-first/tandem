@@ -821,10 +821,16 @@ async fn metrics_are_off_without_a_token_and_need_the_exact_bearer_token() {
         "auth_sign_in_total",
         "rate_limited_total",
         "db_pool_connections",
-        "process_resident_memory_bytes",
         "build_info",
     ] {
         assert!(reply.text.contains(name), "{name} missing");
+    }
+    // The process gauges are read from /proc, so they exist on Linux only.
+    if cfg!(target_os = "linux") {
+        assert!(
+            reply.text.contains("process_resident_memory_bytes"),
+            "process_resident_memory_bytes missing"
+        );
     }
     assert!(
         reply.text.contains("route=\"/api/auth/me\""),

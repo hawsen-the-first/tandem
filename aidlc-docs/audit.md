@@ -635,3 +635,31 @@
 **AI Response**: "Executed steps 28 to 32 on branch unit-u2/api: admin-only routes for providers, default models, search, the GitHub connector, the sandbox policy, the runtime check and test runs; write-only secrets (saved flag and time only); 202 for test starts with 409 and the active run id when one is running; a separate Test rate-limit bucket (10 per minute); field-named validation errors including the outbound URL reasons; OpenAPI and web types regenerated. Tests: 18 in-memory API tests and a Docker Postgres end-to-end test through the real provider adapter, including a check that no key reaches a response, audit entry or log line. Summary in construction/u2-instance-administration/code/pr4-api-summary.md."
 **Status**: PR 4 opened for review
 **Context**: CONSTRUCTION - U2 Code Generation, Part 2
+
+---
+## Session resumption - Return to AIDLC workflow
+**Timestamp**: 2026-11-17T01:30:08Z
+**User Input**: "Nice. Let's switch back to AIDLC mode, can you review the next steps, ensuring we leave out any changes made in this session so far on their own tangent/branch"
+**AI Response**: "Committed the ad-hoc storage contract suite (crates/sqlite-tests, tests/test.sh, the workspace member and its audit entry) to local branch tangent/sqlite-contract-suite (f94acd5) and returned to a clean main. Reviewed U2 progress: PRs 1 to 3 merged (#16, #17, #18); PR 4 (steps 28 to 32, admin API) is open as #19 with all checks passing and awaiting review. Next in plan: PR 5 (steps 33 to 41: web, end-to-end, documentation, U2 close-out), which builds on PR 4's API and generated web types."
+**Context**: CONSTRUCTION - U2 Code Generation, Part 2; resuming after ad-hoc tangent
+
+---
+## U2 Code Generation - Part 2, PR 5 (web, end-to-end, documentation)
+**Timestamp**: 2026-11-17T01:32:40Z
+**User Input**: "19 Merged, continue"
+**AI Response**: "PR 4 merged (#19). Started steps 33 to 41 on branch unit-u2/web."
+**Context**: CONSTRUCTION - U2 Code Generation, Part 2
+
+---
+## U2 Code Generation - Part 2, PR 5 completion
+**Timestamp**: 2026-11-17T02:13:55Z
+**User Input**: (none; continuation of "19 Merged, continue")
+**AI Response**: "Executed steps 33 to 41 on branch unit-u2/web: Integrations header link and layout; shared components (SecretField, StatusBadge, TestResultView, UrlField, HostListEditor, CapabilityWarning) and client mirrors of BR-19 and BR-18.4; useTestRun polling with 409 follow; Providers, Search, GitHub and Sandbox policy pages; unit, axe and keyboard tests (228 web unit tests); e2e loopback mocks and 7 integrations scenarios (93 e2e tests pass in Chromium and Firefox); docs/integrations.md, docs/api.md, docs/development.md, README. Fixed three defects found by e2e (WCAG 2.5.3 label-in-name, per-source rate limit in the a11y spec, skip-link timing) and a Linux-only metric assertion in a U1 pipeline test that failed on macOS. BR-14 to BR-21 traceability table and all six stories ticked. Summaries: pr5-web-e2e-docs-summary.md and u2-code-generation-summary.md. aidlc-state.md updated: U2 complete pending PR 5 merge; next U3."
+**Status**: PR 5 to be opened for review
+**Context**: CONSTRUCTION - U2 Code Generation, Part 2; U2 close-out
+
+---
+## U2 Code Generation - Completion approval prompt
+**Timestamp**: 2026-11-17T02:13:55Z
+**AI Prompt**: "U2 code generation complete. Request Changes, or Continue to Next Stage (U3)?"
+**Context**: CONSTRUCTION - U2 Code Generation; awaiting user response

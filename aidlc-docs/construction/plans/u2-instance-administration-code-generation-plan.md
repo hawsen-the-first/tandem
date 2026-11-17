@@ -109,25 +109,25 @@ web/src/components/   SecretField, StatusBadge, TestResultView, UrlField, HostLi
 - [x] **Step 32 - Pull request 4 verification and summary.** Gates plus a smoke run of the existing e2e suite; `code/pr4-api-summary.md`. Open pull request 4.
 
 ### Pull request 5: web, end-to-end, documentation
-- [ ] **Step 33 - Web foundations.** `Integrations` nav entry and `AdminIntegrationsLayout` (sub-navigation as links), the integrations message catalogue, shared components `SecretField`, `StatusBadge`, `TestResultView`, `UrlField`, `HostListEditor`, `CapabilityWarning`, a test-run polling hook (1 s, 90 s limit); component tests with axe. *US-5, BR-20.*
-- [ ] **Step 34 - ProvidersPage.** Table, `ProviderDialog` with `ModelListEditor`, test panel with per-model results and capability badges, `DefaultModelsCard` with warnings, removal dialog with the impact list; tests. *US-2.1, 2.3, 2.4.*
-- [ ] **Step 35 - SearchPage.** Three kind cards, settings, test, make active; tests. *US-2.5.*
-- [ ] **Step 36 - GitHubPage.** Token form, permissions notice, test result with repositories, removal; tests. *US-2.6.*
-- [ ] **Step 37 - SandboxPolicyPage.** Runner tier with the runtime check, tool list with `command_run` disabled, network rule, limits with factory defaults and "Reset to default"; tests. *US-2.9.*
-- [ ] **Step 38 - Accessibility pass.** Every page and dialog has an axe check, keyboard walk-through tests and 360 px checks; headings and live regions reviewed.
-- [ ] **Step 39 - End-to-end.** A small Node mock module (OpenAI-compatible, SearXNG) started and stopped by `dev/scripts/e2e.sh`; scenarios: add a provider with a mock, test it and read capabilities, set defaults and see a warning for a weak model, remove a provider and see defaults cleared; switch search provider and test; save and remove the GitHub token; edit the sandbox policy and reset a limit; container tier unavailable without a socket; non-admins get "not found"; axe on every U2 page in both themes. *All U2 stories.*
-- [ ] **Step 40 - Documentation.** README, `docs/development.md` (settings, container-socket warning, outbound rules), `docs/api.md`, and a short admin guide `docs/integrations.md` (providers, search, GitHub token permissions, sandbox policy).
-- [ ] **Step 41 - Final verification and close-out.** Run every gate and the e2e suite; extend the BR-to-test table for BR-14 to BR-21; tick every story below; write `code/u2-code-generation-summary.md`; update `aidlc-state.md`. Open pull request 5.
+- [x] **Step 33 - Web foundations.** `Integrations` nav entry and `AdminIntegrationsLayout` (sub-navigation as links), the integrations message catalogue, shared components `SecretField`, `StatusBadge`, `TestResultView`, `UrlField`, `HostListEditor`, `CapabilityWarning`, a test-run polling hook (1 s, 90 s limit); component tests with axe. *US-5, BR-20.*
+- [x] **Step 34 - ProvidersPage.** Table, `ProviderDialog` with `ModelListEditor`, test panel with per-model results and capability badges, `DefaultModelsCard` with warnings, removal dialog with the impact list; tests. *US-2.1, 2.3, 2.4.*
+- [x] **Step 35 - SearchPage.** Three kind cards, settings, test, make active; tests. *US-2.5.*
+- [x] **Step 36 - GitHubPage.** Token form, permissions notice, test result with repositories, removal; tests. *US-2.6.*
+- [x] **Step 37 - SandboxPolicyPage.** Runner tier with the runtime check, tool list with `command_run` disabled, network rule, limits with factory defaults and "Reset to default"; tests. *US-2.9.*
+- [x] **Step 38 - Accessibility pass.** Every page and dialog has an axe check, keyboard walk-through tests and 360 px checks; headings and live regions reviewed.
+- [x] **Step 39 - End-to-end.** A small Node mock module (OpenAI-compatible, SearXNG) started and stopped by `dev/scripts/e2e.sh`; scenarios: add a provider with a mock, test it and read capabilities, set defaults and see a warning for a weak model, remove a provider and see defaults cleared; switch search provider and test; save and remove the GitHub token; edit the sandbox policy and reset a limit; container tier unavailable without a socket; non-admins get "not found"; axe on every U2 page in both themes. *All U2 stories.*
+- [x] **Step 40 - Documentation.** README, `docs/development.md` (settings, container-socket warning, outbound rules), `docs/api.md`, and a short admin guide `docs/integrations.md` (providers, search, GitHub token permissions, sandbox policy).
+- [x] **Step 41 - Final verification and close-out.** Run every gate and the e2e suite; extend the BR-to-test table for BR-14 to BR-21; tick every story below; write `code/u2-code-generation-summary.md`; update `aidlc-state.md`. Open pull request 5.
 
 ## 6. Story traceability (stories ticked when their steps are done)
 | Done | Story | Steps |
 |---|---|---|
-| [ ] | US-2.1 Configure an OpenAI-compatible provider | 2, 3, 6, 11, 12, 17, 18, 20, 28, 34, 39 |
-| [ ] | US-2.3 Test a provider connection | 2, 6, 12, 21, 22, 29, 31, 34, 39 |
-| [ ] | US-2.4 Set default models | 2, 17, 18, 20, 23, 28, 34, 39 |
-| [ ] | US-2.5 Configure web search | 3, 13, 18, 20, 21, 29, 35, 39 |
-| [ ] | US-2.6 Configure the GitHub connector | 6, 14, 18, 20, 21, 29, 36 |
-| [ ] | US-2.9 Configure the sandbox policy | 4, 7, 15, 17, 18, 20, 23, 29, 37, 39 |
+| [x] | US-2.1 Configure an OpenAI-compatible provider | 2, 3, 6, 11, 12, 17, 18, 20, 28, 34, 39 |
+| [x] | US-2.3 Test a provider connection | 2, 6, 12, 21, 22, 29, 31, 34, 39 |
+| [x] | US-2.4 Set default models | 2, 17, 18, 20, 23, 28, 34, 39 |
+| [x] | US-2.5 Configure web search | 3, 13, 18, 20, 21, 29, 35, 39 |
+| [x] | US-2.6 Configure the GitHub connector | 6, 14, 18, 20, 21, 29, 36 |
+| [x] | US-2.9 Configure the sandbox policy | 4, 7, 15, 17, 18, 20, 23, 29, 37, 39 |
 
 ## 7. Extension compliance (planning)
 - **Security Baseline**: steps 3, 6 and 9 carry the outbound controls (SE-18, SE-19); 8, 18 and 23 the secret handling (SE-20, SE-21); 12 to 14 SE-22; 15 SE-23; 30 and 31 SE-24; 17 SE-26. Compliance is re-evaluated at the completion message.

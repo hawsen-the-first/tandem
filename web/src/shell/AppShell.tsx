@@ -3,6 +3,7 @@ import { NavLink, Outlet, useLocation } from 'react-router';
 import { isAdmin, useSession } from '../auth/SessionProvider';
 import { cx } from '../styles/cx';
 import { t } from '../i18n/messages';
+import { ti } from '../i18n/messages.integrations';
 import { ThemeToggle } from '../theme/ThemeToggle';
 import styles from './AppShell.module.css';
 
@@ -62,6 +63,9 @@ export function AppShell() {
             <>
               <NavLink to="/admin/users" className={link}>
                 {t('navUsers')}
+              </NavLink>
+              <NavLink to="/admin/integrations" className={link}>
+                {ti('navIntegrations')}
               </NavLink>
               <NavLink to="/admin/settings" className={link}>
                 {t('navSettings')}

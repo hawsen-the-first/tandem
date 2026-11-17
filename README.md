@@ -45,10 +45,11 @@ just migrate           # applies migrations under the migration role
 just api               # in separate terminals: just worker, just web
 ```
 Open <http://localhost:5173>; the first-run setup screen appears. Setup creates the first admin, who must then enrol an authenticator app. Invitations and reset links are copied from the Users page (nothing is emailed).
+Then add a model provider, choose default models and, optionally, set up web search, a GitHub token and the sandbox policy under **Integrations** ([admin guide](docs/integrations.md)).
 
 ### Everyday loop
 `just check` runs everything CI runs (format, clippy, tests, web checks, dependency and licence audits).
-`just e2e` runs the Playwright suite against an isolated stack; `just perf` and `just contract` run the latency budgets and the API contract check. See [docs/development.md](docs/development.md) for conventions and [docs/api.md](docs/api.md) for the API.
+`just e2e` runs the Playwright suite against an isolated stack; `just perf` and `just contract` run the latency budgets and the API contract check. See [docs/development.md](docs/development.md) for conventions, [docs/api.md](docs/api.md) for the API and [docs/integrations.md](docs/integrations.md) for configuring providers, search, GitHub and the sandbox.
 `just dev-reset` gives a clean database and fresh secrets. `just --list` shows every command.
 
 ### Notes
@@ -71,7 +72,7 @@ crates/   shared libraries (core, ports, app, support, config, credentials, stor
 apps/     api, worker, cli
 web/      Vite + React client
 tools/    breach-filter (builds the offline breached-password filter)
-docs/     development guide and API notes
+docs/     development guide, API notes and the integrations admin guide
 tests/    reserved for cross-crate tests (the end-to-end suite is in web/e2e, the performance smoke test in apps/api/tests)
 dev/      development Compose file and scripts
 aidlc-docs/  AI-DLC workflow artifacts (requirements, designs, plans)

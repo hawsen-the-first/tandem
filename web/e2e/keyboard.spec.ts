@@ -50,6 +50,8 @@ test('an empty form moves focus to the first problem', async ({ browser }, testI
 
 test('the skip link jumps over the navigation to the content', async ({ page }) => {
   await page.goto('/account');
+  // The shell renders after the session loads; focus the page only once it is there.
+  await expect(page.getByRole('main')).toBeVisible();
   await focusPage(page);
   await page.keyboard.press('Tab');
   const skip = page.getByRole('link', { name: 'Skip to content' });
