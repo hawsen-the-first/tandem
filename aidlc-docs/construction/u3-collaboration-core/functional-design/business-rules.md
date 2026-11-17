@@ -107,6 +107,9 @@ decisions it comes from (Q for the plan, C for the clarifications). Each rule mu
    explicit action.
 6. **Instance settings.** The limits are held in code with these values. Making them instance settings is a later
    option, so they are kept in one place.
+7. **Retention (added in NFR Requirements, Q4).** Uploads are deleted a set time after the session ends: 180 days
+   by default, an instance setting from 1 day to "keep forever". The upload becomes `expired`, and its messages show
+   "File removed after the retention period". Messages, approvals and summaries are kept.
 
 ## BR-27 Thread status and approvals (US-5.6, US-7.1 to US-7.3; Q5, Q6, A3 to A5)
 1. **Status changes.**

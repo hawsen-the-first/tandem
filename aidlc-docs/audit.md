@@ -732,3 +732,39 @@
 **User Input**: "Looks good, continue"
 **AI Response**: "Functional design approved, including assumptions A14 to A16. Marked complete; committed on branch aidlc/u3-functional-design and opened its pull request. Starting NFR Requirements."
 **Context**: CONSTRUCTION - U3 Functional Design approved (Continue to Next Stage)
+
+---
+## U3 NFR Requirements - Plan and questions
+**Timestamp**: 2026-11-17T21:20:00Z
+**User Input**: (continuation of "Looks good, continue")
+**AI Response**: "Created construction/plans/u3-collaboration-core-nfr-requirements-plan.md on branch aidlc/u3-nfr-requirements (Full depth: C7 security-critical): settled items (NOTIFY fan-out, sequence ordering), assumptions N1 to N8 (scale, latency, write rate limits, WebSocket limits, replay window, upload reliability, metrics, tests) and 9 questions (upload storage, upload encryption, malware scanning, retention after end, event payloads, Markdown renderer and highlighter, search scope, presence across processes, verifying 500 ms). Awaiting answers."
+**Context**: CONSTRUCTION - U3 NFR Requirements, step 2
+
+---
+## U3 NFR Requirements - Answers received
+**Timestamp**: 2026-11-17T22:01:39Z
+**User Input**: The complete plan file pasted back, unchanged from the version sent except for the [Answer]: tags, which read verbatim:
+- Q1: "A by default, C supported and configurable from day one."
+- Q2: "A"
+- Q3: "A with B as a later feature"
+- Q4: "C"
+- Q5: "A"
+- Q6: "A"
+- Q7: "A"
+- Q8: "A"
+- Q9: "A"
+**AI Response**: "Recorded the answers and decisions. Added assumptions N9 (upload retention 180 days after ending by default, instance setting, 1 day to keep forever) and N10 (S3 adapter configuration, BR-19 rules, MinIO contract tests). Wrote nfr-requirements/nfr-requirements.md (SC-7 to SC-11, PF-10 to PF-14, AV-8 to AV-10, RL-12 to RL-18, SE-27 to SE-37, OB-7, OB-8, MT-13 to MT-18, US-6 to US-8) and tech-stack-decisions.md (T16 to T24)."
+**Context**: CONSTRUCTION - U3 NFR Requirements, steps 2 to 4
+
+---
+## U3 NFR Requirements - Approval prompt
+**Timestamp**: 2026-11-17T22:10:00Z
+**AI Prompt**: "NFR Requirements Complete - u3-collaboration-core. Request Changes, or Continue to Next Stage (NFR Design)?"
+**Context**: CONSTRUCTION - U3 NFR Requirements, step 5; awaiting user response
+
+---
+## U3 NFR Requirements - Approval
+**Timestamp**: 2026-11-17T22:12:41Z
+**User Input**: "Approve, continue"
+**AI Response**: "NFR requirements approved, including N9 and N10. Committed on branch aidlc/u3-nfr-requirements and opened its pull request (stacked on the functional design PR). Starting NFR Design."
+**Context**: CONSTRUCTION - U3 NFR Requirements approved (Continue to Next Stage)

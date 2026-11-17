@@ -4,7 +4,7 @@
 - **Project Name**: Tandem
 - **Project Type**: Greenfield
 - **Start Date**: 2026-09-28T03:32:30Z
-- **Current Stage**: CONSTRUCTION - U3 Collaboration core, NFR Requirements: plan and questions in progress. U3 Functional Design approved
+- **Current Stage**: CONSTRUCTION - U3 Collaboration core, NFR Design: plan in progress. U3 Functional Design and NFR Requirements approved (PRs #23 and the NFR PR)
 - **AI-DLC Rules Version**: v1.0.1 (awslabs/aidlc-workflows @ e40f6a93a59d1a22be78314ff32585fdd6b60936)
 
 ## Workspace State
