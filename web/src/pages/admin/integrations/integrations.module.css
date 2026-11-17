@@ -1,0 +1,154 @@
+/* Layout of the integrations pages. */
+.subnav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+  margin-bottom: var(--space-5);
+  padding: 0;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.subnav ul {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.subnavLink {
+  display: inline-flex;
+  align-items: center;
+  min-height: var(--target-primary);
+  padding: 0 var(--space-3);
+  color: var(--color-text);
+  text-decoration: none;
+  border-bottom: 3px solid transparent;
+}
+
+.subnavLink:hover {
+  border-bottom-color: var(--color-border);
+}
+
+.subnavActive {
+  border-bottom-color: var(--color-accent);
+  font-weight: 600;
+}
+
+.section {
+  margin-bottom: var(--space-6);
+}
+
+.section > h2 {
+  margin-top: 0;
+}
+
+.cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 20rem), 1fr));
+  gap: var(--space-4);
+  margin-bottom: var(--space-5);
+}
+
+.cardHead {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+  align-items: center;
+  justify-content: space-between;
+}
+
+.cardHead h2,
+.cardHead h3 {
+  margin: 0;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+.formNarrow {
+  max-width: 40rem;
+}
+
+.dialogWide {
+  width: min(100% - 2rem, 48rem);
+}
+
+.modelRow {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 12rem), 1fr));
+  gap: var(--space-3);
+  align-items: start;
+  padding: var(--space-3);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+}
+
+.modelRowHead {
+  grid-column: 1 / -1;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: var(--space-2);
+  margin: 0;
+  font-weight: 600;
+}
+
+.select {
+  min-height: var(--target-min);
+}
+
+.cellStack {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  align-items: flex-start;
+}
+
+.url {
+  font-family: var(--font-mono);
+  font-size: 0.875rem;
+  overflow-wrap: anywhere;
+}
+
+.radioRow {
+  display: flex;
+  gap: var(--space-3);
+  align-items: flex-start;
+}
+
+.radioRow input {
+  margin-top: var(--space-1);
+}
+
+.limitRow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+  align-items: flex-end;
+}
+
+.limitRow > :first-child {
+  flex: 1 1 16rem;
+}
+
+.toolList {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.actionsRow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+  align-items: center;
+}
+
+.modelRowFull {
+  grid-column: 1 / -1;
+}

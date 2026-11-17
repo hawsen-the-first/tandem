@@ -1,4 +1,5 @@
 import type { ComponentType } from 'react';
+import { Navigate } from 'react-router';
 import type { RouteObject } from 'react-router';
 import { RequireAdmin, RequireAuth } from './auth/guards';
 import { Root } from './Root';
@@ -39,6 +40,29 @@ export const appRoutes: RouteObject[] = [
                   { path: '/admin/users', ...page(() => import('./pages/admin/UsersPage')) },
                   { path: '/admin/settings', ...page(() => import('./pages/admin/SettingsPage')) },
                   { path: '/admin/audit', ...page(() => import('./pages/admin/AuditLogPage')) },
+                  {
+                    path: '/admin/integrations',
+                    ...page(() => import('./pages/admin/integrations/AdminIntegrationsLayout')),
+                    children: [
+                      { index: true, element: <Navigate to="providers" replace /> },
+                      {
+                        path: 'providers',
+                        ...page(() => import('./pages/admin/integrations/ProvidersPage')),
+                      },
+                      {
+                        path: 'search',
+                        ...page(() => import('./pages/admin/integrations/SearchPage')),
+                      },
+                      {
+                        path: 'github',
+                        ...page(() => import('./pages/admin/integrations/GitHubPage')),
+                      },
+                      {
+                        path: 'sandbox-policy',
+                        ...page(() => import('./pages/admin/integrations/SandboxPolicyPage')),
+                      },
+                    ],
+                  },
                 ],
               },
             ],

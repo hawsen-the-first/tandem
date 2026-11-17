@@ -13,6 +13,8 @@ export class ApiError extends Error {
   readonly code: string;
   readonly fields: FieldProblem[];
   readonly retryAfterSeconds: number | null;
+  /** The run already in progress, for `already_running`. */
+  readonly runId: string | null;
 
   constructor(init: {
     status: number;
@@ -20,6 +22,7 @@ export class ApiError extends Error {
     message: string;
     fields?: FieldProblem[];
     retryAfterSeconds?: number | null;
+    runId?: string | null;
   }) {
     super(init.message);
     this.name = 'ApiError';
@@ -27,6 +30,7 @@ export class ApiError extends Error {
     this.code = init.code;
     this.fields = init.fields ?? [];
     this.retryAfterSeconds = init.retryAfterSeconds ?? null;
+    this.runId = init.runId ?? null;
   }
 }
 
@@ -49,6 +53,7 @@ export function toApiError(status: number, body: unknown, headers: Headers): Api
       message: body.error.message,
       fields: body.error.fields ?? [],
       retryAfterSeconds,
+      runId: body.error.run_id ?? null,
     });
   }
   return new ApiError({

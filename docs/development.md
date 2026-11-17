@@ -53,7 +53,21 @@ The loader reports every problem at once and never prints a secret.
 | `TANDEM_WEB_DIR` | The built client (`web/dist`). Optional |
 | `TANDEM_SOURCE_URL` | Where the Corresponding Source of this running version can be obtained (AGPL section 13). Defaults to the upstream project. **If you run a modified version for users over a network, set it to where your modified source is published.** The footer links to it |
 | `TANDEM_OTLP_ENDPOINT` | Validated, but this build has no OTLP exporter yet (trace IDs are logged only) |
+| `TANDEM_CONTAINER_SOCKET` | Worker only. Absolute path of the container runtime socket (for example `/var/run/docker.sock`) for the container runner's runtime check. Unset: the container tier is unavailable. **Access to this socket is root-equivalent on the host**: mount it only into the worker, never into the api, and only if you intend to use the container runner |
 | `TANDEM_LOG_LEVEL`, `TANDEM_HASH_MEMORY_BUDGET_MB`, `TANDEM_DB_*` | Optional tuning, see `crates/config` |
+
+Integration settings (providers, default models, search, the GitHub token and the sandbox policy) are not
+environment variables: admins set them in the web client under **Integrations**, and they are stored in the
+database with their secrets sealed by the vault. See [integrations.md](integrations.md).
+
+### Outbound calls
+
+Every outbound HTTP request goes through `tandem-outbound`, which applies the BR-19 address rules (see
+[integrations.md](integrations.md#outbound-addresses)): names are resolved at call time and the connection
+is made to the checked address, cross-host redirects are refused, bodies are capped at 1 MiB and TLS is
+always verified. A clippy lint (`disallowed-methods`) rejects building an HTTP client anywhere else;
+`dev/scripts/check-outbound-lint.sh` proves the lint still fires. Tests in the background (provider, search,
+GitHub and runtime checks) run in the worker as jobs; the api only queues them and reports their progress.
 
 ## The request pipeline
 
@@ -79,7 +93,13 @@ description matches the routes.
   `src/test/render.tsx` renders the real route table. Every page has an accessibility check and a keyboard test.
 - `data-testid` names are kebab-case: `<page>-<part>`, for example `sign-in-submit`.
 - End-to-end tests (`web/e2e`) run in Chromium and Firefox against a real stack. The `setup` project performs
-  first-run setup once and saves an admin session for the others.
+  first-run setup once and saves an admin session for the others. `dev/scripts/e2e.sh` also starts
+  `web/e2e/mocks/server.mjs` on loopback (port 8092, `E2E_MOCK_PORT`): an OpenAI-compatible provider with a
+  capable and a weak model, and a SearXNG stand-in, so the integrations scenarios need no network. The suite
+  runs once per browser against one database, so scenarios use unique names and leave the instance as they
+  found it.
+- Background tests in the web client poll `GET /api/admin/test-runs/{id}` once a second for at most 90
+  seconds (`src/api/useTestRun.ts`); a start that answers 409 `already_running` follows the run in progress.
 
 ## Web client notes
 

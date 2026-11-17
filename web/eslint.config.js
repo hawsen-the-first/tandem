@@ -22,4 +22,10 @@ export default tseslint.config(
     },
   },
   { files: ['*.config.{js,ts}'], ...tseslint.configs.disableTypeChecked },
+  // The end-to-end stand-in services run in Node, outside the TypeScript project.
+  {
+    files: ['e2e/mocks/**/*.mjs'],
+    ...tseslint.configs.disableTypeChecked,
+    languageOptions: { globals: globals.node },
+  },
 );
