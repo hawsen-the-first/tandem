@@ -4,7 +4,7 @@
 - **Project Name**: Tandem
 - **Project Type**: Greenfield
 - **Start Date**: 2026-09-28T03:32:30Z
-- **Current Stage**: CONSTRUCTION - U3 Collaboration core, NFR Design: plan in progress. U3 Functional Design and NFR Requirements approved (PRs #23 and the NFR PR)
+- **Current Stage**: CONSTRUCTION - U3 Collaboration core, Code Generation Part 1 (planning) in progress. Functional Design (#23), NFR Requirements (#24) and NFR Design approved; Infrastructure Design skipped, as in U2
 - **AI-DLC Rules Version**: v1.0.1 (awslabs/aidlc-workflows @ e40f6a93a59d1a22be78314ff32585fdd6b60936)
 
 ## Workspace State
@@ -38,7 +38,7 @@
 - [x] Units Generation (APPROVED - 9 units, 87 stories mapped)
 
 ### 🟢 CONSTRUCTION PHASE
-- [ ] Per-unit design and code generation (U1 COMPLETE pending PR 5 merge: design stages and code generation done, see construction/u1-foundation/code/u1-code-generation-summary.md; U2 COMPLETE, see construction/u2-instance-administration/code/u2-code-generation-summary.md; U3 to U9 remain, per unit-of-work.md)
+- [ ] Per-unit design and code generation (U1 COMPLETE pending PR 5 merge: design stages and code generation done, see construction/u1-foundation/code/u1-code-generation-summary.md; U2 COMPLETE, see construction/u2-instance-administration/code/u2-code-generation-summary.md; U3 IN PROGRESS: functional design, NFR requirements and NFR design approved, code generation planning next; U4 to U9 remain, per unit-of-work.md)
 - [ ] Build and Test
 
 ### 🟡 OPERATIONS PHASE
