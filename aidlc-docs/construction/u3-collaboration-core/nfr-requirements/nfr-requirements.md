@@ -28,7 +28,7 @@ IDs continue from U1 and U2: **SC** scalability, **PF** performance, **AV** avai
 ## 3. Availability
 | ID | Requirement |
 |---|---|
-| AV-8 | `/readyz` also checks the blob store: the local directory is writable, or the S3 bucket is reachable with a head request under 2 s |
+| AV-8 | `/readyz` also checks the blob store: the local directory is writable, or the S3 bucket is reachable with a head request under 2 s. An unavailable store is reported as `degraded` and does **not** fail readiness: uploads and downloads answer 503 while the rest of Tandem keeps working (revised in NFR Design, Q5) |
 | AV-9 | Browsers reconnect after an `api` restart with backoff (1 s up to 30 s, with jitter). They resume from their last sequence, or reload if it falls outside the replay window (N5). No message is lost, because writes go over HTTP |
 | AV-10 | Graceful shutdown closes WebSockets with a "going away" code, so that clients reconnect to another process at once |
 

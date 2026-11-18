@@ -768,3 +768,30 @@
 **User Input**: "Approve, continue"
 **AI Response**: "NFR requirements approved, including N9 and N10. Committed on branch aidlc/u3-nfr-requirements and opened its pull request (stacked on the functional design PR). Starting NFR Design."
 **Context**: CONSTRUCTION - U3 NFR Requirements approved (Continue to Next Stage)
+
+---
+## U3 NFR Design - Plan and questions
+**Timestamp**: 2026-11-17T22:20:00Z
+**User Input**: (continuation of "Approve, continue")
+**AI Response**: "Created construction/plans/u3-collaboration-core-nfr-design-plan.md on branch aidlc/u3-nfr-design: settled items (downloads through the API, slow-client cutoff, rekey of upload data keys), assumptions D1 to D5 (sequence allocation, per-process rate limiting, notification channel, reminder scheduling, batched sweeps) and 6 questions covering resilience (NOTIFY listener loss, blob store failure), scalability (event store versus outbox), performance (gateway access cache, client fetch batching) and security (sanitiser allow-list location). Awaiting answers."
+**Context**: CONSTRUCTION - U3 NFR Design, step 2
+
+---
+## U3 NFR Design - Answers received
+**Timestamp**: 2026-11-17T22:27:23Z
+**User Input**: The complete plan file pasted back, unchanged from the version sent except for the [Answer]: tags, which read verbatim: Q1 "A", Q2 "A", Q3 "A", Q4 "A", Q5 "A", Q6 "A".
+**AI Response**: "Recorded the answers. Wrote nfr-design/nfr-design-patterns.md (14 sections: access decision, session events as outbox with listener catch-up, thin events and batched reads with a latency budget, gateway hygiene, presence, upload pipeline, blob store failure isolation, limits and quotas, safe rendering, reminders and sweeps, concurrency guards, observability, testability, traceability) and logical-components.md (LC-35 to LC-46 and changes to U1 components). Revised AV-8: an unavailable blob store is reported degraded and does not fail readiness (Q5)."
+**Context**: CONSTRUCTION - U3 NFR Design, steps 2 to 4
+
+---
+## U3 NFR Design - Approval prompt
+**Timestamp**: 2026-11-17T22:27:23Z
+**AI Prompt**: "NFR Design Complete - u3-collaboration-core. Request Changes, or Continue to Next Stage (Code Generation planning)?"
+**Context**: CONSTRUCTION - U3 NFR Design, step 5; awaiting user response
+
+---
+## U3 NFR Design - Approval
+**Timestamp**: 2026-11-18T02:29:58Z
+**User Input**: "COntinue"
+**AI Response**: "NFR design approved, including working assumptions D1 to D5. Committed on branch aidlc/u3-nfr-design and opened its pull request (stacked on the NFR requirements PR). Starting Code Generation Part 1 (planning)."
+**Context**: CONSTRUCTION - U3 NFR Design approved (Continue to Next Stage)
